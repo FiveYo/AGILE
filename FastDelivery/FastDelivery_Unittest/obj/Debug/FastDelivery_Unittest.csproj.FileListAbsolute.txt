@@ -1,0 +1,7 @@
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\bin\Debug\FastDelivery_Unittest.dll
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\bin\Debug\FastDelivery_Unittest.pdb
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\bin\Debug\fr\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\obj\Debug\FastDelivery_Unittest.csprojResolveAssemblyReference.cache
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\obj\Debug\FastDelivery_Unittest.dll
+C:\Users\quent\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Unittest\obj\Debug\FastDelivery_Unittest.pdb
