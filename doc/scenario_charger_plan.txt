@@ -1,0 +1,10 @@
+Scénario : charger le plan
+--------------------------
+1. L'utilisateur indique au système qu'il veut charger un plan de ville
+2. Le système demande à l'utilisateur de choisir un fichier au format XML décrivant le plan de la ville
+3. L'utilisateur :
+    3.1 indique au système qu'il souhaite annuler la procédure, ou
+    3.2 indique au système un fichier XML à charger.
+4. Si 3.2 est effectué, le système :
+    4.1 échoue à charger le fichier avec succès et le communique à l'utilisateur, ou
+    4.1 charge effectivement le fichier demandé et visualise le plan.

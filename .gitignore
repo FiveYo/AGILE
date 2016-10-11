@@ -1,0 +1,8 @@
+*.exe
+*.suo
+*.dll
+*.pdb
+*.pri
+*.xbf
+*.winmd
+**/obj*
