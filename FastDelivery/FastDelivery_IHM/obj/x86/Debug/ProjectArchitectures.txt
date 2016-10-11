@@ -1,0 +1,2 @@
+C:\Users\Quentin\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_IHM\FastDelivery_IHM.csproj;x86
+C:\Users\Quentin\Documents\GitHub\FiveYo\AGILE\FastDelivery\FastDelivery_Library\FastDelivery_Library.csproj;neutral
