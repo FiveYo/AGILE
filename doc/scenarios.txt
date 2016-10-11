@@ -1,0 +1,62 @@
+***Charger le plan, scenarios:
+-L'utilisateur indique au système qu'il veut charger un plan de ville
+-Le système ouvre une fenêtre pour que l'utilisateur choisisse un fichier XML décrivant le plan de ville
+-L'utilisateur choisit le fichier XML qu'il veut charger
+-Le système charge le fichier XML
+-Le système parse le fichier XML
+-Le système visualise le plan
+
+Alternative:
+-L'utilisateur indique au système qu'il veut charger un plan de ville
+-Le système ouvre une fenêtre pour que l'utilisateur choisisse un fichier XML décrivant le plan de ville
+-L'utilisateur ne trouve pas le fichier XML qu'il veut charger
+-L'utilisateur annule le chargement de fichier
+-Le système revient à l'état initial, sans charger de plan
+
+Alternative:
+-L'utilisateur indique au système qu'il veut charger un plan de ville
+-Le système ouvre une fenêtre pour que l'utilisateur choisisse un fichier XML décrivant le plan de ville
+-L'utilisateur choisit le fichier XML qu'il veut charger
+-Le système charge le fichier XML
+-Le système détecte que le fichier XML est mal formé ou comporte des erreurs de syntaxe
+-Le système indique à l'utilisateur que le fichier XML comporte des erreurs
+-L'utilisateur doit indiquer à nouveau au système si il veut charger un autre fichier XML
+
+***Charger la demande de livraisons, scenarios:
+Pré-condition: un plan a été chargé avec succès dans le système par l'utilisateur.
+-L'utilisateur indique au système qu'il veut charger une demande de livraisons
+-Le système ouvre une fenêtre pour que l'utilisateur choisisse un fichier XML décrivant la demande de livraisons
+-L'utilisateur choisit le fichier XML qu'il veut charger
+-Le système charge le fichier XML
+-Le système parse le fichier XML
+-Le système affiche sur le plan les livraisons et l'entrepôt de la demande de livraisons
+
+Alternative: 
+-L'utilisateur indique au système qu'il veut charger une demande de livraisons
+-Le système ouvre une fenêtre pour que l'utilisateur choisisse un fichier XML
+-L'utilisateur ne trouve pas le fichier XML qu'il veut charger
+-L'utilisateur annule le chargement de fichier
+-Le système revient à l'état initial avant ce scénario
+
+Alternative: 
+-L'utilisateur indique au système qu'il veut charger une demande de livraisons
+-Le système ouvre une fenêtre pour que l'utilisateur choisisse un fichier XML
+-L'utilisateur choisit le fichier XML qu'il veut charger
+-Le système charge le fichier XML
+-Le système détecte que le fichier XML est mal formé ou comporte des erreurs de syntaxe
+-Le système indique à l'utilisateur que le fichier XML comporte des erreurs
+-L'utilisateur doit indiquer à nouveau au système si il veut charger un autre fichier XML
+
+***Calculer une tournée, scenarios:
+Pré-condition: Un plan et une demande de livraison ont étés correctement chargés et affichés
+-L'utilisateur indique au système qu'il veut calculer une tournée
+-Le système vérifie si la tournée vérifie bien toutes les contraintes liées aux plages horaires, et c'est le cas
+-Le système détermine la tournée a effectuer pour que la durée soit minimale
+-Le système affiche sur le plan la tournée calculée
+-Le système affiche la liste des livraisons, dans l’ordre de la tournée, avec pour chaque livraison les heures d’arrivée et de départ prévues
+
+Alternative:
+-L'utilisateur indique au système qu'il veut calculer une tournée
+-Le système vérifie si la tournée vérifie bien toutes les contraintes liées aux plages horaires, mais ce n'est pas le cas
+-Le système indique à l'utilisateur qu'il n'y a pas de tournée possible correspondant à sa demande de livraisons
+-L'utilisateur peut décider de charger un nouveua plan, ou une nouvelle demande de livraisons
