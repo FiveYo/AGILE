@@ -52,30 +52,23 @@ namespace FastDelivery_Library
                 Point Origin_Point;
 
                 //On cherche les objets Point dans la PointHash
-                if (PointHash.TryGetValue(id_dest, out Dest_Point))
+                if ( (PointHash.TryGetValue(id_dest, out Dest_Point)) && (PointHash.TryGetValue(id_origin, out Origin_Point)) )
                 {
-                    if (PointHash.TryGetValue(id_origin, out Origin_Point))
-                    {
-                        // ON crée le nouvel objet Troncon
-                        Troncon Troncon_temp = new Troncon(
-                            Dest_Point,
-                            int.Parse(node.Attribute("longueur").Value),
-                            Origin_Point,
-                            int.Parse(node.Attribute("vitesse").Value),
-                            node.Attribute("nomRue").Value,
-                            ID
-                            );
+                    // ON crée le nouvel objet Troncon
+                    Troncon Troncon_temp = new Troncon(
+                        Dest_Point,
+                        int.Parse(node.Attribute("longueur").Value),
+                        Origin_Point,
+                        int.Parse(node.Attribute("vitesse").Value),
+                        node.Attribute("nomRue").Value,
+                        ID
+                        );
 
-                        //On met a jour les voisins 
-                        if ((Dest_Point is Point) && (Origin_Point is Point))
-                        {
-                            PointHash[id_origin].SetVoisins(Troncon_temp);
-                        }
-
-                        //On met à jour la HashTable avec un nouvel id
-                        TronconHash.Add(ID, Troncon_temp);
+                    //On met a jour les voisins 
+                    PointHash[id_origin].SetVoisins(Troncon_temp);
+                    //On met à jour la HashTable avec un nouvel id
+                    TronconHash.Add(ID, Troncon_temp);
                     }
-                }
             }
             
             return PointHash;
