@@ -38,6 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Entrepot.cs" />
+    <Compile Include="Livraison.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Outils.cs" />
     <Compile Include="Point.cs" />

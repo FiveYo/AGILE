@@ -8,7 +8,7 @@ namespace FastDelivery_Library
 {
     public class Troncon
     {
-        public int Length,Speed,id;
+        public int Length,Speed,Id;
         public Point Destination, Origin;
         public string StreetName;
         public Troncon(Point dest, int longueur, Point origine, int vitesse, string nomRue, int ID )
@@ -18,7 +18,7 @@ namespace FastDelivery_Library
             this.Length = longueur;
             this.Speed = vitesse;
             this.StreetName = nomRue;
-            this.id = ID;
+            this.Id = ID;
         } 
     }
 }

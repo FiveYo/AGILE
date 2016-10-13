@@ -27,17 +27,17 @@ namespace FastDelivery_Library
             //On génère les Points depuis le fichier XML en paramètre 
             foreach (var node  in MyData.Descendants("noeud"))
             {
-                int ID = int.Parse(node.Attribute("id").Value);
+                int Id = int.Parse(node.Attribute("id").Value);
 
                 Point pt = new Point(
-                    ID,
+                    Id,
                     int.Parse(node.Attribute("x").Value),
                     int.Parse(node.Attribute("y").Value)
                     );
 
-                PointHash.Add(ID, pt);
+                PointHash.Add(Id, pt);
             }
-
+            int ID = 1;
             //On génère les Troncons depuis le fichier XML en paramètre 
             foreach (var node in MyData.Descendants("troncon"))
             {   
@@ -45,7 +45,6 @@ namespace FastDelivery_Library
                 int id_dest = int.Parse(node.Attribute("destination").Value);
                 int id_origin = int.Parse(node.Attribute("origine").Value);
 
-                int ID = 1;
 
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
@@ -73,7 +72,50 @@ namespace FastDelivery_Library
             }
             
             return PointHash;
+        }
+        public static Dictionary<int,Livraison> ParserXml_Livraison(string File_PATH)
+        {
+            //On initialise notre Xdocument avec le Path du fichier xml
+            XDocument MyData = XDocument.Load(File_PATH);
 
+            //On récupète dans un dictionnaire la data avec le node qu'on veut 
+            Dictionary<int, Livraison> LivHash = new Dictionary<int, Livraison>();
+            
+            // On fait une liste d'entrepot car on sait jamais poto
+            List<Entrepot> ListEntrepot = new List<Entrepot>();
+
+            //On génère les Livraisons depuis le fichier XML en paramètre 
+            int ID = 1;
+
+            foreach (var node in MyData.Descendants("entrepot"))
+            {   
+                Entrepot entrepot = new Entrepot(
+                1,
+                int.Parse(node.Attribute("adresse").Value),
+                node.Attribute("heureDepart").Value
+                );
+                ListEntrepot.Add(entrepot);
+                ID++;
+            }
+            foreach (var node in MyData.Descendants("livraison"))
+            {
+                Livraison liv = new Livraison(
+                     int.Parse(node.Attribute("adresse").Value),
+                     int.Parse(node.Attribute("duree").Value),
+                     ListEntrepot
+                     );
+
+                string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
+                string PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
+
+                if (PlageDebut!="False")
+                {
+                    liv.SetPlage(PlageDebut, PlageFin);
+                }
+                LivHash.Add(ID, liv);
+                ID++;
+            }
+            return LivHash;
 
         }
     }
