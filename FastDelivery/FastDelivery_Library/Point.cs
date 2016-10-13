@@ -17,6 +17,7 @@ namespace FastDelivery_Library
             this.id = ID;
             this.x = X;
             this.y = Y;
+            List_Voisin = new List<Troncon>();
 
         }
 

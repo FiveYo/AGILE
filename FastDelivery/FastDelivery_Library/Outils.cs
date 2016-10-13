@@ -45,7 +45,7 @@ namespace FastDelivery_Library
                 int id_dest = int.Parse(node.Attribute("destination").Value);
                 int id_origin = int.Parse(node.Attribute("origine").Value);
 
-                int ID = int.Parse(node.Attribute("id").Value);
+                int ID = 1;
 
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
@@ -65,10 +65,11 @@ namespace FastDelivery_Library
                         );
 
                     //On met a jour les voisins 
-                    PointHash[id_origin].SetVoisins(Troncon_temp);
+                    Origin_Point.SetVoisins(Troncon_temp);
                     //On met à jour la HashTable avec un nouvel id
                     TronconHash.Add(ID, Troncon_temp);
                     }
+                ID++;
             }
             
             return PointHash;
