@@ -10,6 +10,7 @@ namespace FastDelivery_Library
     public class Point
     {
         public int id, x, y;
+        public List<Troncon> List_Voisin;
 
         public Point(int ID , int X, int Y)
         {
@@ -18,10 +19,13 @@ namespace FastDelivery_Library
             this.y = Y;
 
         }
-        public static int AfficherCoordx(Point pt)
+
+        //Un voisin sera un objet Troncon (trop con pour les intimes)
+        public void SetVoisins(Troncon Voisins)
         {
-            return pt.x;
+            List_Voisin.Add(Voisins);
         }
+
 
     }
 }
