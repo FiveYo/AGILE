@@ -87,22 +87,20 @@ namespace FastDelivery_Library
             //On génère les Livraisons depuis le fichier XML en paramètre 
             int ID = 1;
 
-            foreach (var node in MyData.Descendants("entrepot"))
-            {   
-                Entrepot entrepot = new Entrepot(
-                1,
-                int.Parse(node.Attribute("adresse").Value),
-                node.Attribute("heureDepart").Value
-                );
-                ListEntrepot.Add(entrepot);
-                ID++;
-            }
+            var EntrepotXML = MyData.Descendants("entrepot").First();
+            Entrepot entrepot = new Entrepot(
+            1,
+            int.Parse(EntrepotXML.Attribute("adresse").Value),
+            EntrepotXML.Attribute("heureDepart").Value
+            );
+                
+            
             foreach (var node in MyData.Descendants("livraison"))
             {
                 Livraison liv = new Livraison(
                      int.Parse(node.Attribute("adresse").Value),
                      int.Parse(node.Attribute("duree").Value),
-                     ListEntrepot
+                     entrepot
                      );
 
                 string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
