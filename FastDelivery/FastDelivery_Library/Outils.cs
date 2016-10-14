@@ -22,7 +22,7 @@ namespace FastDelivery_Library
         /// </summary>
         /// <param name="streamFile">stream du fichier xml</param>
         /// <returns></returns>
-        public static List<object> ParserXml_Plan(System.IO.Stream streamFile)
+        public static StructPlan ParserXml_Plan(System.IO.Stream streamFile)
         { 
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(streamFile);
@@ -31,19 +31,42 @@ namespace FastDelivery_Library
             Dictionary<int, Point> PointHash = new Dictionary<int, Point>();
             Dictionary<int, Troncon> TronconHash = new Dictionary<int, Troncon>();
 
-            List<object> HashList = new List<object>();
+            //déclaration de la structure
+            StructPlan Hashstruct = new StructPlan();
 
-            //On génère les Points depuis le fichier XML en paramètre 
+            List <object> HashList = new List<object>();
+            //variable calcul xmax ymax xmin ymin
+            int xmax = 0;
+            int xmin = 999999;
+            int ymax = 0;
+            int ymin = 999999;
+            //On génère les Points depuis le fichier XML en paramètre
             foreach (var node  in MyData.Descendants("noeud"))
             {
                 int Id = int.Parse(node.Attribute("id").Value);
+                int x = int.Parse(node.Attribute("x").Value);
+                int y = int.Parse(node.Attribute("y").Value);
+                Point pt = new Point(Id,x,y);
 
-                Point pt = new Point(
-                    Id,
-                    int.Parse(node.Attribute("x").Value),
-                    int.Parse(node.Attribute("y").Value)
-                    );
+                if (xmax<x)
+                {
+                    xmax = x;
+                }
 
+                if (ymax<y)
+                {
+                    ymax = y;
+                }
+
+                if(xmin>x)
+                {
+                    xmin = x;
+                }
+
+                if(ymin>y)
+                {
+                    ymin = y;
+                }
                 PointHash.Add(Id, pt);
             }
             int ID = 1;
@@ -58,7 +81,7 @@ namespace FastDelivery_Library
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
                 Point Origin_Point;
-
+                
                 //On cherche les objets Point dans la PointHash
                 if ( (PointHash.TryGetValue(id_dest, out Dest_Point)) && (PointHash.TryGetValue(id_origin, out Origin_Point)) )
                 {
@@ -79,12 +102,16 @@ namespace FastDelivery_Library
                     }
                 ID++;
             }
-            HashList.Add(TronconHash);
-            HashList.Add(PointHash);
+            Hashstruct.HashPoint = PointHash;
+            Hashstruct.HashTroncon = TronconHash;
+            Hashstruct.Xmax = xmax;
+            Hashstruct.Xmin = xmin;
+            Hashstruct.Ymax = ymax;
+            Hashstruct.Ymin = ymin;
 
-            return HashList;
+            return Hashstruct;
         }
-        public static Dictionary<int,Livraison> ParserXml_Livraison(string File_PATH)
+        public static Dictionary<int,Livraison> ParserXml_Livraison(string File_PATH,Dictionary<int,Point> HashPoint)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(File_PATH);
@@ -104,28 +131,39 @@ namespace FastDelivery_Library
             int.Parse(EntrepotXML.Attribute("adresse").Value),
             EntrepotXML.Attribute("heureDepart").Value
             );
-                
-            
+
+            Point AdressePoint;
             foreach (var node in MyData.Descendants("livraison"))
             {
-                Livraison liv = new Livraison(
-                     int.Parse(node.Attribute("adresse").Value),
-                     int.Parse(node.Attribute("duree").Value),
-                     entrepot
-                     );
+                int id = int.Parse(node.Attribute("adresse").Value);
+                if (HashPoint.TryGetValue(id, out AdressePoint))
+                { 
+                    Livraison liv = new Livraison(
+                        AdressePoint,
+                        int.Parse(node.Attribute("duree").Value),
+                        entrepot
+                        );
 
-                string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
-                string PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
+                    string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
+                    string PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
 
-                if (PlageDebut!="False")
-                {
-                    liv.SetPlage(PlageDebut, PlageFin);
-                }
-                LivHash.Add(ID, liv);
-                ID++;
+                    if (PlageDebut != "False")
+                    {
+                        liv.SetPlage(PlageDebut, PlageFin);
+                    }
+
+                    LivHash.Add(ID, liv);
+
+                    ID++;
+                }   
             }
             return LivHash;
-
+        }
+        public struct StructPlan
+        {
+            public Dictionary<int, Point> HashPoint;
+            public Dictionary<int, Troncon> HashTroncon;
+            public int Xmin, Xmax, Ymin, Ymax;
         }
     }
 }
