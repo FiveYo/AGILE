@@ -12,15 +12,15 @@
             <ColumnDefinition Width="0.3*" />
             <ColumnDefinition Width="0.7*" />
         </Grid.ColumnDefinitions>
-        <Canvas x:Name="mapCanvas" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" >
-
-        </Canvas>
+        <Grid x:Name="mapGrid" Grid.Column="1" Margin="0,0,0,0">
+            <Canvas x:Name="mapCanvas" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch"/>
+        </Grid>
         <StackPanel HorizontalAlignment="Stretch"  Margin="0,0,0,0" VerticalAlignment="Stretch">
             <Grid Height="100">
                 <Button x:Name="button" Content="Load Plan" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Click="button_Click"/>
 
             </Grid>
-            <ListView x:Name="listView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0"/>
+            <ListView x:Name="listLivraison" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -32,10 +32,9 @@ namespace FastDelivery_IHM
 
         private async void button_Click(object sender, RoutedEventArgs e)
         {
+            Canvas map = this.mapCanvas;
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation =
-                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
             picker.FileTypeFilter.Add(".xml");
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
@@ -45,7 +44,7 @@ namespace FastDelivery_IHM
                 List<Object> xmlData = Outils.ParserXml_Plan(streamFile);
                 Dictionary<int, FastDelivery_Library.Point> points = (Dictionary<int, FastDelivery_Library.Point>)xmlData[1];
                 Dictionary<int, Troncon> troncons = (Dictionary<int, Troncon>)xmlData[0];
-                Canvas map = this.mapCanvas;
+                
 
                 foreach (var point in points)
                 {
@@ -55,7 +54,6 @@ namespace FastDelivery_IHM
                     Canvas.SetLeft(intersection, point.Value.x);
                     map.Children.Add(intersection);
                 }
-
             }
             else
             {
