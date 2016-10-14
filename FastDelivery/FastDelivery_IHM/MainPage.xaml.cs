@@ -32,7 +32,7 @@ namespace FastDelivery_IHM
 
         private async void button_Click(object sender, RoutedEventArgs e)
         {
-            Canvas map = this.mapCanvas;
+            MapView map = this.mapCanvas;
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.FileTypeFilter.Add(".xml");
@@ -42,18 +42,19 @@ namespace FastDelivery_IHM
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 StructPlan xmlData = Outils.ParserXml_Plan(streamFile);
-                Dictionary<int, FastDelivery_Library.Point> points = xmlData.HashPoint;
-                Dictionary<int, Troncon> troncons = xmlData.HashTroncon;
+                map.LoadMap(xmlData);
+                //Dictionary<int, FastDelivery_Library.Point> points = xmlData.HashPoint;
+                //Dictionary<int, Troncon> troncons = xmlData.HashTroncon;
                 
 
-                foreach (var point in points)
-                {
-                    TextBlock intersection = new TextBlock();
-                    intersection.Text = point.Value.id.ToString() + " : (" + point.Value.x.ToString() + "," + point.Value.y.ToString() + ")";
-                    Canvas.SetTop(intersection, point.Value.y);
-                    Canvas.SetLeft(intersection, point.Value.x);
-                    map.Children.Add(intersection);
-                }
+                //foreach (var point in points)
+                //{
+                //    TextBlock intersection = new TextBlock();
+                //    intersection.Text = point.Value.id.ToString() + " : (" + point.Value.x.ToString() + "," + point.Value.y.ToString() + ")";
+                //    Canvas.SetTop(intersection, point.Value.y);
+                //    Canvas.SetLeft(intersection, point.Value.x);
+                //    map.Children.Add(intersection);
+                //}
             }
             else
             {

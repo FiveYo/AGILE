@@ -34,13 +34,16 @@ namespace FastDelivery_Library
             //déclaration de la structure
             StructPlan Hashstruct = new StructPlan();
             
+            var nodes = MyData.Descendants("noeud");
+
             //variable calcul xmax ymax xmin ymin
-            int xmax = 0;
-            int xmin = 999999;
-            int ymax = 0;
-            int ymin = 999999;
+            int xmax = int.Parse(nodes.First().Attribute("x").Value);
+            int xmin = xmax;
+            int ymax = int.Parse(nodes.First().Attribute("y").Value);
+            int ymin = ymax;
+
             //On génère les Points depuis le fichier XML en paramètre
-            foreach (var node  in MyData.Descendants("noeud"))
+            foreach (var node  in nodes)
             {
                 int Id = int.Parse(node.Attribute("id").Value);
                 int x = int.Parse(node.Attribute("x").Value);
