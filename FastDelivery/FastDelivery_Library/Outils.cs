@@ -97,11 +97,13 @@ namespace FastDelivery_Library
 
                     //On met a jour les voisins 
                     Origin_Point.SetVoisins(Troncon_temp);
+
                     //On met à jour la HashTable avec un nouvel id
                     TronconHash.Add(ID, Troncon_temp);
                     }
                 ID++;
             }
+
             Hashstruct.HashPoint = PointHash;
             Hashstruct.HashTroncon = TronconHash;
             Hashstruct.Xmax = xmax;
@@ -111,7 +113,7 @@ namespace FastDelivery_Library
 
             return Hashstruct;
         }
-        public static Dictionary<int,Livraison> ParserXml_Livraison(string File_PATH,Dictionary<int,Point> HashPoint)
+        public static Dictionary<int,Livraison> ParserXml_Livraison(string File_PATH, Dictionary<int,Point> HashPoint)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(File_PATH);
