@@ -8,11 +8,12 @@ namespace FastDelivery_Library
 {
     public class Livraison
     {
-        public int Adresse, Duree;
+        public int  Duree;
         public string DebutPlage, FinPlage;
         public bool OnPlage = false;
         public Entrepot Entrepot;
-        public Livraison( int adresse , int duree, Entrepot topertne)
+        public Point Adresse;
+        public Livraison(Point adresse , int duree, Entrepot topertne)
         {
             this.Adresse = adresse;
             this.Duree = duree;

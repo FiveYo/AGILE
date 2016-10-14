@@ -42,9 +42,9 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                List<Object> xmlData = Outils.ParserXml_Plan(streamFile);
-                Dictionary<int, FastDelivery_Library.Point> points = (Dictionary<int, FastDelivery_Library.Point>)xmlData[1];
-                Dictionary<int, Troncon> troncons = (Dictionary<int, Troncon>)xmlData[0];
+                Outils.StructPlan xmlData = Outils.ParserXml_Plan(streamFile);
+                Dictionary<int, FastDelivery_Library.Point> points = xmlData.HashPoint;
+                Dictionary<int, Troncon> troncons = xmlData.HashTroncon;
                 Canvas map = this.mapCanvas;
 
                 foreach (var point in points)
