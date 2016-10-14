@@ -33,8 +33,7 @@ namespace FastDelivery_Library
 
             //déclaration de la structure
             StructPlan Hashstruct = new StructPlan();
-
-            List <object> HashList = new List<object>();
+            
             //variable calcul xmax ymax xmin ymin
             int xmax = 0;
             int xmin = 999999;
@@ -161,11 +160,12 @@ namespace FastDelivery_Library
             }
             return LivHash;
         }
-        public struct StructPlan
-        {
-            public Dictionary<int, Point> HashPoint;
-            public Dictionary<int, Troncon> HashTroncon;
-            public int Xmin, Xmax, Ymin, Ymax;
-        }
+        
+    }
+    public struct StructPlan
+    {
+        public Dictionary<int, Point> HashPoint;
+        public Dictionary<int, Troncon> HashTroncon;
+        public int Xmin, Xmax, Ymin, Ymax;
     }
 }
