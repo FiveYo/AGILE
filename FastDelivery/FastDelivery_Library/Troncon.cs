@@ -20,5 +20,11 @@ namespace FastDelivery_Library
             this.StreetName = nomRue;
             this.Id = ID;
         } 
+
+        public double calculPoids()
+        {
+            double poids = Length / Speed;
+            return poids;
+        }
     }
 }
