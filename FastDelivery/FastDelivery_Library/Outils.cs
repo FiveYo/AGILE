@@ -15,7 +15,7 @@ namespace FastDelivery_Library
         {
 
         }
-        public static Dictionary<int,Point> ParserXml_Plan(string File_PATH)
+        public static List<object> ParserXml_Plan(string File_PATH)
         { 
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(File_PATH);
@@ -23,6 +23,8 @@ namespace FastDelivery_Library
             //On récupète dans un dictionnaire la data avec le node qu'on veut 
             Dictionary<int, Point> PointHash = new Dictionary<int, Point>();
             Dictionary<int, Troncon> TronconHash = new Dictionary<int, Troncon>();
+
+            List<object> HashList = new List<object>();
 
             //On génère les Points depuis le fichier XML en paramètre 
             foreach (var node  in MyData.Descendants("noeud"))
@@ -70,8 +72,10 @@ namespace FastDelivery_Library
                     }
                 ID++;
             }
-            
-            return PointHash;
+            HashList.Add(TronconHash);
+            HashList.Add(PointHash);
+
+            return HashList;
         }
         public static Dictionary<int,Livraison> ParserXml_Livraison(string File_PATH)
         {
