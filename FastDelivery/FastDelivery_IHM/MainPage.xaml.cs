@@ -13,6 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using FastDelivery_Library;
+using System.Threading.Tasks;
+
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace FastDelivery_IHM
@@ -25,6 +28,39 @@ namespace FastDelivery_IHM
         public MainPage()
         {
             this.InitializeComponent();
+        }
+
+        private async void button_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation =
+                Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".xml");
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                Stream streamFile = await file.OpenStreamForReadAsync();
+                List<Object> xmlData = Outils.ParserXml_Plan(streamFile);
+                Dictionary<int, FastDelivery_Library.Point> points = (Dictionary<int, FastDelivery_Library.Point>)xmlData[1];
+                Dictionary<int, Troncon> troncons = (Dictionary<int, Troncon>)xmlData[0];
+                Canvas map = this.mapCanvas;
+
+                foreach (var point in points)
+                {
+                    TextBlock intersection = new TextBlock();
+                    intersection.Text = point.Value.id.ToString() + " : (" + point.Value.x.ToString() + "," + point.Value.y.ToString() + ")";
+                    Canvas.SetTop(intersection, point.Value.y);
+                    Canvas.SetLeft(intersection, point.Value.x);
+                    map.Children.Add(intersection);
+                }
+
+            }
+            else
+            {
+                
+            }
         }
     }
 }

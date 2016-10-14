@@ -15,10 +15,17 @@ namespace FastDelivery_Library
         {
 
         }
-        public static List<object> ParserXml_Plan(string File_PATH)
+
+        /// <summary>
+        /// Retourne une liste d'object, le premier étant la dictionnaire de Troncon,
+        /// le second le dictionnaire de point
+        /// </summary>
+        /// <param name="streamFile">stream du fichier xml</param>
+        /// <returns></returns>
+        public static List<object> ParserXml_Plan(System.IO.Stream streamFile)
         { 
             //On initialise notre Xdocument avec le Path du fichier xml
-            XDocument MyData = XDocument.Load(File_PATH);
+            XDocument MyData = XDocument.Load(streamFile);
 
             //On récupète dans un dictionnaire la data avec le node qu'on veut 
             Dictionary<int, Point> PointHash = new Dictionary<int, Point>();
