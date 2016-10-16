@@ -6,23 +6,45 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.3*" />
             <ColumnDefinition Width="0.7*" />
         </Grid.ColumnDefinitions>
-        <Grid x:Name="mapGrid" Grid.Column="1" Margin="50">
-            <Border BorderBrush="Black" BorderThickness="2">
-                <local:MapView x:Name="mapCanvas" Margin="0"/>
-            </Border>
+        <Grid x:Name="mapGrid" Grid.Column="1" Padding="50" Background="WhiteSmoke">
+            <local:MapView x:Name="mapCanvas" Margin="0"/>
         </Grid>
-        <StackPanel HorizontalAlignment="Stretch"  Margin="0,0,0,0" VerticalAlignment="Stretch">
-            <Grid Height="100">
-                <Button x:Name="button" Content="Load Plan" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Click="button_Click"/>
+        <SplitView x:Name="navbar" DisplayMode="CompactOverlay"  IsPaneOpen="False" 
+               CompactPaneLength="50" OpenPaneLength="250">
+            <SplitView.Pane>
+                <StackPanel Background="WhiteSmoke">
+                    <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                    Width="50" Height="50" Background="Transparent" Click="HamburgerButton_Click"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="loadMap" FontFamily="Segoe MDL2 Assets" Content="&#59657;"
+                    Width="50" Height="50" Background="Transparent" Click="loadMap_Click"/>
+                        <TextBlock Text="Charger un plan" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="loadDeliveries" FontFamily="Segoe MDL2 Assets" Content="&#xE707;"
+                        Width="50" Height="50" Background="Transparent"/>
+                        <TextBlock Text="Charger les livraisons" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="loadCircuit" FontFamily="Segoe MDL2 Assets" Content="&#xE8FB;"
+                        Width="50" Height="50" Background="Transparent"/>
+                        <TextBlock Text="Calculer une tournée" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <TextBlock Text="SplitView Basic" FontSize="54"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </SplitView.Content>
 
-            </Grid>
-            <ListView x:Name="listLivraison" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0"/>
-        </StackPanel>
+        </SplitView>
     </Grid>
 </Page>

@@ -28,7 +28,6 @@ namespace FastDelivery_IHM
             this.SizeChanged += MapView_SizeChanged;
             planLoaded = false;
             livraisonLoaded = false;
-            this.Background = new SolidColorBrush(Colors.Beige);
         }
 
         public void LoadMap(StructPlan plan)
