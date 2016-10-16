@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using FastDelivery_Library;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -28,36 +29,34 @@ namespace FastDelivery_IHM
         public MainPage()
         {
             this.InitializeComponent();
+
+            // Enable Previous Button
+            // SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
         }
 
-        private async void button_Click(object sender, RoutedEventArgs e)
+        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
-            Canvas map = this.mapCanvas;
+            this.navbar.IsPaneOpen = !navbar.IsPaneOpen;
+        }
+
+        private async void loadMap_Click(object sender, RoutedEventArgs e)
+        {
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
+
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.FileTypeFilter.Add(".xml");
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 StructPlan xmlData = Outils.ParserXml_Plan(streamFile);
-                Dictionary<int, FastDelivery_Library.Point> points = xmlData.HashPoint;
-                Dictionary<int, Troncon> troncons = xmlData.HashTroncon;
-                
-
-                foreach (var point in points)
-                {
-                    TextBlock intersection = new TextBlock();
-                    intersection.Text = point.Value.id.ToString() + " : (" + point.Value.x.ToString() + "," + point.Value.y.ToString() + ")";
-                    Canvas.SetTop(intersection, point.Value.y);
-                    Canvas.SetLeft(intersection, point.Value.x);
-                    map.Children.Add(intersection);
-                }
+                mapCanvas.LoadMap(xmlData);
             }
             else
             {
-                
+
             }
         }
     }
