@@ -83,7 +83,4 @@ namespace FastDelivery_Library
             return false;
         }
     }
-
-
-
 }

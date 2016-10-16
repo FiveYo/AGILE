@@ -31,7 +31,7 @@ namespace FastDelivery_Library
          * @param i
          * @return le sommet visite en i-eme position dans la solution calculee par chercheSolution
          */
-         int getMeilleureSolution(int i);
+         int? getMeilleureSolution(int i);
 
         /** 
          * @return la duree de la solution calculee par chercheSolution

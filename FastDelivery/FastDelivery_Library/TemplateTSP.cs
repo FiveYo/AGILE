@@ -109,10 +109,7 @@ namespace FastDelivery_Library
         }
     }
 
-        int TSP.getMeilleureSolution(int i)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 
 
