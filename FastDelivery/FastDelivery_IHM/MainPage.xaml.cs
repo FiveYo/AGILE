@@ -71,7 +71,7 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                Controler.loadDeliveries(streamFile, mapCanvas);
+                Controler.loadDeliveries(streamFile, mapCanvas, listDeliveries);
             }
             else
             {
@@ -82,6 +82,17 @@ namespace FastDelivery_IHM
         private void loadCircuit_Click(object sender, RoutedEventArgs e)
         {
             Controler.GetWay(mapCanvas);
+        }
+
+        private void checkButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in listDeliveries.Children)
+            {
+                if(item is Delivery)
+                {
+                    ((Delivery)item).toggleSplit();
+                }
+            }
         }
     }
 }

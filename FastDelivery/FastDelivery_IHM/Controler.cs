@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 
 using FastDelivery_Library;
+using Windows.UI.Xaml.Controls;
 
 namespace FastDelivery_IHM
 {
@@ -31,12 +32,23 @@ namespace FastDelivery_IHM
             }
         }
 
-        public static void loadDeliveries(Stream streamFile, MapView mapCanvas)
+        public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
         {
             if(planLoaded)
             {
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, structPlan.HashPoint);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
+
+                list.Children.Clear();
+                foreach (var livraison in demandeLivraisons.Values)
+                {
+                    list.Children.Add(
+                        new Delivery(
+                            livraison.Adresse,
+                            livraison.Duree
+                        )
+                    );
+                }
             }
             else
             {
