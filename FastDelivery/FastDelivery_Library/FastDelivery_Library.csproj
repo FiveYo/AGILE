@@ -34,11 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="InteratorSeq.cs" />
     <Compile Include="DemandeLivraison.cs" />
+    <Compile Include="Dijkstra.cs" />
     <Compile Include="Entrepot.cs" />
+    <Compile Include="Graphe.cs" />
+    <Compile Include="TemplateTSP.cs" />
+    <Compile Include="TSP.cs" />
     <Compile Include="Livraison.cs" />
     <Compile Include="Outils.cs" />
     <Compile Include="Plan.cs" />
@@ -46,6 +48,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tournee.cs" />
     <Compile Include="Troncon.cs" />
+    <Compile Include="TSP1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Windows.Foundation.FoundationContract">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\References\Windows.Foundation.FoundationContract\1.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

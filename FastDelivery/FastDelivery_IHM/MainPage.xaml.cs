@@ -51,13 +51,37 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                StructPlan xmlData = Outils.ParserXml_Plan(streamFile);
-                mapCanvas.LoadMap(xmlData);
+                Controler.loadMap(streamFile, mapCanvas);
             }
             else
             {
 
             }
+        }
+
+        private async void loadDeliveries_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.FileTypeFilter.Add(".xml");
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+
+            if (file != null)
+            {
+                Stream streamFile = await file.OpenStreamForReadAsync();
+                Controler.loadDeliveries(streamFile, mapCanvas);
+            }
+            else
+            {
+
+            }
+        }
+
+        private void loadCircuit_Click(object sender, RoutedEventArgs e)
+        {
+            Controler.GetWay(mapCanvas);
         }
     }
 }

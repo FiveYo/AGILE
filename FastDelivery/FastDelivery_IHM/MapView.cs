@@ -16,111 +16,173 @@ using Windows.Storage.Streams;
 namespace FastDelivery_IHM
 {
 
-    class MapView : Canvas
+    public class MapView : Canvas
     {
-        StructPlan plan;
         bool planLoaded;
-        bool livraisonLoaded;
-        double rX, rY, minX, minY;
+        double minX, minY, rX, rY;
 
         public MapView()
         {
             this.SizeChanged += MapView_SizeChanged;
             planLoaded = false;
-            livraisonLoaded = false;
         }
 
         public void LoadMap(StructPlan plan)
         {
-            this.plan = plan;
+            Children.Clear();
             planLoaded = true;
-            minX = plan.Xmin;
-            minY = plan.Ymin;
-            this.Display();
+            DisplayMap(plan);
         }
+
+        public void LoadDeliveries(Dictionary<int, Livraison> demandeLivraisons)
+        {
+            DisplayEntrepot(demandeLivraisons);
+            DisplayDeliveries(demandeLivraisons);
+        }
+
+
+        public void LoadWay(LinkedList<Point> chemin)
+        {
+            DisplayWay(chemin);
+        }
+
 
         private void MapView_SizeChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Display();
+
+            //this.Display();
         }
 
-        private void Display()
-        {
-            // On supprime tout ce qu'on avait affiché
-            this.Children.Clear();
-            rX = this.ActualWidth / (this.plan.Xmax - this.plan.Xmin);
-            rY = this.ActualHeight / (this.plan.Ymax - this.plan.Ymin);
+        //private void Display()
+        //{
+        //    // On supprime tout ce qu'on avait affiché
+        //    this.Children.Clear();
+        //    rX = this.ActualWidth / (this.plan.Xmax - this.plan.Xmin);
+        //    rY = this.ActualHeight / (this.plan.Ymax - this.plan.Ymin);
 
-            if (planLoaded)
-            {
-                this.DisplayMap();
-                this.DisplayLivraison();
-                if(livraisonLoaded)
-                {
-                    this.DisplayLivraison();
-                }
-            }
-        }
+        //    if (planLoaded)
+        //    {
+        //        this.DisplayMap();
+        //        // this.DisplayLivraison();
+        //        if(livraisonLoaded)
+        //        {
+        //            this.DisplayLivraison();
+        //        }
+        //    }
+        //}
 
-        private void DisplayMap()
+        private void DisplayMap(StructPlan plan)
         {
-            foreach (var troncon in this.plan.HashTroncon)
+            minX = plan.Xmin;
+            minY = plan.Ymin;
+            rX = this.ActualWidth / (double)(plan.Xmax - plan.Xmin);
+            rY = this.ActualHeight / (double)(plan.Ymax - plan.Ymin);
+
+            foreach (var troncon in plan.HashTroncon)
             {
                 Line line = new Line();
 
                 line.Stroke = new SolidColorBrush(Colors.Green);
 
-                line.X1 = getX(troncon.Value.Origin.x);
-                line.Y1 = getY(troncon.Value.Origin.y);
-                line.X2 = getX(troncon.Value.Destination.x);
-                line.Y2 = getY(troncon.Value.Destination.y);
+                line.X1 = getX(troncon.Value.Origin.x, minX, rX);
+                line.Y1 = getY(troncon.Value.Origin.y, minY, rY);
+                line.X2 = getX(troncon.Value.Destination.x, minX, rX);
+                line.Y2 = getY(troncon.Value.Destination.y, minY, rY);
 
                 line.StrokeThickness = 2;
                 this.Children.Add(line);
             }
         }
 
-        private async void DisplayLivraison()
+        private async void DisplayDeliveries(Dictionary<int, Livraison> demandeLivraisons)
         {
-            if (this.planLoaded)
-            {
-                var source = new BitmapImage();
+            var source = new BitmapImage();
 
-                var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur.png"));
-                IRandomAccessStream stream = await rass.OpenReadAsync();
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur.png"));
+            IRandomAccessStream stream = await rass.OpenReadAsync();
 
-                IRandomAccessStream stream2 = stream.CloneStream();
+            IRandomAccessStream stream2 = stream.CloneStream();
 
 
-                var decoder = await BitmapDecoder.CreateAsync(stream);
-                var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
+            var decoder = await BitmapDecoder.CreateAsync(stream);
+            var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
                 
-                source.SetSource(stream2);
+            source.SetSource(stream2);
 
-                var recenterY = - size.Height;
-                var recenterX = - size.Width / 2;
+            var recenterY = - size.Height;
+            var recenterX = - size.Width / 2;
 
-                foreach (var point in this.plan.HashPoint)
-                {
-                    Image intersection = new Image();
-                    intersection.Source = source;
-                    double top = getY(point.Value.y) + recenterY;
-                    double left = getX(point.Value.x) + recenterX;
-                    Canvas.SetTop(intersection, top);
-                    Canvas.SetLeft(intersection, left);
-                    this.Children.Add(intersection);
-                }
+            foreach (var point in demandeLivraisons)
+            {
+                Image intersection = new Image();
+                intersection.Source = source;
+                double top = getY(point.Value.Adresse.y, minY, rY) + recenterY;
+                double left = getX(point.Value.Adresse.x, minX, rX) + recenterX;
+                Canvas.SetTop(intersection, top);
+                Canvas.SetLeft(intersection, left);
+                this.Children.Add(intersection);
             }
         }
 
-        private double getX(double X)
+        private void DisplayWay(LinkedList<Point> chemin)
         {
-            return (X - this.minX) * this.rX;
+            Point first = chemin.First.Value;
+            foreach(var point in chemin.Skip(1))
+            {
+                Point second = point;
+
+                Line line = new Line();
+
+                line.Stroke = new SolidColorBrush(Colors.Green);
+
+                line.X1 = getX(first.x, minX, rX);
+                line.Y1 = getY(first.y, minY, rY);
+                line.X2 = getX(second.x, minX, rX);
+                line.Y2 = getY(second.y, minY, rY);
+
+                line.StrokeThickness = 2;
+                this.Children.Add(line);
+
+                first = second;
+            }
         }
 
-        private double getY(double Y)
+        private async void DisplayEntrepot(Dictionary<int, Livraison> demandeLivraisons)
         {
-            return (Y - this.minY) * this.rY;
+            //Point entrepot = demandeLivraisons.First().Value.Entrepot.adresse;
+            //var source = new BitmapImage();
+
+            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur.png"));
+            //IRandomAccessStream stream = await rass.OpenReadAsync();
+
+            //IRandomAccessStream stream2 = stream.CloneStream();
+
+
+            //var decoder = await BitmapDecoder.CreateAsync(stream);
+            //var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
+
+            //source.SetSource(stream2);
+
+            //var recenterY = -size.Height;
+            //var recenterX = -size.Width / 2;
+            //Image intersection = new Image();
+            //intersection.Source = source;
+            //double top = getY(entrepot.y, minY, rY) + recenterY;
+            //double left = getX(entrepot.x, minX, rX) + recenterX;
+            //Canvas.SetTop(intersection, top);
+            //Canvas.SetLeft(intersection, left);
+            //this.Children.Add(intersection);
+        }
+
+
+        private static double getX(double X, double minX, double rX)
+        {
+            return (X - minX) * rX;
+        }
+
+        private static double getY(double Y, double minY, double rY)
+        {
+            return (Y - minY) * rY;
         }
     }
 }

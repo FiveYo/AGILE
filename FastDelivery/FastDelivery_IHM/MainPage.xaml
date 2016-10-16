@@ -28,20 +28,20 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="loadDeliveries" FontFamily="Segoe MDL2 Assets" Content="&#xE707;"
-                        Width="50" Height="50" Background="Transparent"/>
+                        Width="50" Height="50" Background="Transparent" Click="loadDeliveries_Click"/>
                         <TextBlock Text="Charger les livraisons" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="loadCircuit" FontFamily="Segoe MDL2 Assets" Content="&#xE8FB;"
-                        Width="50" Height="50" Background="Transparent"/>
+                        Width="50" Height="50" Background="Transparent" Click="loadCircuit_Click"/>
                         <TextBlock Text="Calculer une tournée" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
                 <Grid>
-                    <TextBlock Text="SplitView Basic" FontSize="54"
-                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Text="Liste des livraisons avec recherche ici" FontSize="54"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"/>
                 </Grid>
             </SplitView.Content>
 

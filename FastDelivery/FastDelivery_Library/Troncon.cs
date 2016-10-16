@@ -23,7 +23,7 @@ namespace FastDelivery_Library
 
         public double calculPoids()
         {
-            double poids = Length / Speed;
+            double poids = ((double)Length / (double)Speed);
             return poids;
         }
     }
