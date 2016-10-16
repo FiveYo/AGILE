@@ -38,7 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemandeLivraison.cs" />
+    <Compile Include="Dijkstra.cs" />
     <Compile Include="Entrepot.cs" />
+    <Compile Include="Graphe.cs" />
     <Compile Include="Livraison.cs" />
     <Compile Include="Outils.cs" />
     <Compile Include="Plan.cs" />

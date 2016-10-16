@@ -14,7 +14,7 @@ namespace FastDelivery_Library
         public Dictionary<int, Point> listePoints;
         public Graphe(Point depart, Point arrivee, List<object> hashList )
         {
-            this.listePoints = (Dictionary<int, Point>)hashList[1]; ;
+            this.listePoints = (Dictionary<int, Point>)hashList[1];
             this.listeTroncons = (Dictionary<int, Troncon>)hashList[0];
             this.pointDepart = depart;
             this.pointArrivee = arrivee;

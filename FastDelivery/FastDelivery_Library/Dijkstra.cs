@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FastDelivery_Library
 {
-    public class DijkstraAlgorithm
+    public class Dijkstra
     {
 
         private Dictionary<int, Point> noeuds;
@@ -16,7 +16,7 @@ namespace FastDelivery_Library
         private Dictionary<Point, Point> predecessors;
         private Dictionary<Point, double> distance;
 
-        public DijkstraAlgorithm(Graphe graph)
+        public Dijkstra(Graphe graph)
         {
             // create a copy of the array so that we can operate on this array
             this.noeuds = new Dictionary<int, Point>(graph.listePoints);
@@ -40,24 +40,21 @@ namespace FastDelivery_Library
             }
         }
 
-        private void findMinimalDistances(Point node)
+        public void findMinimalDistances(Point node)
         {
             List<Point> adjacentnoeuds = getNeighbors(node);
             foreach (Point target in adjacentnoeuds)
             {
-                if (getShortestDistance(target) > getShortestDistance(node)
-                                + getDistance(node, target))
+                if (getShortestDistance(target) > getShortestDistance(node) + getDistance(node, target))
                 {
-                    distance.Add(target, getShortestDistance(node)
-                                    + getDistance(node, target));
+                    distance.Add(target, getShortestDistance(node) + getDistance(node, target));
                     predecessors.Add(target, node);
                     unSettlednoeuds.Add(target);
                 }
             }
-
         }
 
-        private double getDistance(Point node, Point target)
+        public double getDistance(Point node, Point target)
         {
             foreach (Troncon Troncon in Troncons.Values)
             {
@@ -69,7 +66,7 @@ namespace FastDelivery_Library
             throw new Exception("Erreur calcul de la distance entre deux points");
         }
 
-        private List<Point> getNeighbors(Point node)
+        public List<Point> getNeighbors(Point node)
         {
             List<Point> neighbors = new List<Point>();
             foreach (Troncon Troncon in Troncons.Values)
@@ -82,7 +79,7 @@ namespace FastDelivery_Library
             return neighbors;
         }
 
-        private Point getMinimum( HashSet<Point> Pointes)
+        public Point getMinimum( HashSet<Point> Pointes)
         {
             Point minimum = null;
             foreach (Point Point in Pointes)
@@ -102,21 +99,20 @@ namespace FastDelivery_Library
             return minimum;
         }
 
-        private bool isSettled(Point Point)
+        public bool isSettled(Point Point)
         {
             return settlednoeuds.Contains(Point);
         }
 
-        private double getShortestDistance(Point destination)
+        public double getShortestDistance(Point destination)
         {
-            double d = distance[destination];
-            if (d == null)
+            if (!distance.ContainsKey(destination))
             {
                 return int.MaxValue;
             }
             else
             {
-                return d;
+                return distance[destination];
             }
         }
 
