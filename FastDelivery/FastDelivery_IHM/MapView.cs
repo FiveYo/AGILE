@@ -98,7 +98,7 @@ namespace FastDelivery_IHM
         {
             var source = new BitmapImage();
 
-            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur.png"));
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_livraison.png"));
             IRandomAccessStream stream = await rass.OpenReadAsync();
 
             IRandomAccessStream stream2 = stream.CloneStream();
@@ -152,7 +152,7 @@ namespace FastDelivery_IHM
             //Point entrepot = demandeLivraisons.First().Value.Entrepot.adresse;
             //var source = new BitmapImage();
 
-            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur.png"));
+            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
             //IRandomAccessStream stream = await rass.OpenReadAsync();
 
             //IRandomAccessStream stream2 = stream.CloneStream();
