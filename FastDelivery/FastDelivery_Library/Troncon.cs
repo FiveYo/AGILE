@@ -11,6 +11,7 @@ namespace FastDelivery_Library
         public int Length,Speed,Id;
         public Point Destination, Origin;
         public string StreetName;
+
         public Troncon(Point dest, int longueur, Point origine, int vitesse, string nomRue, int ID )
         {
             this.Destination = dest;

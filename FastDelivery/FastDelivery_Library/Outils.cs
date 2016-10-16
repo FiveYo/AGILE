@@ -115,37 +115,46 @@ namespace FastDelivery_Library
 
             return Hashstruct;
         }
-        public static Dictionary<int,Livraison> ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int,Point> HashPoint)
+        public static Dictionary<int, Livraison> ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int, Point> HashPoint)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(streamFile);
 
             //On récupète dans un dictionnaire la data avec le node qu'on veut 
             Dictionary<int, Livraison> LivHash = new Dictionary<int, Livraison>();
-            
+
             // On fait une liste d'entrepot car on sait jamais poto
             List<Entrepot> ListEntrepot = new List<Entrepot>();
 
             //On génère les Livraisons depuis le fichier XML en paramètre 
             int ID = 1;
 
-            var EntrepotXML = MyData.Descendants("entrepot").First();
-            Entrepot entrepot = new Entrepot(
-            1,
-            int.Parse(EntrepotXML.Attribute("adresse").Value),
-            EntrepotXML.Attribute("heureDepart").Value
-            );
+            // On initialise les adresse
+            Point AdressePointLivraison;
+            Point AdressePointEntrepot;
 
-            Point AdressePoint;
+            var EntrepotXML = MyData.Descendants("entrepot").First();
+
+            //On récupère les infos sur l'entrepot, son adresse sera un objet Point
+            int idAdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
+            if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
+            { 
+                Entrepot entrepot = new Entrepot(
+                1,
+                AdressePointEntrepot,
+                EntrepotXML.Attribute("heureDepart").Value
+                );
+            }
+
+            //On récupère les infos sur les livraisons, leurs adresses seront des objets Point
             foreach (var node in MyData.Descendants("livraison"))
             {
                 int id = int.Parse(node.Attribute("adresse").Value);
-                if (HashPoint.TryGetValue(id, out AdressePoint))
+                if (HashPoint.TryGetValue(id, out AdressePointLivraison))
                 { 
                     Livraison liv = new Livraison(
-                        AdressePoint,
-                        int.Parse(node.Attribute("duree").Value),
-                        entrepot
+                        AdressePointLivraison,
+                        int.Parse(node.Attribute("duree").Value)
                         );
 
                     string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";

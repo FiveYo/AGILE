@@ -8,9 +8,10 @@ namespace FastDelivery_Library
 {
     public class Entrepot
     {
-        int Id, Adresse;
+        int Id;
+        Point Adresse;
         string HeureDepart;
-        public Entrepot(int id, int adresse, string HeureDep)
+        public Entrepot(int id, Point adresse, string HeureDep)
         {
             this.Id = id;
             this.Adresse = adresse;
