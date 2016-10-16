@@ -11,13 +11,11 @@ namespace FastDelivery_Library
         public int  Duree;
         public string DebutPlage, FinPlage;
         public bool OnPlage = false;
-        public Entrepot Entrepot;
         public Point Adresse;
-        public Livraison(Point adresse , int duree, Entrepot topertne)
+        public Livraison(Point adresse , int duree)
         {
             this.Adresse = adresse;
             this.Duree = duree;
-            this.Entrepot = topertne;
         }
         
         public void SetPlage(string debut, string fin)

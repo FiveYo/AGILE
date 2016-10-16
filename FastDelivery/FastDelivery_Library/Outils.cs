@@ -129,23 +129,30 @@ namespace FastDelivery_Library
             //On génère les Livraisons depuis le fichier XML en paramètre 
             int ID = 1;
 
-            var EntrepotXML = MyData.Descendants("entrepot").First();
-            Entrepot entrepot = new Entrepot(
-            1,
-            int.Parse(EntrepotXML.Attribute("adresse").Value),
-            EntrepotXML.Attribute("heureDepart").Value
-            );
+            Point AdressePointLivraison;
+            Point AdressePointEntrepot;
 
-            Point AdressePoint;
+
+            // On récupère les données sur l'entrepot 
+            var EntrepotXML = MyData.Descendants("entrepot").First();
+            int AdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
+            if (HashPoint.TryGetValue(AdresseEntrepot, out AdressePointEntrepot))
+            {
+                Entrepot entrepot = new Entrepot(
+                1,
+                AdressePointEntrepot,
+                EntrepotXML.Attribute("heureDepart").Value
+                );
+            }
+             // On récupère les données sur les livraisons
             foreach (var node in MyData.Descendants("livraison"))
             {
                 int id = int.Parse(node.Attribute("adresse").Value);
-                if (HashPoint.TryGetValue(id, out AdressePoint))
+                if (HashPoint.TryGetValue(id, out AdressePointLivraison))
                 { 
                     Livraison liv = new Livraison(
-                        AdressePoint,
-                        int.Parse(node.Attribute("duree").Value),
-                        entrepot
+                        AdressePointLivraison,
+                        int.Parse(node.Attribute("duree").Value)
                         );
 
                     string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
@@ -161,6 +168,7 @@ namespace FastDelivery_Library
                     ID++;
                 }   
             }
+
             return LivHash;
         }
         
