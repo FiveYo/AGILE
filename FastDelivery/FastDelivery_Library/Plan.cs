@@ -19,7 +19,6 @@ namespace FastDelivery_Library
             this.ListTroncon = HashTroncon;
             this.tournee = tourneet;
             this.livAsk = demande;
-
         }
     }
 }
