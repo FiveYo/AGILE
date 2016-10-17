@@ -89,7 +89,7 @@ namespace FastDelivery_IHM
                 line.X2 = getX(troncon.Value.Destination.x, minX, rX);
                 line.Y2 = getY(troncon.Value.Destination.y, minY, rY);
 
-                line.StrokeThickness = 2;
+                line.StrokeThickness = 1;
                 this.Children.Add(line);
             }
         }
@@ -140,7 +140,7 @@ namespace FastDelivery_IHM
                 line.X2 = getX(second.x, minX, rX);
                 line.Y2 = getY(second.y, minY, rY);
 
-                line.StrokeThickness = 2;
+                line.StrokeThickness = 3;
                 this.Children.Add(line);
 
                 first = second;

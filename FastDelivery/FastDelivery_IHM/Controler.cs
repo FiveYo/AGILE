@@ -66,13 +66,6 @@ namespace FastDelivery_IHM
             List<Point> l = Outils.startTsp(structLivraison, structPlan);
             Graphe G = new Graphe(structPlan);
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(G);
-
-            //Point p1 = structLivraison.HashLivraison.ElementAt(5).Value.Adresse;
-            //dijkstra.execute(p1);
-            //Point p = structLivraison.HashLivraison.ElementAt(2).Value.Adresse;
-            //LinkedList<Point> result = dijkstra.getPath(p);
-
-            //mapCanvas.LoadWay(result);
             Point start = structLivraison.entrepot.Adresse;
             foreach (var point in l)
             {

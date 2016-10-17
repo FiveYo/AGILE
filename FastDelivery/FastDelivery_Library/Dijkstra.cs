@@ -135,8 +135,9 @@ namespace FastDelivery_Library
         {
             LinkedList<Point> path = new LinkedList<Point>();
             Point step = target;
+            Point tmp;
             // check if a path exists
-            if (!predecessors.TryGetValue(target,out step))
+            if (!predecessors.TryGetValue(step, out tmp))
             {
                 return null;
             }
