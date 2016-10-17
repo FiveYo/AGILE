@@ -37,7 +37,7 @@ namespace FastDelivery_IHM
             if(planLoaded)
             {
                 structLivraison = Outils.ParserXml_Livraison(streamFile, structPlan.HashPoint);
-                mapCanvas.LoadDeliveries(structLivraison.HashLivraison);
+                mapCanvas.LoadDeliveries(structLivraison);
 
                 list.Children.Clear();
                 foreach (var livraison in structLivraison.HashLivraison.Values)
@@ -60,7 +60,7 @@ namespace FastDelivery_IHM
             
         }
 
-        public static void GetWay(MapView mapCanvas)
+        public async static void GetWay(MapView mapCanvas)
         {
 
             List<Point> l = Outils.startTsp(structLivraison, structPlan);
@@ -75,6 +75,7 @@ namespace FastDelivery_IHM
                     LinkedList<Point> result = dijkstra.getPath(point);
                     mapCanvas.LoadWay(result);
                     start = point;
+                    await Task.Delay(TimeSpan.FromSeconds(1));
                 }
             }
         }

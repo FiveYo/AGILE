@@ -34,10 +34,10 @@ namespace FastDelivery_IHM
             DisplayMap(plan);
         }
 
-        public void LoadDeliveries(Dictionary<int, Livraison> demandeLivraisons)
+        public void LoadDeliveries(StructLivraison demandeLivraisons)
         {
-            DisplayEntrepot(demandeLivraisons);
-            DisplayDeliveries(demandeLivraisons);
+            DisplayEntrepot(demandeLivraisons.entrepot);
+            DisplayDeliveries(demandeLivraisons.HashLivraison);
         }
 
 
@@ -147,31 +147,31 @@ namespace FastDelivery_IHM
             }
         }
 
-        private async void DisplayEntrepot(Dictionary<int, Livraison> demandeLivraisons)
+        private async void DisplayEntrepot(Entrepot entrepot)
         {
-            //Point entrepot = demandeLivraisons.First().Value.Entrepot.adresse;
-            //var source = new BitmapImage();
+            Point entrepotPt = entrepot.Adresse;
+            var source = new BitmapImage();
 
-            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
-            //IRandomAccessStream stream = await rass.OpenReadAsync();
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
+            IRandomAccessStream stream = await rass.OpenReadAsync();
 
-            //IRandomAccessStream stream2 = stream.CloneStream();
+            IRandomAccessStream stream2 = stream.CloneStream();
 
 
-            //var decoder = await BitmapDecoder.CreateAsync(stream);
-            //var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
+            var decoder = await BitmapDecoder.CreateAsync(stream);
+            var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
 
-            //source.SetSource(stream2);
+            source.SetSource(stream2);
 
-            //var recenterY = -size.Height;
-            //var recenterX = -size.Width / 2;
-            //Image intersection = new Image();
-            //intersection.Source = source;
-            //double top = getY(entrepot.y, minY, rY) + recenterY;
-            //double left = getX(entrepot.x, minX, rX) + recenterX;
-            //Canvas.SetTop(intersection, top);
-            //Canvas.SetLeft(intersection, left);
-            //this.Children.Add(intersection);
+            var recenterY = -size.Height;
+            var recenterX = -size.Width / 2;
+            Image intersection = new Image();
+            intersection.Source = source;
+            double top = getY(entrepotPt.y, minY, rY) + recenterY;
+            double left = getX(entrepotPt.x, minX, rX) + recenterX;
+            Canvas.SetTop(intersection, top);
+            Canvas.SetLeft(intersection, left);
+            this.Children.Add(intersection);
         }
 
 

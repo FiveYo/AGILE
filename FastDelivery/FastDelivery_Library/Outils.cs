@@ -185,7 +185,7 @@ namespace FastDelivery_Library
             LinkedList<Point> linked;
             int longueur = LivStruct.HashLivraison.Count + 1;
             int[,] matrice = new int[longueur, longueur];
-            int i = 0, j = 0;
+            int i = 0, j = 0, cout = 0;
             foreach (var points in LivStruct.HashLivraison)
             {
 
@@ -204,7 +204,33 @@ namespace FastDelivery_Library
                 j = 0;
                 i++;
             }
-            Point entrepot = LivStruct.entrepot.Adresse;
+            //Point entrepot = LivStruct.entrepot.Adresse;
+            //i = 0;
+            //d.execute(entrepot);
+            //// rempli la derniere colonne
+            //foreach (var points in LivStruct.HashLivraison)
+            //{
+            //    if (points.Value.Adresse.id != entrepot.id)
+            //    {
+            //        linked = d.getPath(points.Value.Adresse);
+            //        cout = (int)calculcout(linked);
+            //        matrice[longueur - 1, i] = cout;
+            //    }
+            //    i++;
+            //}
+            //i = 0;
+            //// rempli la ligne 9
+            //foreach (var points in LivStruct.HashLivraison)
+            //{
+            //    if (points.Value.Adresse.id != entrepot.id)
+            //    {
+            //        d.execute(points.Value.Adresse);
+            //        linked = d.getPath(entrepot);
+            //        cout = (int)calculcout(linked);
+            //        matrice[i, longueur - 1] = cout;
+            //    }
+            //    i++;
+            //}
 
             return matrice;
         }
@@ -250,7 +276,7 @@ namespace FastDelivery_Library
             {
                 if(index + 1 == tsp.meilleureSolution.Length)
                 {
-                    resultat.Add(LivStruct.entrepot.Adresse);
+                    //resultat.Add(LivStruct.entrepot.Adresse);
                 }
                 else
                 {
