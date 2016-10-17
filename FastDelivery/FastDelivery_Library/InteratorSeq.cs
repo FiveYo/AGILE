@@ -75,9 +75,9 @@ namespace FastDelivery_Library
 
         bool IIterator<int>.MoveNext()
         {
-            if (nbCandidats < candidats.Length)
+            if (nbCandidats > 0)
             {
-                nbCandidats++;
+                nbCandidats--;
                 return true;
             }
             return false;

@@ -16,7 +16,7 @@ namespace FastDelivery_IHM
         private static Plan plan { get; set; }
         private static StructPlan structPlan { get; set; }
         private static bool planLoaded = false;
-        private static Dictionary<int, Livraison> demandeLivraisons { get; set; }
+        private static StructLivraison structLivraison { get; set; }
 
         public static void loadMap(Stream file, MapView map)
         {
@@ -36,11 +36,11 @@ namespace FastDelivery_IHM
         {
             if(planLoaded)
             {
-                demandeLivraisons = Outils.ParserXml_Livraison(streamFile, structPlan.HashPoint);
-                mapCanvas.LoadDeliveries(demandeLivraisons);
+                structLivraison = Outils.ParserXml_Livraison(streamFile, structPlan.HashPoint);
+                mapCanvas.LoadDeliveries(structLivraison.HashLivraison);
 
                 list.Children.Clear();
-                foreach (var livraison in demandeLivraisons.Values)
+                foreach (var livraison in structLivraison.HashLivraison.Values)
                 {
                     list.Children.Add(
                         new Delivery(
@@ -49,23 +49,41 @@ namespace FastDelivery_IHM
                         )
                     );
                 }
+                
             }
             else
             {
                 throw new Exception("Load map before");
             }
-            Graphe G = new Graphe(demandeLivraisons.First().Value.Adresse, demandeLivraisons.Last().Value.Adresse, structPlan);
-            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(G);
-            dijkstra.execute(demandeLivraisons.First().Value.Adresse);
-            LinkedList<Point> result = dijkstra.getPath(demandeLivraisons.Last().Value.Adresse);
-            mapCanvas.LoadWay(result);
+            
+            
+            
         }
 
         public static void GetWay(MapView mapCanvas)
         {
-            //TODO
-            // Peut etre faire une boucle si tu as une liste de liste de point
-            //mapCanvas.LoadDeliveries();
+
+            List<Point> l = Outils.startTsp(structLivraison, structPlan);
+            Graphe G = new Graphe(structPlan);
+            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(G);
+
+            //Point p1 = structLivraison.HashLivraison.ElementAt(5).Value.Adresse;
+            //dijkstra.execute(p1);
+            //Point p = structLivraison.HashLivraison.ElementAt(2).Value.Adresse;
+            //LinkedList<Point> result = dijkstra.getPath(p);
+
+            //mapCanvas.LoadWay(result);
+            Point start = structLivraison.entrepot.Adresse;
+            foreach (var point in l)
+            {
+                if (point.id != start.id)
+                {
+                    dijkstra.execute(start);
+                    LinkedList<Point> result = dijkstra.getPath(point);
+                    mapCanvas.LoadWay(result);
+                    start = point;
+                }
+            }
         }
     }
 }

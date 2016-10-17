@@ -13,7 +13,7 @@ namespace FastDelivery_Library
     {
 
     
-    private int[] meilleureSolution;
+    public int[] meilleureSolution;
     private int coutMeilleureSolution = 0;
     private Boolean tempsLimiteAtteint;
 
@@ -22,7 +22,7 @@ namespace FastDelivery_Library
         return tempsLimiteAtteint;
     }
 
-    public void chercheSolution(int tpsLimite, int nbSommets, int[][] cout, int[] duree)
+    public void chercheSolution(int tpsLimite, int nbSommets, int[,] cout, int[] duree)
     {
         tempsLimiteAtteint = false;
         coutMeilleureSolution = int.MaxValue;
@@ -55,7 +55,7 @@ namespace FastDelivery_Library
 	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	 */
-    protected abstract int bound(int sommetCourant, List<int> nonVus, int[][] cout, int[] duree);
+    protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree);
 
     /*
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -65,7 +65,7 @@ namespace FastDelivery_Library
 	 * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
 	 * @return un iterateur permettant d'iterer sur tous les sommets de nonVus
 	 */
-    protected abstract IIterator<int> iterator(int sommetCrt, List<int> nonVus, int[][] cout, int[] duree);
+    protected abstract IIterator<int> iterator(int sommetCrt, List<int> nonVus, int[,] cout, int[] duree);
 
     /*
 	 * Methode definissant le patron (template) d'une resolution par separation et evaluation (branch and bound) du TSP
@@ -78,16 +78,16 @@ namespace FastDelivery_Library
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */
-    void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[][] cout, int[] duree, long tpsDebut, int tpsLimite)
+    void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, long tpsDebut, int tpsLimite)
     {
-        if (DateTime.Now.Millisecond - tpsDebut > tpsLimite)
-        {
-            tempsLimiteAtteint = true;
-            return;
-        }
+        //if (DateTime.Now.Millisecond - tpsDebut > tpsLimite)
+        //{
+        //    tempsLimiteAtteint = true;
+        //    return;
+        //}
         if (nonVus.Count == 0)
         { // tous les sommets ont ete visites
-            coutVus += cout[sommetCrt][0];
+            coutVus += cout[sommetCrt,0];
             if (coutVus < coutMeilleureSolution)
             { // on a trouve une solution meilleure que meilleureSolution
                 meilleureSolution = vus.ToArray<int>();
@@ -102,7 +102,7 @@ namespace FastDelivery_Library
                 int prochainSommet=it.Current; 
                 vus.Add(prochainSommet);
                 nonVus.Remove(prochainSommet);
-                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt][prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt,prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
                 vus.Remove(prochainSommet); 
                 nonVus.Add(prochainSommet);
             }
