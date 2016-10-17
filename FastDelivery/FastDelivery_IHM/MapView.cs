@@ -133,7 +133,7 @@ namespace FastDelivery_IHM
 
                 Line line = new Line();
 
-                line.Stroke = new SolidColorBrush(Colors.Green);
+                line.Stroke = new SolidColorBrush(Colors.Blue);
 
                 line.X1 = getX(first.x, minX, rX);
                 line.Y1 = getY(first.y, minY, rY);

@@ -54,6 +54,11 @@ namespace FastDelivery_IHM
             {
                 throw new Exception("Load map before");
             }
+            Graphe G = new Graphe(demandeLivraisons.First().Value.Adresse, demandeLivraisons.Last().Value.Adresse, structPlan);
+            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(G);
+            dijkstra.execute(demandeLivraisons.First().Value.Adresse);
+            LinkedList<Point> result = dijkstra.getPath(demandeLivraisons.Last().Value.Adresse);
+            mapCanvas.LoadWay(result);
         }
 
         public static void GetWay(MapView mapCanvas)

@@ -15,6 +15,7 @@ namespace FastDelivery_Library
         private HashSet<Point> unSettlednoeuds;
         private Dictionary<Point, Point> predecessors;
         private Dictionary<Point, double> distance;
+        private static List<int> idTest = new List<int>();
 
         public DijkstraAlgorithm(Graphe graph)
         {
@@ -43,15 +44,21 @@ namespace FastDelivery_Library
         private void findMinimalDistances(Point node)
         {
             List<Point> adjacentnoeuds = getNeighbors(node);
+            double test;
             foreach (Point target in adjacentnoeuds)
             {
+
                 if (getShortestDistance(target) > getShortestDistance(node)
                                 + getDistance(node, target))
                 {
-                    distance.Add(target, getShortestDistance(node)
-                                    + getDistance(node, target));
-                    predecessors.Add(target, node);
-                    unSettlednoeuds.Add(target);
+                    idTest.Add(target.id);
+                    if (!distance.TryGetValue(target, out test))
+                    {
+                        distance.Add(target, getShortestDistance(node)
+                                        + getDistance(node, target));
+                        predecessors.Add(target, node);
+                        unSettlednoeuds.Add(target);
+                    }
                 }
             }
 
@@ -82,7 +89,7 @@ namespace FastDelivery_Library
             return neighbors;
         }
 
-        private Point getMinimum( HashSet<Point> Pointes)
+        private Point getMinimum(HashSet<Point> Pointes)
         {
             Point minimum = null;
             foreach (Point Point in Pointes)
@@ -109,8 +116,8 @@ namespace FastDelivery_Library
 
         private double getShortestDistance(Point destination)
         {
-            double d = distance[destination];
-            if (d == null)
+            double d = 0;
+            if (!distance.TryGetValue(destination, out d))
             {
                 return int.MaxValue;
             }
@@ -134,13 +141,12 @@ namespace FastDelivery_Library
                 return null;
             }
             path.AddLast(step);
-            while (predecessors[step] != null)
+            while (predecessors.TryGetValue(step, out step))
             {
-                step = predecessors[step];
                 path.AddLast(step);
             }
             // Put it into the correct order
-            path = (LinkedList<Point>)path.Reverse();
+            //path = path.Reverse();
             return path;
         }
 

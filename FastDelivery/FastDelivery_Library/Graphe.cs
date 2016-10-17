@@ -12,10 +12,10 @@ namespace FastDelivery_Library
         public Point pointDepart, pointArrivee;
         public Dictionary<int, Troncon> listeTroncons;
         public Dictionary<int, Point> listePoints;
-        public Graphe(Point depart, Point arrivee, List<object> hashList )
+        public Graphe(Point depart, Point arrivee, StructPlan hashList)
         {
-            this.listePoints = (Dictionary<int, Point>)hashList[1];
-            this.listeTroncons = (Dictionary<int, Troncon>)hashList[0];
+            this.listePoints = hashList.HashPoint;
+            this.listeTroncons = hashList.HashTroncon;
             this.pointDepart = depart;
             this.pointArrivee = arrivee;
             this.nombreSommets = listePoints.Count;
