@@ -371,6 +371,23 @@ namespace FastDelivery_unitTest
             Assert.AreEqual(structRetournee.entrepot.Adresse.x, 651);
             Assert.AreEqual(structRetournee.entrepot.Adresse.y, 255);
             Assert.AreEqual(structRetournee.entrepot.HeureDepart, "8:0:0");
+
+            // Création du dictionnaire de points de livraisons attendu
+            Dictionary<int, Livraison> livPoints = new Dictionary<int, Livraison>();
+            int ID = 1;
+            livPoints.Add(ID++, new Livraison(new Point(1, 195, 291), 900));
+            livPoints.Add(ID++, new Livraison(new Point(9, 205, 629), 600));
+            livPoints.Add(ID++, new Livraison(new Point(3, 132, 470), 600));
+            livPoints.Add(ID++, new Livraison(new Point(13, 376, 591), 900));
+
+            // Vérification des livraisons retournées
+            foreach (var key in structRetournee.HashLivraison.Keys)
+            {
+                Assert.AreEqual(structRetournee.HashLivraison[key].Adresse.id, livPoints[key].Adresse.id);
+                Assert.AreEqual(structRetournee.HashLivraison[key].Adresse.x, livPoints[key].Adresse.x);
+                Assert.AreEqual(structRetournee.HashLivraison[key].Adresse.y, livPoints[key].Adresse.y);
+                Assert.AreEqual(structRetournee.HashLivraison[key].Duree, livPoints[key].Duree);
+            }
         }
     }
 }
