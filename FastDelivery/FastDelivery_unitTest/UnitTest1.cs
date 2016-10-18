@@ -361,10 +361,16 @@ namespace FastDelivery_unitTest
         public void TestParserXml_Livraison()
         {
             FileStream planFile = new FileStream(@"..\..\..\..\XMLExample\plan5x5.xml", FileMode.Open, FileAccess.Read);
-            FileStream livraisonFile = new FileStream(@"..\..\..\..\XMLExample\livraison5x5-4.xml", FileMode.Open, FileAccess.Read);
+            FileStream livraisonFile = new FileStream(@"..\..\..\..\XMLExample\livraisons5x5-4.xml", FileMode.Open, FileAccess.Read);
             StructPlan structPlan = Outils.ParserXml_Plan(planFile);
-            StructLivraison livRetournee = Outils.ParserXml_Livraison(livraisonFile, structPlan.HashPoint);
-            StructLivraison livAttendu = new StructLivraison();
+            StructLivraison structRetournee = Outils.ParserXml_Livraison(livraisonFile, structPlan.HashPoint);
+
+            // Vérifie que l'entrepot contient l'adresse du point d'id 21 (x=651, y=255) et l'heure "8:0:0"
+            Assert.AreEqual(structRetournee.entrepot.Id, 1);
+            Assert.AreEqual(structRetournee.entrepot.Adresse.id, 21);
+            Assert.AreEqual(structRetournee.entrepot.Adresse.x, 651);
+            Assert.AreEqual(structRetournee.entrepot.Adresse.y, 255);
+            Assert.AreEqual(structRetournee.entrepot.HeureDepart, "8:0:0");
         }
     }
 }
