@@ -13,11 +13,11 @@ namespace FastDelivery_Library
         public Exception_Stream(string message, System.Exception inner) : base (message, inner) { }
     }
 
-    public class Exceptions_XML : Exception
+    public class Exception_XML : Exception
     {
-        public Exceptions_XML() : base() { }
-        public Exceptions_XML(string message) : base() { }
-        public Exceptions_XML(string message, System.Exception inner) : base (message, inner) { }
+        public Exception_XML() : base() { }
+        public Exception_XML(string message) : base() { }
+        public Exception_XML(string message, System.Exception inner) : base (message, inner) { }
     }
 
 
