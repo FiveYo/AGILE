@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Modele\Carte.cs" />
     <Compile Include="TSP\InteratorSeq.cs" />
     <Compile Include="Modele\DemandeDeLivraisons.cs" />
