@@ -19,7 +19,7 @@ namespace FastDelivery_Library
         private Dictionary<Point, double> distance;
         private static List<int> idTest = new List<int>();
 
-        public DijkstraAlgorithm(Modele.Carte carte)
+        public DijkstraAlgorithm(Carte carte)
         {
             // create a copy of the array so that we can operate on this array
             this.noeuds = new Dictionary<int, Point>(carte.points);
