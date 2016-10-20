@@ -127,10 +127,26 @@ namespace FastDelivery_Library
             Point AdressePointLivraison;
             Point AdressePointEntrepot;
 
-            var EntrepotXML = MyData.Descendants("entrepot").First();
+            //On initialise des élements testés dans le Try Entrepot 
+            int idAdresseEntrepot = 0;
+            XElement EntrepotXML = null;
+            string PlageDebut;
+            string PlageFin;
+            int duree;
+            int id;
 
-            //On récupère les infos sur l'entrepot, son adresse sera un objet Point
-            int idAdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
+            try
+            {
+                EntrepotXML = MyData.Descendants("entrepot").First();
+
+                //On récupère les infos sur l'entrepot, son adresse sera un objet Point
+                idAdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
+            }
+            catch (System.NullReferenceException ex)
+            {
+                throw new Exception_XML("Dossier XML incorrect", ex);
+
+            } 
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
             {
                 Entrepot entrepot_temp = new Entrepot(
@@ -140,20 +156,29 @@ namespace FastDelivery_Library
                 );
                 entrepot = entrepot_temp;
             }
+            
 
             //On récupère les infos sur les livraisons, leurs adresses seront des objets Point
             foreach (var node in MyData.Descendants("livraison"))
             {
-                int id = int.Parse(node.Attribute("adresse").Value);
+                try
+                {
+                    id = int.Parse(node.Attribute("adresse").Value);
+                    duree = int.Parse(node.Attribute("duree").Value);
+                }
+                catch (NullReferenceException ex)
+                {
+                    throw new Exception_XML("Erreur dans le fichier XML", ex);
+                }
                 if (HashPoint.TryGetValue(id, out AdressePointLivraison))
                 {
                     Livraison liv = new Livraison(
                         AdressePointLivraison,
-                        int.Parse(node.Attribute("duree").Value)
+                        duree
                         );
 
-                    string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
-                    string PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
+                    PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
+                    PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
 
                     if (PlageDebut != "False")
                     {

@@ -17,6 +17,7 @@ namespace FastDelivery_IHM
     {
         private static Carte carte { get; set; }
         private static bool carteLoaded = false;
+        private static bool DeliveriesLoaded = false;
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
         public static void loadMap(Stream file, MapView map)
@@ -27,9 +28,9 @@ namespace FastDelivery_IHM
                 map.LoadMap(carte);
                 carteLoaded = true;
             }
-            catch (Exception)
+            catch (InvalidOperationException ex)
             {
-                throw;
+                throw new Exception_Stream("Invalid or Unknown File", ex);
             }
         }
 
@@ -50,11 +51,13 @@ namespace FastDelivery_IHM
                         )
                     );
                 }
-                
+                DeliveriesLoaded = true;
+
+
             }
             else
             {
-                throw new Exception("Load map before");
+                throw new Exception_Stream("Load map before");
             }
             
             
@@ -63,19 +66,26 @@ namespace FastDelivery_IHM
 
         public async static void GetWay(MapView mapCanvas)
         {
-            List<Point> l = Outils.startTsp(demandeLivraisons, carte);
-            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
-            Point start = demandeLivraisons.entrepot.adresse;
-            foreach (var point in l)
+            if (DeliveriesLoaded && carteLoaded)
             {
-                if (point.id != start.id)
+                List<Point> l = Outils.startTsp(demandeLivraisons, carte);
+                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
+                Point start = demandeLivraisons.entrepot.adresse;
+                foreach (var point in l)
                 {
-                    dijkstra.execute(start);
-                    LinkedList<Point> result = dijkstra.getPath(point);
-                    mapCanvas.LoadWay(result);
-                    start = point;
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    if (point.id != start.id)
+                    {
+                        dijkstra.execute(start);
+                        LinkedList<Point> result = dijkstra.getPath(point);
+                        mapCanvas.LoadWay(result);
+                        start = point;
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
                 }
+            }
+            else
+            {
+                throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
         }
     }
