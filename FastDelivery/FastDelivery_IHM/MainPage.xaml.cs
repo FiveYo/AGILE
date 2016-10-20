@@ -88,15 +88,17 @@ namespace FastDelivery_IHM
 
         private async void loadCircuit_Click(object sender, RoutedEventArgs e)
         {
-            if(await Controler.GetWay(mapCanvas))
+            try
             {
-                var messageDialog = new MessageDialog("L'opération a été annulée car le calcul demande un temps trop important (plus de 1 minute).");
-                await messageDialog.ShowAsync();
-            }
-            else
-            {
+                await Controler.GetWay(mapCanvas);
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
+            }
+            catch (Exception)
+            {
+
+                var messageDialog = new MessageDialog("L'opération a été annulée car le calcul demande un temps trop important (plus de 1 minute).");
+                await messageDialog.ShowAsync();
             }
         }
 
