@@ -29,7 +29,7 @@ namespace FastDelivery_IHM
         public MainPage()
         {
             this.InitializeComponent();
-
+            this.navbar.IsPaneOpen = !navbar.IsPaneOpen;
             // Enable Previous Button
             // SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
         }
@@ -72,6 +72,7 @@ namespace FastDelivery_IHM
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 Controler.loadDeliveries(streamFile, mapCanvas, listDeliveries);
+                this.navbar.IsPaneOpen = false;
             }
             else
             {

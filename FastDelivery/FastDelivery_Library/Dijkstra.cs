@@ -10,7 +10,6 @@ namespace FastDelivery_Library
 {
     public class DijkstraAlgorithm
     {
-
         private Dictionary<int, Point> noeuds;
         private Dictionary<int, Troncon> Troncons;
         private HashSet<Point> settlednoeuds;
