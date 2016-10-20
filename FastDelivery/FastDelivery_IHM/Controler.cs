@@ -37,7 +37,7 @@ namespace FastDelivery_IHM
         public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
         {
             if(carteLoaded)
-            {
+            {   
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 

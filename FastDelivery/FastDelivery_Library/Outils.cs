@@ -33,18 +33,28 @@ namespace FastDelivery_Library
 
             var nodes = MyData.Descendants("noeud");
 
+
+            //Initialisation variables 
+            int xmax;
+            int xmin;
+            int ymax;
+            int ymin;
+            int Id;
+            int x;
+            int y;
+
             //variable calcul xmax ymax xmin ymin
-            int xmax = int.Parse(nodes.First().Attribute("x").Value);
-            int xmin = xmax;
-            int ymax = int.Parse(nodes.First().Attribute("y").Value);
-            int ymin = ymax;
+            xmax = int.Parse(nodes.First().Attribute("x").Value);
+            xmin = xmax;
+            ymax = int.Parse(nodes.First().Attribute("y").Value);
+            ymin = ymax;
 
             //On génère les Points depuis le fichier XML en paramètre
             foreach (var node in nodes)
-            {
-                int Id = int.Parse(node.Attribute("id").Value);
-                int x = int.Parse(node.Attribute("x").Value);
-                int y = int.Parse(node.Attribute("y").Value);
+            {  
+                Id = int.Parse(node.Attribute("id").Value);
+                x = int.Parse(node.Attribute("x").Value);
+                y = int.Parse(node.Attribute("y").Value);
                 Point pt = new Point(Id, x, y);
 
                 if (xmax < x)
@@ -80,7 +90,7 @@ namespace FastDelivery_Library
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
                 Point Origin_Point;
-
+                
                 //On cherche les objets Point dans la PointHash
                 if ((PointHash.TryGetValue(id_dest, out Dest_Point)) && (PointHash.TryGetValue(id_origin, out Origin_Point)))
                 {
@@ -168,7 +178,7 @@ namespace FastDelivery_Library
                 }
                 catch (NullReferenceException ex)
                 {
-                    throw new Exception_XML("Erreur dans le fichier XML", ex);
+                    throw new Exception_XML("Dossier XML incorrect", ex);
                 }
                 if (HashPoint.TryGetValue(id, out AdressePointLivraison))
                 {
