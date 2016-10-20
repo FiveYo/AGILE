@@ -25,7 +25,7 @@ namespace FastDelivery_Library
          * @param cout : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
          * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
          */
-         void chercheSolution(int tpsLimite, int nbSommets, int[,] cout, int[] duree);
+         void chercheSolution(TimeSpan tpsLimite, int nbSommets, int[,] cout, int[] duree);
 
         /**
          * @param i

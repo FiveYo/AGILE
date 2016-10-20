@@ -58,11 +58,19 @@ namespace FastDelivery_IHM
             
         }
 
-        public async static void GetWay(MapView mapCanvas)
+        public async static Task<bool> GetWay(MapView mapCanvas)
         {
             if (DeliveriesLoaded && carteLoaded)
             {
-                List<Point> l = Outils.startTsp(demandeLivraisons, carte);
+                List<Point> l;
+                try
+                {
+                    l = Outils.startTsp(demandeLivraisons, carte);
+                }
+                catch (TimeoutException e)
+                {
+                    return true;
+                }
                 DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
                 Point start = demandeLivraisons.entrepot.adresse;
                 foreach (var point in l)
@@ -81,6 +89,7 @@ namespace FastDelivery_IHM
             {
                 throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
+            return false;
         }
     }
 }

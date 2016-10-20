@@ -22,7 +22,7 @@ namespace FastDelivery_Library
         return tempsLimiteAtteint;
     }
 
-    public void chercheSolution(int tpsLimite, int nbSommets, int[,] cout, int[] duree)
+    public void chercheSolution(TimeSpan tpsLimite, int nbSommets, int[,] cout, int[] duree)
     {
         tempsLimiteAtteint = false;
         coutMeilleureSolution = int.MaxValue;
@@ -31,7 +31,7 @@ namespace FastDelivery_Library
         for (int i = 1; i < nbSommets; i++) nonVus.Add(i);
         List<int> vus = new List<int>(nbSommets);
         vus.Add(0); // le premier sommet visite est 0
-            branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now.Millisecond, tpsLimite);
+            branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite);
     }
 
     public int? getMeilleureSolution(int i)
@@ -78,13 +78,13 @@ namespace FastDelivery_Library
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */
-    void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, long tpsDebut, int tpsLimite)
+    void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite)
     {
-        //if (DateTime.Now.Millisecond - tpsDebut > tpsLimite)
-        //{
-        //    tempsLimiteAtteint = true;
-        //    return;
-        //}
+        if (DateTime.Now - tpsDebut > tpsLimite)
+        {
+            tempsLimiteAtteint = true;
+            return;
+        }
         if (nonVus.Count == 0)
         { // tous les sommets ont ete visites
             coutVus += cout[sommetCrt,0];

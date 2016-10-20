@@ -166,7 +166,6 @@ namespace FastDelivery_Library
             try
             {
                 EntrepotXML = MyData.Descendants("entrepot").First();
-
                 //On récupère les infos sur l'entrepot, son adresse sera un objet Point
                 idAdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
             }
@@ -310,17 +309,26 @@ namespace FastDelivery_Library
 
         public static List<Point> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
+            Livraison tmp;
             int[,] cost = CreateCostMatrice(LivStruct, carte);
             TSP1 tsp = new TSP1();
             int[] duree = new int[LivStruct.livraisons.Count + 1];
             for(int i = 0; i < duree.Length; i++)
             {
-                duree[i] = 100;
+                if(LivStruct.livraisons.TryGetValue(i, out tmp))
+                {
+                    duree[i] = tmp.duree;
+                }
             }
-            tsp.chercheSolution(1000, LivStruct.livraisons.Count + 1, cost,
+            tsp.chercheSolution(new TimeSpan(0,0,1,0), LivStruct.livraisons.Count + 1, cost,
                 duree);
 
             List<Point> resultat = new List<Point>();
+
+            if(tsp.getTempsLimiteAtteint())
+            {
+                throw new TimeoutException("try again");
+            }
 
             foreach(var index in tsp.meilleureSolution.Skip(1))
             {
