@@ -22,16 +22,10 @@ namespace FastDelivery_IHM
 
         public static void loadMap(Stream file, MapView map)
         {
-            try
-            {
-                carte = Outils.ParserXml_Plan(file);
-                map.LoadMap(carte);
-                carteLoaded = true;
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw new Exception_Stream("Invalid or Unknown File", ex);
-            }
+            
+            carte = Outils.ParserXml_Plan(file);
+            map.LoadMap(carte);
+            carteLoaded = true;
         }
 
         public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)

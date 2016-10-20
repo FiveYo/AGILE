@@ -35,28 +35,29 @@ namespace FastDelivery_Library
 
 
             //Initialisation variables 
-            int xmax;
-            int xmin;
-            int ymax;
-            int ymin;
-            int Id;
-            int x;
-            int y;
-
+            int xmax, xmin, ymax, ymin, Id, x, y, id_dest, id_origin,longueur,vitesse;
+            string nomRue;
             //variable calcul xmax ymax xmin ymin
-            xmax = int.Parse(nodes.First().Attribute("x").Value);
-            xmin = xmax;
-            ymax = int.Parse(nodes.First().Attribute("y").Value);
-            ymin = ymax;
-
+            xmin = 0;
+            ymin = 0;
+            xmax = 0;
+            ymax = 0;
             //On génère les Points depuis le fichier XML en paramètre
             foreach (var node in nodes)
-            {  
-                Id = int.Parse(node.Attribute("id").Value);
-                x = int.Parse(node.Attribute("x").Value);
-                y = int.Parse(node.Attribute("y").Value);
+            {
+                try
+                {
+                    Id = int.Parse(node.Attribute("id").Value);
+                    x = int.Parse(node.Attribute("x").Value);
+                    y = int.Parse(node.Attribute("y").Value);
+                }
+                catch (NullReferenceException ex)
+                {
+                    throw new Exception_XML("Dossier XML incorrect", ex);
+                }
                 Point pt = new Point(Id, x, y);
-
+                ymax = y;
+                xmax = x;
                 if (xmax < x)
                 {
                     xmax = x;
@@ -83,9 +84,16 @@ namespace FastDelivery_Library
             foreach (var node in MyData.Descendants("troncon"))
             {
                 //on récpuère les id des points d'origine
-                int id_dest = int.Parse(node.Attribute("destination").Value);
-                int id_origin = int.Parse(node.Attribute("origine").Value);
 
+                try
+                {
+                    id_dest = int.Parse(node.Attribute("destination").Value);
+                    id_origin = int.Parse(node.Attribute("origine").Value);
+                }
+                catch (NullReferenceException ex)
+                {
+                    throw new Exception_XML("Dossier XML incorrect", ex);
+                }
 
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
@@ -95,12 +103,22 @@ namespace FastDelivery_Library
                 if ((PointHash.TryGetValue(id_dest, out Dest_Point)) && (PointHash.TryGetValue(id_origin, out Origin_Point)))
                 {
                     // ON crée le nouvel objet Troncon
+                    try
+                    {
+                        longueur = int.Parse(node.Attribute("longueur").Value);
+                        vitesse = int.Parse(node.Attribute("vitesse").Value);
+                        nomRue = node.Attribute("nomRue").Value;
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        throw new Exception_XML("Dossier XML incorrect", ex);
+                    }
                     Troncon Troncon_temp = new Troncon(
                         Dest_Point,
-                        int.Parse(node.Attribute("longueur").Value),
+                        longueur,
                         Origin_Point,
-                        int.Parse(node.Attribute("vitesse").Value),
-                        node.Attribute("nomRue").Value,
+                        vitesse,
+                        nomRue,
                         ID
                         );
 
