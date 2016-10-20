@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FastDelivery_Library.Outils">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAIAAABAAABAAAAAAAIAAA=</HashCode>
+      <FileName>Outils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Troncon" Collapsed="true">
+    <Position X="12" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAQAAQAAAAABAAAAlA=</HashCode>
+      <FileName>Modele\Troncon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.DijkstraAlgorithm" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAgAABACQAAEQACEAAIAEEAAAAAACAAAAQIAAAA=</HashCode>
+      <FileName>Dijkstra.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Entrepot" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAgA=</HashCode>
+      <FileName>Modele\Entrepot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Graphe" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAABAAAAQAAAA=</HashCode>
+      <FileName>Graphe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.IteratorSeq" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAiAAAAQAAAAAABAMQABAAAAAAA=</HashCode>
+      <FileName>TSP\InteratorSeq.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FastDelivery_Library.Livraison" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAEAAAEAAAAIAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Modele\Livraison.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Point" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACBAAABgAAAAAgA=</HashCode>
+      <FileName>Modele\Point.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.TemplateTSP" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIAAAAAACggAAAAAAAAACAAABIAAAEAAACACAAAAA=</HashCode>
+      <FileName>TSP\TemplateTSP.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FastDelivery_Library.Tournee" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAQAAAAAAAACACAAAAAACAAAAA=</HashCode>
+      <FileName>Modele\Tournee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.TSP1" Collapsed="true">
+    <Position X="2.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>TSP\TSP1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="FastDelivery_Library.StructLivraison" Collapsed="true">
+    <Position X="4.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Outils.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FastDelivery_Library.StructPlan" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAQACAACAAAAAAAAAAEAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Outils.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="FastDelivery_Library.TSP" Collapsed="true">
+    <Position X="4.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>TSP\TSP.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

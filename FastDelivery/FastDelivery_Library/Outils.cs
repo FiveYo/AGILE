@@ -6,23 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
+using FastDelivery_Library.Modele;
+
 namespace FastDelivery_Library
 
 {
-    public class Outils
+    public static class Outils
     {
-        public Outils()
-        {
-
-        }
-
         /// <summary>
         /// Retourne une liste d'object, le premier étant la dictionnaire de Troncon,
         /// le second le dictionnaire de point
         /// </summary>
         /// <param name="streamFile">stream du fichier xml</param>
         /// <returns></returns>
-        public static StructPlan ParserXml_Plan(System.IO.Stream streamFile)
+        public static Carte ParserXml_Plan(System.IO.Stream streamFile)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(streamFile);
@@ -32,7 +29,7 @@ namespace FastDelivery_Library
             Dictionary<int, Troncon> TronconHash = new Dictionary<int, Troncon>();
 
             //déclaration de la structure
-            StructPlan Hashstruct = new StructPlan();
+            Carte carte;
 
             var nodes = MyData.Descendants("noeud");
 
@@ -98,7 +95,7 @@ namespace FastDelivery_Library
                         );
 
                     //On met a jour les voisins 
-                    Origin_Point.SetVoisins(Troncon_temp);
+                    Origin_Point.AddVoisins(Troncon_temp);
 
                     //On met à jour la HashTable avec un nouvel id
                     TronconHash.Add(ID, Troncon_temp);
@@ -106,16 +103,10 @@ namespace FastDelivery_Library
                 ID++;
             }
 
-            Hashstruct.HashPoint = PointHash;
-            Hashstruct.HashTroncon = TronconHash;
-            Hashstruct.Xmax = xmax;
-            Hashstruct.Xmin = xmin;
-            Hashstruct.Ymax = ymax;
-            Hashstruct.Ymin = ymin;
-
-            return Hashstruct;
+            carte = new Carte(PointHash, TronconHash, xmin, xmax, ymin, ymax);
+            return carte;
         }
-        public static StructLivraison ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int, Point> HashPoint)
+        public static DemandeDeLivraisons ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int, Point> HashPoint)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(streamFile);
@@ -127,7 +118,8 @@ namespace FastDelivery_Library
             List<Entrepot> ListEntrepot = new List<Entrepot>();
 
             // On initialise la structure
-            StructLivraison StrucLiv = new StructLivraison();
+            DemandeDeLivraisons demandeLivaisons;
+            Entrepot entrepot = null;
             //On génère les Livraisons depuis le fichier XML en paramètre 
             int ID = 1;
 
@@ -146,7 +138,7 @@ namespace FastDelivery_Library
                 AdressePointEntrepot,
                 EntrepotXML.Attribute("heureDepart").Value
                 );
-                StrucLiv.entrepot = entrepot_temp;
+                entrepot = entrepot_temp;
             }
 
             //On récupère les infos sur les livraisons, leurs adresses seront des objets Point
@@ -173,29 +165,33 @@ namespace FastDelivery_Library
                     ID++;
                 }
             }
-            StrucLiv.HashLivraison = LivHash;
-            return StrucLiv;
+            demandeLivaisons = new DemandeDeLivraisons(LivHash, entrepot);
+            return demandeLivaisons;
         }
 
-
-        public static int[,] CreateCostMatrice(StructLivraison LivStruct, StructPlan PointStruct)
+        /// <summary>
+        /// Créé la matrice carré de cout.
+        /// </summary>
+        /// <param name="LivStruct"></param>
+        /// <param name="PointStruct"></param>
+        /// <returns></returns>
+        public static int[,] CreateCostMatrice(DemandeDeLivraisons LivStruct, Modele.Carte carte)
         {
-            Graphe g = new Graphe(PointStruct);
-            DijkstraAlgorithm d = new DijkstraAlgorithm(g);
+            DijkstraAlgorithm d = new DijkstraAlgorithm(carte);
             LinkedList<Point> linked;
-            int longueur = LivStruct.HashLivraison.Count + 1;
+            int longueur = LivStruct.livraisons.Count + 1;
             int[,] matrice = new int[longueur, longueur];
             int i = 1, j = 1;
-            foreach (var points in LivStruct.HashLivraison)
+            foreach (var points in LivStruct.livraisons)
             {
 
-                Point adresse = points.Value.Adresse;
+                Point adresse = points.Value.adresse;
                 d.execute(adresse);
-                foreach (var autrespoints in LivStruct.HashLivraison)
+                foreach (var autrespoints in LivStruct.livraisons)
                 {
-                    if (autrespoints.Value.Adresse.id != adresse.id)
+                    if (autrespoints.Value.adresse.id != adresse.id)
                     {
-                        linked = d.getPath(autrespoints.Value.Adresse);
+                        linked = d.getPath(autrespoints.Value.adresse);
                         matrice[i, j] = (int)calculcout(linked);
                         
                     }
@@ -204,16 +200,16 @@ namespace FastDelivery_Library
                 j = 1;
                 i++;
             }
-            Point entrepot = LivStruct.entrepot.Adresse;
+            Point entrepot = LivStruct.entrepot.adresse;
             int cout;
             i = 1;
             d.execute(entrepot);
             // rempli la ligne 0
-            foreach (var points in LivStruct.HashLivraison)
+            foreach (var points in LivStruct.livraisons)
             {
-                if (points.Value.Adresse.id != entrepot.id)
+                if (points.Value.adresse.id != entrepot.id)
                 {
-                    linked = d.getPath(points.Value.Adresse);
+                    linked = d.getPath(points.Value.adresse);
                     cout = (int)calculcout(linked);
                     matrice[0, i] = cout;
                 }
@@ -221,11 +217,11 @@ namespace FastDelivery_Library
             }
             i = 1;
             // rempli la colonne 0
-            foreach (var points in LivStruct.HashLivraison)
+            foreach (var points in LivStruct.livraisons)
             {
-                if (points.Value.Adresse.id != entrepot.id)
+                if (points.Value.adresse.id != entrepot.id)
                 {
-                    d.execute(points.Value.Adresse);
+                    d.execute(points.Value.adresse);
                     linked = d.getPath(entrepot);
                     cout = (int)calculcout(linked);
                     matrice[i, 0] = cout;
@@ -242,12 +238,12 @@ namespace FastDelivery_Library
             Point depart = linkedPoint.First();
             while (depart != linkedPoint.Last())
             {
-                foreach (var voisins in depart.List_Voisin)
+                foreach (var voisins in depart.voisins)
                 {
-                    if (voisins.Destination == linkedPoint.ElementAt(i + 1))
+                    if (voisins.destination == linkedPoint.ElementAt(i + 1))
 
                     {
-                        cout += (double)voisins.Length / voisins.Speed;
+                        cout += (double)voisins.longueur / voisins.vitesse;
                         depart = linkedPoint.ElementAt(i + 1);
                         i++;
                         break;
@@ -259,40 +255,28 @@ namespace FastDelivery_Library
             return cout;
         }
 
-        public static List<Point> startTsp(StructLivraison LivStruct, StructPlan PointStruct)
+        public static List<Point> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
-            int[,] cost = CreateCostMatrice(LivStruct, PointStruct);
+            int[,] cost = CreateCostMatrice(LivStruct, carte);
             TSP1 tsp = new TSP1();
-            int[] duree = new int[LivStruct.HashLivraison.Count + 1];
+            int[] duree = new int[LivStruct.livraisons.Count + 1];
             for(int i = 0; i < duree.Length; i++)
             {
                 duree[i] = 100;
             }
-            tsp.chercheSolution(1000, LivStruct.HashLivraison.Count + 1, cost,
+            tsp.chercheSolution(1000, LivStruct.livraisons.Count + 1, cost,
                 duree);
 
             List<Point> resultat = new List<Point>();
 
             foreach(var index in tsp.meilleureSolution.Skip(1))
             {
-                resultat.Add(LivStruct.HashLivraison.ElementAt(index - 1).Value.Adresse);
+                resultat.Add(LivStruct.livraisons.ElementAt(index - 1).Value.adresse);
             }
 
-            resultat.Add(LivStruct.entrepot.Adresse);
+            resultat.Add(LivStruct.entrepot.adresse);
 
             return resultat;
         }
     }
-    public struct StructLivraison
-    {
-        public Dictionary<int, Livraison> HashLivraison;
-        public Entrepot entrepot;
-    }
-    public struct StructPlan
-    {
-        public Dictionary<int, Point> HashPoint;
-        public Dictionary<int, Troncon> HashTroncon;
-        public int Xmin, Xmax, Ymin, Ymax;
-    }
-
 }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FastDelivery_Library;
+using FastDelivery_Library.Modele;
+
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
@@ -12,6 +14,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
+
 
 namespace FastDelivery_IHM
 {
@@ -27,17 +30,17 @@ namespace FastDelivery_IHM
             planLoaded = false;
         }
 
-        public void LoadMap(StructPlan plan)
+        public void LoadMap(Carte plan)
         {
             Children.Clear();
             planLoaded = true;
             DisplayMap(plan);
         }
 
-        public void LoadDeliveries(StructLivraison demandeLivraisons)
+        public void LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
         {
             DisplayEntrepot(demandeLivraisons.entrepot);
-            DisplayDeliveries(demandeLivraisons.HashLivraison);
+            DisplayDeliveries(demandeLivraisons.livraisons);
         }
 
 
@@ -71,23 +74,23 @@ namespace FastDelivery_IHM
         //    }
         //}
 
-        private void DisplayMap(StructPlan plan)
+        private void DisplayMap(Carte plan)
         {
-            minX = plan.Xmin;
-            minY = plan.Ymin;
-            rX = this.ActualWidth / (double)(plan.Xmax - plan.Xmin);
-            rY = this.ActualHeight / (double)(plan.Ymax - plan.Ymin);
+            minX = plan.minX;
+            minY = plan.minY;
+            rX = this.ActualWidth / (double)(plan.maxX - plan.minX);
+            rY = this.ActualHeight / (double)(plan.maxY - plan.minY);
 
-            foreach (var troncon in plan.HashTroncon)
+            foreach (var troncon in plan.troncons)
             {
                 Line line = new Line();
 
                 line.Stroke = new SolidColorBrush(Colors.Green);
 
-                line.X1 = getX(troncon.Value.Origin.x, minX, rX);
-                line.Y1 = getY(troncon.Value.Origin.y, minY, rY);
-                line.X2 = getX(troncon.Value.Destination.x, minX, rX);
-                line.Y2 = getY(troncon.Value.Destination.y, minY, rY);
+                line.X1 = getX(troncon.Value.origine.x, minX, rX);
+                line.Y1 = getY(troncon.Value.origine.y, minY, rY);
+                line.X2 = getX(troncon.Value.destination.x, minX, rX);
+                line.Y2 = getY(troncon.Value.destination.y, minY, rY);
 
                 line.StrokeThickness = 1;
                 this.Children.Add(line);
@@ -116,8 +119,8 @@ namespace FastDelivery_IHM
             {
                 Image intersection = new Image();
                 intersection.Source = source;
-                double top = getY(point.Value.Adresse.y, minY, rY) + recenterY;
-                double left = getX(point.Value.Adresse.x, minX, rX) + recenterX;
+                double top = getY(point.Value.adresse.y, minY, rY) + recenterY;
+                double left = getX(point.Value.adresse.x, minX, rX) + recenterX;
                 Canvas.SetTop(intersection, top);
                 Canvas.SetLeft(intersection, left);
                 this.Children.Add(intersection);
@@ -149,7 +152,7 @@ namespace FastDelivery_IHM
 
         private async void DisplayEntrepot(Entrepot entrepot)
         {
-            Point entrepotPt = entrepot.Adresse;
+            Point entrepotPt = entrepot.adresse;
             var source = new BitmapImage();
 
             var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
