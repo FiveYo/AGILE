@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="FastDelivery_Library.DijkstraAlgorithm" Collapsed="true">
+    <Position X="17.75" Y="0.75" Width="1.5" />
+    <AssociationLine Name="noeuds" Type="FastDelivery_Library.Point" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.094" Y="1.312" />
+        <Point X="18.094" Y="3.688" />
+        <Point X="16.25" Y="3.688" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="predecessors" Type="FastDelivery_Library.Point" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.906" Y="1.312" />
+        <Point X="18.906" Y="4.187" />
+        <Point X="18.583" Y="4.187" Type="JumpStart" />
+        <Point X="18.417" Y="4.187" Type="JumpEnd" />
+        <Point X="16.25" Y="4.187" />
+        <Point X="16.25" Y="3.812" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.136" Y="0.088" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAAgAABACQAAEQACEAAIAEEAAAAAACAAAAQIAAAA=</HashCode>
+      <FileName>Dijkstra.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="noeuds" />
+      <Field Name="predecessors" />
+      <Field Name="Troncons" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="FastDelivery_Library.DemandeDeLivraisons" Collapsed="true">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAACAAAAA=</HashCode>
+      <FileName>Modele\DemandeDeLivraisons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Entrepot" Collapsed="true">
+    <Position X="9.5" Y="2.25" Width="1.5" />
+    <AssociationLine Name="adresse" Type="FastDelivery_Library.Point" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="11" Y="2.531" />
+        <Point X="15.875" Y="2.531" />
+        <Point X="15.875" Y="3.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAgA=</HashCode>
+      <FileName>Modele\Entrepot.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="adresse" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FastDelivery_Library.Livraison" Collapsed="true">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <AssociationLine Name="adresse" Type="FastDelivery_Library.Point" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.547" Y="4.75" />
+        <Point X="8.547" Y="3.562" />
+        <Point X="14.75" Y="3.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAEAAAEAAAAIAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Modele\Livraison.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="adresse" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FastDelivery_Library.Point" Collapsed="true">
+    <Position X="14.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAACBAAABgAAAAAgA=</HashCode>
+      <FileName>Modele\Point.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Tournee" Collapsed="true">
+    <Position X="4.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAQAAAAAAAACACAAAAAACAAAAA=</HashCode>
+      <FileName>Modele\Tournee.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="entrepot" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="troncons" />
+      <Field Name="livraisons" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="FastDelivery_Library.Troncon" Collapsed="true">
+    <Position X="12.75" Y="6.5" Width="1.5" />
+    <AssociationLine Name="destination" Type="FastDelivery_Library.Point" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.5" Y="6.5" />
+        <Point X="13.5" Y="4.488" />
+        <Point X="13.823" Y="4.488" Type="JumpStart" />
+        <Point X="13.99" Y="4.488" Type="JumpEnd" />
+        <Point X="15.875" Y="4.488" />
+        <Point X="15.875" Y="3.812" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="origine" Type="FastDelivery_Library.Point" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.906" Y="6.5" />
+        <Point X="13.906" Y="4.187" />
+        <Point X="14.75" Y="4.187" />
+        <Point X="14.75" Y="3.812" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.135" Y="0.06" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAQAAQAAAAABAAAAlA=</HashCode>
+      <FileName>Modele\Troncon.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="destination" />
+      <Field Name="origine" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="FastDelivery_Library.Outils" Collapsed="true">
+    <Position X="2.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAIAAABAAABAAAAAAAIAAA=</HashCode>
+      <FileName>Outils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.IteratorSeq" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAiAAAAQAAAAAABAMQABAAAAAAA=</HashCode>
+      <FileName>TSP\InteratorSeq.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="FastDelivery_Library.TemplateTSP" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIAAAAAACggAAAAAAAAACAAABIAAAEAAACACAAAAA=</HashCode>
+      <FileName>TSP\TemplateTSP.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="FastDelivery_Library.TSP1" Collapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>TSP\TSP1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FastDelivery_Library.Modele.Carte" Collapsed="true">
+    <Position X="3.75" Y="1.25" Width="1.5" />
+    <AssociationLine Name="points" Type="FastDelivery_Library.Point" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.969" Y="1.812" />
+        <Point X="3.969" Y="3" />
+        <Point X="4.167" Y="3" Type="JumpStart" />
+        <Point X="4.333" Y="3" Type="JumpEnd" />
+        <Point X="5.417" Y="3" Type="JumpStart" />
+        <Point X="5.583" Y="3" Type="JumpEnd" />
+        <Point X="14.938" Y="3" />
+        <Point X="14.938" Y="3.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>ADAAAACAAAAAAAAAAAAQAAAAAAAAAAAAAAAAADAAAAA=</HashCode>
+      <FileName>Modele\Carte.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="points" />
+      <Field Name="troncons" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Interface Name="FastDelivery_Library.TSP" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIIAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>TSP\TSP.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

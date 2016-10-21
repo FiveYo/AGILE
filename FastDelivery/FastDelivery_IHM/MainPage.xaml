@@ -8,59 +8,84 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.3*" />
-            <ColumnDefinition Width="0.7*" />
-        </Grid.ColumnDefinitions>
-        <Grid x:Name="mapGrid" Grid.Column="1" Padding="50" Background="WhiteSmoke">
-            <local:MapView x:Name="mapCanvas" Margin="0"/>
-        </Grid>
-        <SplitView x:Name="navbar" DisplayMode="CompactOverlay"  IsPaneOpen="False" 
-               CompactPaneLength="50" OpenPaneLength="250">
-            <SplitView.Pane>
-                <StackPanel Background="WhiteSmoke">
-                    <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                    Width="50" Height="50" Background="Transparent" Click="HamburgerButton_Click"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="loadMap" FontFamily="Segoe MDL2 Assets" Content="&#59657;"
-                    Width="50" Height="50" Background="Transparent" Click="loadMap_Click"/>
-                        <TextBlock Text="Charger un plan" FontSize="18" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="loadDeliveries" FontFamily="Segoe MDL2 Assets" Content="&#xE707;"
-                        Width="50" Height="50" Background="Transparent" Click="loadDeliveries_Click"/>
-                        <TextBlock Text="Charger les livraisons" FontSize="18" VerticalAlignment="Center" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="loadCircuit" FontFamily="Segoe MDL2 Assets" Content="&#xE8FB;"
-                        Width="50" Height="50" Background="Transparent" Click="loadCircuit_Click"/>
-                        <TextBlock Text="Calculer une tournée" FontSize="18" VerticalAlignment="Center" />
-                    </StackPanel>
-                </StackPanel>
-            </SplitView.Pane>
-            <SplitView.Content>
-                <Grid HorizontalAlignment="Stretch" Margin="0" Height="Auto">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.8*"/>
-                            <ColumnDefinition Width="0.2*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button x:Name="checkButton" FontFamily="Segoe MDL2 Assets" Content="&#xE133;" Background="Transparent" 
-                                HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="checkButton_Click"/>
-
-                    </Grid>
-                    <ScrollViewer Grid.Row="1" Height="Auto">
-                        <StackPanel x:Name="listDeliveries">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.97*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*" />
+                <ColumnDefinition Width="0.7*" />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="mapGrid" Grid.Column="1" Padding="50" Background="WhiteSmoke">
+                <local:MapView x:Name="mapCanvas" Margin="0"/>
+            </Grid>
+            <SplitView x:Name="navbar" DisplayMode="CompactOverlay"  IsPaneOpen="False" 
+                   CompactPaneLength="50" OpenPaneLength="250">
+                <SplitView.Pane>
+                    <StackPanel Background="WhiteSmoke">
+                        <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
+                        Width="50" Height="50" Background="Transparent" Click="HamburgerButton_Click"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="loadMap" FontFamily="Segoe MDL2 Assets" Content="&#59657;"
+                        Width="50" Height="50" Background="Transparent" Click="loadMap_Click"/>
+                            <TextBlock Text="Charger un plan" FontSize="18" VerticalAlignment="Center" />
                         </StackPanel>
-                    </ScrollViewer>
-                </Grid>
-            </SplitView.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="loadDeliveries" FontFamily="Segoe MDL2 Assets" Content="&#xE707;"
+                            Width="50" Height="50" Background="Transparent" Click="loadDeliveries_Click"/>
+                            <TextBlock Text="Charger les livraisons" FontSize="18" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="loadCircuit" FontFamily="Segoe MDL2 Assets" Content="&#xE8FB;"
+                            Width="50" Height="50" Background="Transparent" Click="loadCircuit_Click"/>
+                            <TextBlock Text="Calculer une tournée" FontSize="18" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+                </SplitView.Pane>
+                <SplitView.Content>
+                    <Grid HorizontalAlignment="Stretch" Margin="0" Height="Auto">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.8*"/>
+                                <ColumnDefinition Width="0.2*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="checkButton" FontFamily="Segoe MDL2 Assets" Content="&#xE133;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="checkButton_Click"/>
 
-        </SplitView>
+                        </Grid>
+                        <ScrollViewer Grid.Row="1" Height="Auto">
+                            <StackPanel x:Name="listDeliveries">
+
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </SplitView.Content>
+
+            </SplitView>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Border BorderThickness="0 1 0 0" BorderBrush="Black">
+                <TextBlock x:Name="feedBack" HorizontalAlignment="Stretch" Padding="5 0"  TextWrapping="Wrap" Text="Bienvenue Utilisateur. Vous pouvez dès maintenant charger le plan de votre choix." VerticalAlignment="Center" >
+                    <TextBlock.Triggers>
+                        <EventTrigger RoutedEvent="TextBlock.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard x:Name="animFeedback">
+                                    <DoubleAnimation
+                                  Storyboard.TargetName="feedBack" 
+                                  Storyboard.TargetProperty="(TextBlock.Opacity)"
+                                  From="0.0" To="1.0" Duration="0:0:1" 
+                                  AutoReverse="False" RepeatBehavior="1x" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </TextBlock.Triggers>
+                </TextBlock>
+            </Border>
+        </Grid>
     </Grid>
 </Page>
