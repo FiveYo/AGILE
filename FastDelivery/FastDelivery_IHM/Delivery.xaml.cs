@@ -13,10 +13,10 @@ namespace FastDelivery_IHM
 {
     public sealed partial class Delivery : UserControl
     {
-        public Delivery(Point pt, int duree)
+        public Delivery(Point pt, int duree)//TODO
         {
             this.InitializeComponent();
-            this.adresse.Text = "Adresse : (" + pt.x.ToString() + ", " + pt.y.ToString() + ")\nDurée : " + duree.ToString();
+            this.adresse.Text = "Adresse : (" + pt.x.ToString() + ", " + pt.y.ToString() + ")\nDurée : " + duree.ToString() +")\nHeure de passage : " ;
         }
 
         public void toggleSplit()

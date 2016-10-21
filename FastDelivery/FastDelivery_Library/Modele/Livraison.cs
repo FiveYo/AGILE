@@ -15,6 +15,7 @@ namespace FastDelivery_Library
         public string debutPlage, finPlage;
         public bool planifier = false;
         public Point adresse;
+        public string heurePassage;
 
         public Livraison(Point adresse , int duree)
         {
@@ -28,5 +29,6 @@ namespace FastDelivery_Library
             finPlage = fin;
             planifier = true;
         }
+        
     }
 }

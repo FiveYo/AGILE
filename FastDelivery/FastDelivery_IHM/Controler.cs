@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 using System.IO;
 
@@ -83,5 +84,10 @@ namespace FastDelivery_IHM
                 throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
         }
+        public static void ajouterLivraison(Livraison livraison)//TODO
+        {
+
+        }
     }
+
 }

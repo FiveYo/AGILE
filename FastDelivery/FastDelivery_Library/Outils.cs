@@ -28,6 +28,8 @@ namespace FastDelivery_Library
             Dictionary<int, Point> PointHash = new Dictionary<int, Point>();
             Dictionary<int, Troncon> TronconHash = new Dictionary<int, Troncon>();
 
+           
+
             //déclaration de la structure
             Carte carte;
 
@@ -42,6 +44,7 @@ namespace FastDelivery_Library
             ymin = 0;
             xmax = 0;
             ymax = 0;
+
             //On génère les Points depuis le fichier XML en paramètre
             foreach (var node in nodes)
             {
@@ -51,9 +54,9 @@ namespace FastDelivery_Library
                     x = int.Parse(node.Attribute("x").Value);
                     y = int.Parse(node.Attribute("y").Value);
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
-                    throw new Exception_XML("Dossier XML incorrect", ex);
+                    throw new Exception_XML("Fichier XML incorrect, erreur dans un des noeuds nommé : noeud ,tag manquant."); 
                 }
                 Point pt = new Point(Id, x, y);
                 ymax = y;
@@ -109,9 +112,9 @@ namespace FastDelivery_Library
                         vitesse = int.Parse(node.Attribute("vitesse").Value);
                         nomRue = node.Attribute("nomRue").Value;
                     }
-                    catch (NullReferenceException ex)
+                    catch (NullReferenceException )
                     {
-                        throw new Exception_XML("Dossier XML incorrect", ex);
+                        throw new Exception_XML("Fichier XML incorrect, erreur dans un des noeuds nommé : troncon ,tag manquant."); 
                     }
                     Troncon Troncon_temp = new Troncon(
                         Dest_Point,
@@ -171,7 +174,7 @@ namespace FastDelivery_Library
             }
             catch (System.NullReferenceException ex)
             {
-                throw new Exception_XML("Dossier XML incorrect", ex);
+                throw new Exception_XML("Fichier XML incorrect, erreur dans un des noeuds nommé : entrepot ,tag manquant.");
 
             } 
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
@@ -193,9 +196,9 @@ namespace FastDelivery_Library
                     id = int.Parse(node.Attribute("adresse").Value);
                     duree = int.Parse(node.Attribute("duree").Value);
                 }
-                catch (NullReferenceException ex)
+                catch (NullReferenceException)
                 {
-                    throw new Exception_XML("Dossier XML incorrect", ex);
+                    throw new Exception_XML("Fichier XML incorrect, erreur dans un des noeuds nommé : livraison ,tag manquant.");
                 }
                 if (HashPoint.TryGetValue(id, out AdressePointLivraison))
                 {
@@ -338,6 +341,10 @@ namespace FastDelivery_Library
             resultat.Add(LivStruct.entrepot.adresse);
 
             return resultat;
+        }
+        public static void setHeurePassage(Tournee tournee )//TODO 
+        {
+           
         }
     }
 }
