@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastDelivery_Library.Modele;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,10 @@ namespace FastDelivery_Library
     /// <summary>
     /// Contient l'adresse et l'heure de départ de l'entrepot
     /// </summary>
-    public class Entrepot
+    public class Entrepot : Lieu
     {
         public int id;
-        public Point adresse;
+        public Point adresse { get; set; }
         public string heureDepart;
 
         public Entrepot(int id, Point adresse, string heureDepart)

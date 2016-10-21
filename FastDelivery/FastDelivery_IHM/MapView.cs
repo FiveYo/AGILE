@@ -44,9 +44,13 @@ namespace FastDelivery_IHM
         }
 
 
-        public void LoadWay(LinkedList<Point> chemin)
+        public async void LoadWay(Tournee t)
         {
-            DisplayWay(chemin);
+            foreach(var chemin in t.troncons.Values)
+            {
+                DisplayWay(chemin);
+                await Task.Delay(100);
+            }
         }
 
 
@@ -127,12 +131,12 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void DisplayWay(LinkedList<Point> chemin)
+        private void DisplayWay(List<Troncon> chemin)
         {
-            Point first = chemin.First.Value;
-            foreach(var point in chemin.Skip(1))
+            foreach(var troncon in chemin)
             {
-                Point second = point;
+                Point first = troncon.origine;
+                Point second = troncon.destination;
 
                 Line line = new Line();
 
@@ -145,8 +149,6 @@ namespace FastDelivery_IHM
 
                 line.StrokeThickness = 3;
                 this.Children.Add(line);
-
-                first = second;
             }
         }
 

@@ -60,21 +60,8 @@ namespace FastDelivery_IHM
         {
             if (DeliveriesLoaded && carteLoaded)
             {
-                List<Point> l;
-                l = Outils.startTsp(demandeLivraisons, carte);
-                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
-                Point start = demandeLivraisons.entrepot.adresse;
-                foreach (var point in l)
-                {
-                    if (point.id != start.id)
-                    {
-                        dijkstra.execute(start);
-                        LinkedList<Point> result = dijkstra.getPath(point);
-                        mapCanvas.LoadWay(result);
-                        start = point;
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                    }
-                }
+                Tournee t = Outils.creerTournee(demandeLivraisons, carte);
+                mapCanvas.LoadWay(t);
             }
             else
             {
