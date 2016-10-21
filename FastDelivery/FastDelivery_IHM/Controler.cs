@@ -63,14 +63,7 @@ namespace FastDelivery_IHM
             if (DeliveriesLoaded && carteLoaded)
             {
                 List<Point> l;
-                try
-                {
-                    l = Outils.startTsp(demandeLivraisons, carte);
-                }
-                catch (TimeoutException e)
-                {
-                    throw;
-                }
+                l = Outils.startTsp(demandeLivraisons, carte);
                 DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
                 Point start = demandeLivraisons.entrepot.adresse;
                 foreach (var point in l)

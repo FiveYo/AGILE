@@ -90,13 +90,14 @@ namespace FastDelivery_IHM
         {
             try
             {
+                feedBack.Text = "Chargement en cours de la tournée";
                 await Controler.GetWay(mapCanvas);
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
             }
-            catch (Exception)
+            catch (TimeoutException)
             {
-
+                feedBack.Text = "Calcul de la tournée annulée. Sélectionnez une nouvelle carte et une nouvelle livraison";
                 var messageDialog = new MessageDialog("L'opération a été annulée car le calcul demande un temps trop important (plus de 1 minute).");
                 await messageDialog.ShowAsync();
             }
