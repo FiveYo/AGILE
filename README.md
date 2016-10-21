@@ -9,7 +9,7 @@ L'application ne doit pas crasher par tous les moyens
 - Modifier
     - Ajouter Livraison                                                     **Milly**
     - Supprimer Livraison                                                   **Samuel**
-
+    - Pattern Undo/Redo
     - Modifier plage horaire                                                **Samuel**
 
 - Gérer les plages horaires                                                 **Milly** trouve idée
@@ -44,4 +44,4 @@ L'application ne doit pas crasher par tous les moyens
 - Gérer map 1000x1000
 - Zoom sur la carte + déplacement
 - Optimisation performance
-    - Déplacer Livraison                    Demander
+    - Déplacer Livraison, 
