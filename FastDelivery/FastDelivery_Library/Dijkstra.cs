@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using FastDelivery_Library.Modele;
+
 namespace FastDelivery_Library
 {
     public class DijkstraAlgorithm
     {
-
         private Dictionary<int, Point> noeuds;
         private Dictionary<int, Troncon> Troncons;
         private HashSet<Point> settlednoeuds;
@@ -17,11 +18,11 @@ namespace FastDelivery_Library
         private Dictionary<Point, double> distance;
         private static List<int> idTest = new List<int>();
 
-        public DijkstraAlgorithm(Graphe graph)
+        public DijkstraAlgorithm(Carte carte)
         {
             // create a copy of the array so that we can operate on this array
-            this.noeuds = new Dictionary<int, Point>(graph.listePoints);
-            this.Troncons = new Dictionary<int, Troncon>(graph.listeTroncons);
+            this.noeuds = new Dictionary<int, Point>(carte.points);
+            this.Troncons = new Dictionary<int, Troncon>(carte.troncons);
         }
 
         public void execute(Point source)
@@ -61,16 +62,17 @@ namespace FastDelivery_Library
                     }
                 }
             }
-
         }
 
         private double getDistance(Point node, Point target)
         {
+            // Utiliser de préférences les voisins des Points plutôt que de 
+            // parcourir toute la liste des troncons
             foreach (Troncon Troncon in Troncons.Values)
             {
-                if ((Troncon.Origin.id == node.id) && (Troncon.Destination.id == target.id))
+                if ((Troncon.origine.id == node.id) && (Troncon.destination.id == target.id))
                 {
-                    return Troncon.calculPoids();
+                    return Troncon.cout;
                 }
             }
             throw new Exception("Erreur calcul de la distance entre deux points");
@@ -78,12 +80,13 @@ namespace FastDelivery_Library
 
         private List<Point> getNeighbors(Point node)
         {
+            // Idem
             List<Point> neighbors = new List<Point>();
             foreach (Troncon Troncon in Troncons.Values)
             {
-                if ((Troncon.Origin.id == node.id) && !isSettled(Troncon.Destination))
+                if ((Troncon.origine.id == node.id) && !isSettled(Troncon.destination))
                 {
-                    neighbors.Add(Troncon.Destination);
+                    neighbors.Add(Troncon.destination);
                 }
             }
             return neighbors;
@@ -147,7 +150,7 @@ namespace FastDelivery_Library
                 path.AddLast(step);
             }
             // Put it into the correct order
-            //path = path.Reverse();
+            path = new LinkedList<Point>(path.Reverse().ToList<Point>());
             return path;
         }
 

@@ -7,76 +7,80 @@ using System.Threading.Tasks;
 using System.IO;
 
 using FastDelivery_Library;
+using FastDelivery_Library.Modele;
+
 using Windows.UI.Xaml.Controls;
 
 namespace FastDelivery_IHM
 {
     public static class Controler
     {
-        private static Plan plan { get; set; }
-        private static StructPlan structPlan { get; set; }
-        private static bool planLoaded = false;
-        private static StructLivraison structLivraison { get; set; }
+        private static Carte carte { get; set; }
+        private static bool carteLoaded = false;
+        private static bool DeliveriesLoaded = false;
+        private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
         public static void loadMap(Stream file, MapView map)
         {
-            try
-            {
-                structPlan = Outils.ParserXml_Plan(file);
-                map.LoadMap(structPlan);
-                planLoaded = true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            
+            carte = Outils.ParserXml_Plan(file);
+            map.LoadMap(carte);
+            carteLoaded = true;
         }
 
         public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
         {
-            if(planLoaded)
-            {
-                structLivraison = Outils.ParserXml_Livraison(streamFile, structPlan.HashPoint);
-                mapCanvas.LoadDeliveries(structLivraison);
+            if(carteLoaded)
+            {   
+                demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
+                mapCanvas.LoadDeliveries(demandeLivraisons);
 
                 list.Children.Clear();
-                foreach (var livraison in structLivraison.HashLivraison.Values)
+                foreach (var livraison in demandeLivraisons.livraisons.Values)
                 {
                     list.Children.Add(
                         new Delivery(
-                            livraison.Adresse,
-                            livraison.Duree
+                            livraison.adresse,
+                            livraison.duree
                         )
                     );
                 }
-                
+                DeliveriesLoaded = true;
+
+
             }
             else
             {
-                throw new Exception("Load map before");
+                throw new Exception_Stream("Load map before");
             }
             
             
             
         }
 
-        public async static void GetWay(MapView mapCanvas)
+        public async static Task GetWay(MapView mapCanvas)
         {
-
-            List<Point> l = Outils.startTsp(structLivraison, structPlan);
-            Graphe G = new Graphe(structPlan);
-            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(G);
-            Point start = structLivraison.entrepot.Adresse;
-            foreach (var point in l)
+            if (DeliveriesLoaded && carteLoaded)
             {
-                if (point.id != start.id)
+                List<Point> l;
+                l = Outils.startTsp(demandeLivraisons, carte);
+                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
+                Point start = demandeLivraisons.entrepot.adresse;
+                foreach (var point in l)
                 {
-                    dijkstra.execute(start);
-                    LinkedList<Point> result = dijkstra.getPath(point);
-                    mapCanvas.LoadWay(result);
-                    start = point;
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    if (point.id != start.id)
+                    {
+                        dijkstra.execute(start);
+                        LinkedList<Point> result = dijkstra.getPath(point);
+                        mapCanvas.LoadWay(result);
+                        start = point;
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
                 }
+            }
+            else
+            {
+                throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
         }
     }
