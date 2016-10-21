@@ -26,10 +26,10 @@ L'application ne doit pas crasher par tous les moyens
 
 - Mettre des points pour les intersections                                  **Justin**
 - Survole de la souris ou click pour afficher infos (troncons et intersection (avec les voisins)) **Quentin**
-- Afficher liste checkbox a gauche des livraisons                                   Mathieu
-- Possibilité de cocher les checkbox, les livraisons cochées sont affichées         Mathieu
-- bouton checkall uncheckall                                                        Mathieu
-- bouton modifier qui apparait onmouseover                                          Mathieu
+- Afficher liste checkbox a gauche des livraisons                                   **Mathieu**
+- Possibilité de cocher les checkbox, les livraisons cochées sont affichées         **Mathieu**
+- bouton checkall uncheckall                                                        **Mathieu**
+- bouton modifier qui apparait onmouseover                                          **Mathieu**
 - plus d'infos ou moins d'espace entre les livraisons a gauche                      **Quentin**
 - Synchroniser l'affichage des infos et ordonner les livraisons                     **Quentin**
 - Possibilité d'utiliser les flèches du clavier pour naviguer dans la liste des livraisons avec surbrillance  **Samuel**
