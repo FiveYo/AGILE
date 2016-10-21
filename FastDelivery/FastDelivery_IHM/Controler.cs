@@ -47,8 +47,6 @@ namespace FastDelivery_IHM
                     );
                 }
                 DeliveriesLoaded = true;
-
-
             }
             else
             {
