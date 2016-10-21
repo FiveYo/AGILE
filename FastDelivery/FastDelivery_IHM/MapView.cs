@@ -44,11 +44,12 @@ namespace FastDelivery_IHM
         }
 
 
-        public void LoadWay(Tournee t)
+        public async void LoadWay(Tournee t)
         {
             foreach(var chemin in t.troncons.Values)
             {
                 DisplayWay(chemin);
+                await Task.Delay(100);
             }
         }
 
