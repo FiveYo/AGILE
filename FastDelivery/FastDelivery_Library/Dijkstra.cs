@@ -10,7 +10,6 @@ namespace FastDelivery_Library
 {
     public class DijkstraAlgorithm
     {
-
         private Dictionary<int, Point> noeuds;
         private Dictionary<int, Troncon> Troncons;
         private HashSet<Point> settlednoeuds;
@@ -63,11 +62,12 @@ namespace FastDelivery_Library
                     }
                 }
             }
-
         }
 
         private double getDistance(Point node, Point target)
         {
+            // Utiliser de préférences les voisins des Points plutôt que de 
+            // parcourir toute la liste des troncons
             foreach (Troncon Troncon in Troncons.Values)
             {
                 if ((Troncon.origine.id == node.id) && (Troncon.destination.id == target.id))
@@ -80,6 +80,7 @@ namespace FastDelivery_Library
 
         private List<Point> getNeighbors(Point node)
         {
+            // Idem
             List<Point> neighbors = new List<Point>();
             foreach (Troncon Troncon in Troncons.Values)
             {
@@ -149,7 +150,7 @@ namespace FastDelivery_Library
                 path.AddLast(step);
             }
             // Put it into the correct order
-            //path = path.Reverse();
+            path = new LinkedList<Point>(path.Reverse().ToList<Point>());
             return path;
         }
 

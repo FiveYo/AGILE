@@ -33,20 +33,31 @@ namespace FastDelivery_Library
 
             var nodes = MyData.Descendants("noeud");
 
-            //variable calcul xmax ymax xmin ymin
-            int xmax = int.Parse(nodes.First().Attribute("x").Value);
-            int xmin = xmax;
-            int ymax = int.Parse(nodes.First().Attribute("y").Value);
-            int ymin = ymax;
 
+            //Initialisation variables 
+            int xmax, xmin, ymax, ymin, Id, x, y, id_dest, id_origin,longueur,vitesse;
+            string nomRue;
+            //variable calcul xmax ymax xmin ymin
+            xmin = 0;
+            ymin = 0;
+            xmax = 0;
+            ymax = 0;
             //On génère les Points depuis le fichier XML en paramètre
             foreach (var node in nodes)
             {
-                int Id = int.Parse(node.Attribute("id").Value);
-                int x = int.Parse(node.Attribute("x").Value);
-                int y = int.Parse(node.Attribute("y").Value);
+                try
+                {
+                    Id = int.Parse(node.Attribute("id").Value);
+                    x = int.Parse(node.Attribute("x").Value);
+                    y = int.Parse(node.Attribute("y").Value);
+                }
+                catch (NullReferenceException ex)
+                {
+                    throw new Exception_XML("Dossier XML incorrect", ex);
+                }
                 Point pt = new Point(Id, x, y);
-
+                ymax = y;
+                xmax = x;
                 if (xmax < x)
                 {
                     xmax = x;
@@ -73,24 +84,41 @@ namespace FastDelivery_Library
             foreach (var node in MyData.Descendants("troncon"))
             {
                 //on récpuère les id des points d'origine
-                int id_dest = int.Parse(node.Attribute("destination").Value);
-                int id_origin = int.Parse(node.Attribute("origine").Value);
 
+                try
+                {
+                    id_dest = int.Parse(node.Attribute("destination").Value);
+                    id_origin = int.Parse(node.Attribute("origine").Value);
+                }
+                catch (NullReferenceException ex)
+                {
+                    throw new Exception_XML("Dossier XML incorrect", ex);
+                }
 
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
                 Point Origin_Point;
-
+                
                 //On cherche les objets Point dans la PointHash
                 if ((PointHash.TryGetValue(id_dest, out Dest_Point)) && (PointHash.TryGetValue(id_origin, out Origin_Point)))
                 {
                     // ON crée le nouvel objet Troncon
+                    try
+                    {
+                        longueur = int.Parse(node.Attribute("longueur").Value);
+                        vitesse = int.Parse(node.Attribute("vitesse").Value);
+                        nomRue = node.Attribute("nomRue").Value;
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        throw new Exception_XML("Dossier XML incorrect", ex);
+                    }
                     Troncon Troncon_temp = new Troncon(
                         Dest_Point,
-                        int.Parse(node.Attribute("longueur").Value),
+                        longueur,
                         Origin_Point,
-                        int.Parse(node.Attribute("vitesse").Value),
-                        node.Attribute("nomRue").Value,
+                        vitesse,
+                        nomRue,
                         ID
                         );
 
@@ -127,10 +155,25 @@ namespace FastDelivery_Library
             Point AdressePointLivraison;
             Point AdressePointEntrepot;
 
-            var EntrepotXML = MyData.Descendants("entrepot").First();
+            //On initialise des élements testés dans le Try Entrepot 
+            int idAdresseEntrepot = 0;
+            XElement EntrepotXML = null;
+            string PlageDebut;
+            string PlageFin;
+            int duree;
+            int id;
 
-            //On récupère les infos sur l'entrepot, son adresse sera un objet Point
-            int idAdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
+            try
+            {
+                EntrepotXML = MyData.Descendants("entrepot").First();
+                //On récupère les infos sur l'entrepot, son adresse sera un objet Point
+                idAdresseEntrepot = int.Parse(EntrepotXML.Attribute("adresse").Value);
+            }
+            catch (System.NullReferenceException ex)
+            {
+                throw new Exception_XML("Dossier XML incorrect", ex);
+
+            } 
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
             {
                 Entrepot entrepot_temp = new Entrepot(
@@ -140,20 +183,29 @@ namespace FastDelivery_Library
                 );
                 entrepot = entrepot_temp;
             }
+            
 
             //On récupère les infos sur les livraisons, leurs adresses seront des objets Point
             foreach (var node in MyData.Descendants("livraison"))
             {
-                int id = int.Parse(node.Attribute("adresse").Value);
+                try
+                {
+                    id = int.Parse(node.Attribute("adresse").Value);
+                    duree = int.Parse(node.Attribute("duree").Value);
+                }
+                catch (NullReferenceException ex)
+                {
+                    throw new Exception_XML("Dossier XML incorrect", ex);
+                }
                 if (HashPoint.TryGetValue(id, out AdressePointLivraison))
                 {
                     Livraison liv = new Livraison(
                         AdressePointLivraison,
-                        int.Parse(node.Attribute("duree").Value)
+                        duree
                         );
 
-                    string PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
-                    string PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
+                    PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
+                    PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
 
                     if (PlageDebut != "False")
                     {
@@ -257,17 +309,26 @@ namespace FastDelivery_Library
 
         public static List<Point> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
+            Livraison tmp;
             int[,] cost = CreateCostMatrice(LivStruct, carte);
             TSP1 tsp = new TSP1();
             int[] duree = new int[LivStruct.livraisons.Count + 1];
             for(int i = 0; i < duree.Length; i++)
             {
-                duree[i] = 100;
+                if(LivStruct.livraisons.TryGetValue(i, out tmp))
+                {
+                    duree[i] = tmp.duree;
+                }
             }
-            tsp.chercheSolution(1000, LivStruct.livraisons.Count + 1, cost,
+            tsp.chercheSolution(new TimeSpan(0,0,1,0), LivStruct.livraisons.Count + 1, cost,
                 duree);
 
             List<Point> resultat = new List<Point>();
+
+            if(tsp.getTempsLimiteAtteint())
+            {
+                throw new TimeoutException("try again");
+            }
 
             foreach(var index in tsp.meilleureSolution.Skip(1))
             {

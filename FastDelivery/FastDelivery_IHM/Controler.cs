@@ -17,26 +17,21 @@ namespace FastDelivery_IHM
     {
         private static Carte carte { get; set; }
         private static bool carteLoaded = false;
+        private static bool DeliveriesLoaded = false;
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
         public static void loadMap(Stream file, MapView map)
         {
-            try
-            {
-                carte = Outils.ParserXml_Plan(file);
-                map.LoadMap(carte);
-                carteLoaded = true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            
+            carte = Outils.ParserXml_Plan(file);
+            map.LoadMap(carte);
+            carteLoaded = true;
         }
 
         public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
         {
             if(carteLoaded)
-            {
+            {   
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 
@@ -50,32 +45,42 @@ namespace FastDelivery_IHM
                         )
                     );
                 }
-                
+                DeliveriesLoaded = true;
+
+
             }
             else
             {
-                throw new Exception("Load map before");
+                throw new Exception_Stream("Load map before");
             }
             
             
             
         }
 
-        public async static void GetWay(MapView mapCanvas)
+        public async static Task GetWay(MapView mapCanvas)
         {
-            List<Point> l = Outils.startTsp(demandeLivraisons, carte);
-            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
-            Point start = demandeLivraisons.entrepot.adresse;
-            foreach (var point in l)
+            if (DeliveriesLoaded && carteLoaded)
             {
-                if (point.id != start.id)
+                List<Point> l;
+                l = Outils.startTsp(demandeLivraisons, carte);
+                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
+                Point start = demandeLivraisons.entrepot.adresse;
+                foreach (var point in l)
                 {
-                    dijkstra.execute(start);
-                    LinkedList<Point> result = dijkstra.getPath(point);
-                    mapCanvas.LoadWay(result);
-                    start = point;
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    if (point.id != start.id)
+                    {
+                        dijkstra.execute(start);
+                        LinkedList<Point> result = dijkstra.getPath(point);
+                        mapCanvas.LoadWay(result);
+                        start = point;
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
                 }
+            }
+            else
+            {
+                throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
         }
     }
