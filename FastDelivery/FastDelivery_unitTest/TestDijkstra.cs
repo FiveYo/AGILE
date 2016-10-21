@@ -1,22 +1,20 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using FastDelivery_Library;
+
 using FastDelivery_Library.Modele;
+using FastDelivery_Library;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FastDelivery_unitTest
 {
     [TestClass]
-    public class TestOutils
+    public class TestDijkstra
     {
         Carte c;
-        DemandeDeLivraisons demand;
-        Dictionary<int, Livraison> HashLivraison = new Dictionary<int, Livraison>();
-        Entrepot entrepotTest;
-        public void CarteGenerator()
+        public void Fixtures()
         {
-            int id = 1;
+            int id = 0;
             Point p1 = new Point(id++, 10, 10);
             Point p2 = new Point(id++, 100, 100);
             Point p3 = new Point(id++, 0, 10);
@@ -26,7 +24,7 @@ namespace FastDelivery_unitTest
             id = 0;
 
             Troncon t1 = new Troncon(p5, 100, p1, 10, "rue1", id++);
-            Troncon t2 = new Troncon(p4, 100, p5, 10, "rue1", id++);
+            Troncon t2 = new Troncon(p4, 1000, p5, 10, "rue1", id++);
             Troncon t3 = new Troncon(p3, 100, p4, 10, "rue1", id++);
             Troncon t4 = new Troncon(p2, 100, p3, 10, "rue1", id++);
             Troncon t5 = new Troncon(p1, 100, p2, 10, "rue1", id++);
@@ -35,16 +33,14 @@ namespace FastDelivery_unitTest
             Troncon t8 = new Troncon(p3, 100, p5, 10, "rue1", id++);
             Troncon t9 = new Troncon(p2, 100, p4, 10, "rue1", id++);
             Troncon t10 = new Troncon(p1, 100, p5, 10, "rue1", id++);
-            Troncon t11 = new Troncon(p2, 100, p1, 10, "rue1", id++);
-            Troncon t12 = new Troncon(p3, 100, p2, 10, "rue1", id++);
+            Troncon t11 = new Troncon(p3, 100, p2, 10, "rue1", id++);
 
             p1.AddVoisins(t1);
             p1.AddVoisins(t6);
-            p1.AddVoisins(t11);
 
             p2.AddVoisins(t5);
             p2.AddVoisins(t7);
-            p2.AddVoisins(t12);
+            p2.AddVoisins(t11);
 
             p3.AddVoisins(t4);
 
@@ -74,44 +70,24 @@ namespace FastDelivery_unitTest
             troncons.Add(t9.id, t9);
             troncons.Add(t10.id, t10);
             troncons.Add(t11.id, t11);
-            troncons.Add(t12.id, t12);
 
             c = new Carte(points, troncons, 0, 100, 10, 100);
         }
 
         [TestMethod]
-        public void LivGenerator()
+        public void TestGetNeighboors()
         {
-            int id = 0;
-            int duree = 100;
-            foreach (Point pt in c.points.Values.Skip(3))
-            {
-                Livraison tmp = new Livraison(pt, duree++);
-                HashLivraison.Add(id, tmp);
-                id++;
-            }
-            entrepotTest = new Entrepot(1, c.points[1], "10:00:00");
-            demand = new DemandeDeLivraisons(HashLivraison, entrepotTest);
-            
-        }
+            Fixtures();
+            DijkstraAlgorithm dij = new DijkstraAlgorithm(c);
+            Point p1 = c.points.First().Value;
+            Point p2 = c.points.ElementAt(1).Value;
 
-        [TestMethod]
-        public void Test_CreateCostMatrice()
-        {
-            CarteGenerator();
-            LivGenerator();
-            int[,] MatriceReturn = Outils.CreateCostMatrice(demand, c);
-            int[,] MatriceAttendu = new int[3, 3];
-            Assert.AreEqual(MatriceAttendu, MatriceReturn);
-        }
+            dij.execute(p1);
+            LinkedList<Point> result = dij.getPath(p2);
 
-        [TestMethod]
-        public void Test_calculcout()
-        {
-
-            int coutAttendu;
-            // double coutReturn = FastDelivery_Library.Outils.calculcout(ListPoints);
-
+            Assert.AreEqual(p1.id, result.ElementAt(0).id);
+            Assert.AreEqual(c.points.ElementAt(2).Value.id, result.ElementAt(1).id);
+            Assert.AreEqual(c.points.ElementAt(1).Value.id, result.Last.Value.id);
         }
     }
 }
