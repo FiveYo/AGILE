@@ -54,8 +54,8 @@
                                 <ColumnDefinition Width="0.8*"/>
                                 <ColumnDefinition Width="0.2*"/>
                             </Grid.ColumnDefinitions>
-                            <!--<Button x:Name="checkButton" FontFamily="Segoe MDL2 Assets" Content="&#xE133;" Background="Transparent" 
-                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="checkButton_Click"/>-->
+                            <Button x:Name="checkButton" FontFamily="Segoe MDL2 Assets" Content="&#xE133;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="checkButton_Click"/>
 
                         </Grid>
                         <ScrollViewer Grid.Row="1" Height="Auto">
