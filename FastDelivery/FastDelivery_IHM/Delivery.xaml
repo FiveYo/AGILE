@@ -1,4 +1,5 @@
-﻿<UserControl
+﻿<UserControl 
+    x:Name="livUI"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FastDelivery_IHM"
@@ -10,17 +11,21 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid Padding="20">
-        <SplitView DisplayMode="Inline"  IsPaneOpen="False" 
-               OpenPaneLength="20">
+    <StackPanel Padding="10">
+        <SplitView DisplayMode="Inline"  IsPaneOpen="{Binding displayCheck, ElementName=livUI}" 
+               OpenPaneLength="20" PaneBackground="White">
             <SplitView.Pane>
-                <CheckBox Width="20" Height="20"></CheckBox>
+                <CheckBox x:Name="checkbox" Width="20" Height="20" />
             </SplitView.Pane>
-            <SplitView.Content>
-                <TextBlock x:Name="adresse" HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" Text="Adresse : " VerticalAlignment="Center"/>
-            </SplitView.Content>
+            <StackPanel Padding="10" VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" Text="{Binding description, ElementName=livUI}" />
+            </StackPanel>
         </SplitView>
-
-
-    </Grid>
+        <Grid x:Name="add">
+            <Border Background="WhiteSmoke">
+                <Button x:Name="addBtn" Content="Ajouter une livraison ici" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="10">
+                </Button>
+            </Border>
+        </Grid>
+    </StackPanel>
 </UserControl>

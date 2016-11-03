@@ -14,26 +14,28 @@ using Windows.UI;
 using Windows.UI.Xaml.Media;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
-
+using Windows.UI.Xaml;
 
 namespace FastDelivery_IHM
 {
 
     public class MapView : Canvas
     {
-        bool planLoaded;
+        List<ItemsControl> calques;
+        ItemsControl carteUI;
+        ItemsControl cheminUI;
         double minX, minY, rX, rY;
 
         public MapView()
         {
-            this.SizeChanged += MapView_SizeChanged;
-            planLoaded = false;
+            SizeChanged += MapView_SizeChanged;
+            calques = new List<ItemsControl>();
+
         }
 
         public void LoadMap(Carte plan)
         {
             Children.Clear();
-            planLoaded = true;
             DisplayMap(plan);
         }
 
@@ -49,7 +51,7 @@ namespace FastDelivery_IHM
             foreach(var chemin in t.troncons.Values)
             {
                 DisplayWay(chemin);
-                await Task.Delay(100);
+                await Task.Delay(1000);
             }
         }
 

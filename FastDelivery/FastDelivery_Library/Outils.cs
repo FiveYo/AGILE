@@ -320,8 +320,13 @@ namespace FastDelivery_Library
                     duree[i] = tmp.duree;
                 }
             }
+#if DEBUG
+            tsp.chercheSolution(new TimeSpan(0,0,0,2), LivStruct.livraisons.Count + 1, cost,
+                duree);
+#else
             tsp.chercheSolution(new TimeSpan(0,0,1,0), LivStruct.livraisons.Count + 1, cost,
                 duree);
+#endif
 
             List<Livraison> resultat = new List<Livraison>();
 
