@@ -17,6 +17,7 @@ namespace FastDelivery_Library
         public bool planifier = false;
         public Point adresse { get; set; }
 
+        public string dateTest = "05/01/2009";
         public Livraison(Point adresse , int duree)
         {
             this.adresse = adresse;
@@ -25,8 +26,8 @@ namespace FastDelivery_Library
         
         public void SetPlage(string debut, string fin)
         {
-            debutPlage = debut;
-            finPlage = fin;
+            debutPlage = dateTest +debut;
+            finPlage = dateTest +fin;
             planifier = true;
         }
     }

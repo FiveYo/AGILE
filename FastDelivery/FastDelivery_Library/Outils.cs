@@ -348,7 +348,7 @@ namespace FastDelivery_Library
 
             Point start = livraisons.entrepot.adresse;
 
-            foreach(var livraison in livraisonsOrdonnee)
+            foreach (var livraison in livraisonsOrdonnee)
             {
                 dijkstra.execute(start);
                 troncons.Add(livraison, PathToTroncon(dijkstra.getPath(livraison.adresse)));
@@ -384,5 +384,6 @@ namespace FastDelivery_Library
             }
             return troncons;
         }
+
     }
 }
