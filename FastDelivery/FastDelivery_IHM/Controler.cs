@@ -68,17 +68,36 @@ namespace FastDelivery_IHM
 
             index = tournee.livraisons.IndexOf(livraison);
 
-            ContentDialog popup = new ContentDialog {
-                Title = "Créer une livraison",
-                Content = new DeliveryPopUp(),
-                PrimaryButtonText = "Créer",
-            };
+            DeliveryPop popup = new DeliveryPop();
 
             await popup.ShowAsync();
-#if DEBUG
-            Debug.WriteLine((popup.Content as DeliveryPopUp).getInfos());
-#endif
 
+            //Switch en fonction du bouton appuyer + boucle while avec gestion erreur
+
+            Point ptLiv;
+            int idPt = 0;
+            int dureeLiv = 0;
+
+            int idLiv = 0;
+
+            if (int.TryParse(popup.idPointLiv, out idPt) && int.TryParse(popup.dureeLiv, out dureeLiv))
+            {
+                if (carte.points.TryGetValue(idPt, out ptLiv))
+                {
+                    Livraison toAdd = new Livraison(
+                        ptLiv, dureeLiv
+                    );
+
+                    int.TryParse(popup.idLiv, out idLiv);
+                    // Tu as l'ID de la liv (je sais pas il sert a quoi mais bon) dans idLiv
+                    // Milllllyyyyyy c'est ici
+                    // tournee.AddLiv
+                    //
+
+                    // t'enerve pas si ça marche pas sur la map, il faut la réactualiser et j'arrive pas à le faire proprement
+                    
+                }
+            }
         }
 
         private static void Checkbox_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)

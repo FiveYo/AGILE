@@ -48,12 +48,14 @@ namespace FastDelivery_IHM
 
         public void LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
         {
+            livraisonUI.Children.Clear();
             DisplayEntrepot(demandeLivraisons.entrepot);
             DisplayDeliveries(demandeLivraisons.livraisons);
         }
 
         public async void LoadWay(Tournee t)
         {
+            cheminUI.Children.Clear();
             foreach (var chemin in t.troncons.Values)
             {
                 DisplayWay(chemin);
