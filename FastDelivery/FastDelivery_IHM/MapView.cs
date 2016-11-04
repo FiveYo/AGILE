@@ -65,9 +65,9 @@ namespace FastDelivery_IHM
 
         public async void LoadWay(Tournee t)
         {
-            foreach(var chemin in t.troncons.Values)
+            foreach(var chemin in t.Hashchemin.Values)
             {
-                DisplayWay(chemin);
+                DisplayWay(chemin.getTronconList());
                 await Task.Delay(1000);
             }
         }

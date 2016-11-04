@@ -346,26 +346,26 @@ namespace FastDelivery_Library
         public static Tournee creerTournee(DemandeDeLivraisons livraisons, Carte carte)
         {
             Tournee t;
+           
             List<Livraison> livraisonsOrdonnee = startTsp(livraisons, carte);
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
 
-            Dictionary<Lieu, List<Troncon>> troncons = new Dictionary<Lieu, List<Troncon>>();
+            Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
 
             Point start = livraisons.entrepot.adresse;
 
             foreach(var livraison in livraisonsOrdonnee)
             {
                 dijkstra.execute(start);
-                troncons.Add(livraison, PathToTroncon(dijkstra.getPath(livraison.adresse)));
+                chemins.Add(livraison, new Chemin(PathToTroncon(dijkstra.getPath(livraison.adresse))));
                 start = livraison.adresse;
             }
 
             dijkstra.execute(livraisonsOrdonnee.Last().adresse);
-            troncons.Add(
+            chemins.Add(
                 livraisons.entrepot,
-                PathToTroncon(dijkstra.getPath(livraisons.entrepot.adresse)));
-
-            t = new Tournee(livraisons.entrepot, livraisonsOrdonnee, troncons);
+                new Chemin(PathToTroncon(dijkstra.getPath(livraisons.entrepot.adresse))));
+            t = new Tournee(livraisons.entrepot, livraisonsOrdonnee, chemins);
             return t;
         }
 
