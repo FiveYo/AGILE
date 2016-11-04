@@ -307,7 +307,7 @@ namespace FastDelivery_Library
             return cout;
         }
 
-        public static List<Point> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
+        public static List<Livraison> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
             Livraison tmp;
             int[,] cost = CreateCostMatrice(LivStruct, carte);
@@ -320,10 +320,15 @@ namespace FastDelivery_Library
                     duree[i] = tmp.duree;
                 }
             }
+#if DEBUG
+            tsp.chercheSolution(new TimeSpan(0,0,0,2), LivStruct.livraisons.Count + 1, cost,
+                duree);
+#else
             tsp.chercheSolution(new TimeSpan(0,0,1,0), LivStruct.livraisons.Count + 1, cost,
                 duree);
+#endif
 
-            List<Point> resultat = new List<Point>();
+            List<Livraison> resultat = new List<Livraison>();
 
             if(tsp.getTempsLimiteAtteint())
             {
@@ -332,12 +337,57 @@ namespace FastDelivery_Library
 
             foreach(var index in tsp.meilleureSolution.Skip(1))
             {
-                resultat.Add(LivStruct.livraisons.ElementAt(index - 1).Value.adresse);
+                resultat.Add(LivStruct.livraisons.ElementAt(index - 1).Value);
             }
 
-            resultat.Add(LivStruct.entrepot.adresse);
-
             return resultat;
+        }
+
+        public static Tournee creerTournee(DemandeDeLivraisons livraisons, Carte carte)
+        {
+            Tournee t;
+            List<Livraison> livraisonsOrdonnee = startTsp(livraisons, carte);
+            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
+
+            Dictionary<Lieu, List<Troncon>> troncons = new Dictionary<Lieu, List<Troncon>>();
+
+            Point start = livraisons.entrepot.adresse;
+
+            foreach(var livraison in livraisonsOrdonnee)
+            {
+                dijkstra.execute(start);
+                troncons.Add(livraison, PathToTroncon(dijkstra.getPath(livraison.adresse)));
+                start = livraison.adresse;
+            }
+
+            dijkstra.execute(livraisonsOrdonnee.Last().adresse);
+            troncons.Add(
+                livraisons.entrepot,
+                PathToTroncon(dijkstra.getPath(livraisons.entrepot.adresse)));
+
+            t = new Tournee(livraisons.entrepot, livraisonsOrdonnee, troncons);
+            return t;
+        }
+
+        public static List<Troncon> PathToTroncon(LinkedList<Point> points)
+        {
+            List<Troncon> troncons = new List<Troncon>();
+
+            Point start = points.First();
+
+            foreach(var point in points.Skip(1))
+            {
+                foreach (var voisin in start.voisins)
+                {
+                    if(voisin.destination == point)
+                    {
+                        troncons.Add(voisin);
+                        break;
+                    }
+                }
+                start = point;
+            }
+            return troncons;
         }
     }
 }

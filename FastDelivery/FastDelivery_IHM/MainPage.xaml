@@ -51,16 +51,18 @@
                         </Grid.RowDefinitions>
                         <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.8*"/>
+                                <ColumnDefinition Width="0.6*"/>
+                                <ColumnDefinition Width="0.2*"/>
                                 <ColumnDefinition Width="0.2*"/>
                             </Grid.ColumnDefinitions>
-                            <!--<Button x:Name="checkButton" FontFamily="Segoe MDL2 Assets" Content="&#xE133;" Background="Transparent" 
-                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="checkButton_Click"/>-->
+                            <Button x:Name="addButton" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="addButton_Click"/>
+                            <Button x:Name="checkButton" FontFamily="Segoe MDL2 Assets" Content="&#xE133;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="2" Click="checkButton_Click"/>
 
                         </Grid>
-                        <ScrollViewer Grid.Row="1" Height="Auto">
+                        <ScrollViewer Grid.Row="1" Height="Auto" Background="White">
                             <StackPanel x:Name="listDeliveries">
-
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>

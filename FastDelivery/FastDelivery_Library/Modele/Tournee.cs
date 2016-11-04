@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastDelivery_Library.Modele;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +16,14 @@ namespace FastDelivery_Library
 
         // Les livraisons sont ordonnées par ordre de passage
         public List<Livraison> livraisons;
-        public List<Troncon> troncons;
 
-        public DateTime heureDepart;
+        // Si on veut connaitre le chemin pour aller à une livraisons on peut y accéder par sa clef
+        public Dictionary<Lieu, List<Troncon>> troncons;
+        
         public DateTime heureArrivee;
         
 
-        public Tournee(Entrepot entrepot, List<Livraison> livraisons, List<Troncon> troncons)
+        public Tournee(Entrepot entrepot, List<Livraison> livraisons, Dictionary<Lieu, List<Troncon>> troncons)
         {
             this.entrepot = entrepot;
             this.livraisons = livraisons;

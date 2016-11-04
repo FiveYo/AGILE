@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#if DEBUG
+using System.Diagnostics;
+#endif
+
 using System.IO;
 
 using FastDelivery_Library;
@@ -15,10 +19,13 @@ namespace FastDelivery_IHM
 {
     public static class Controler
     {
+        private static int countCheck = 0;
         private static Carte carte { get; set; }
         private static bool carteLoaded = false;
-        private static bool DeliveriesLoaded = false;
+        private static bool deliveriesLoaded = false;
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
+
+        private static Tournee tournee;
 
         public static void loadMap(Stream file, MapView map)
         {
@@ -30,6 +37,7 @@ namespace FastDelivery_IHM
 
         public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
         {
+            Delivery tmp;
             if(carteLoaded)
             {   
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
@@ -38,45 +46,59 @@ namespace FastDelivery_IHM
                 list.Children.Clear();
                 foreach (var livraison in demandeLivraisons.livraisons.Values)
                 {
-                    list.Children.Add(
-                        new Delivery(
-                            livraison.adresse,
-                            livraison.duree
-                        )
-                    );
+                    tmp = new Delivery(livraison);
+                    tmp.Checked += Checkbox_Checked;
+                    tmp.AddLivraison += Delivery_AddLivraison;
+                    list.Children.Add(tmp);
                 }
-                DeliveriesLoaded = true;
-
-
+                deliveriesLoaded = true;
             }
             else
             {
                 throw new Exception_Stream("Load map before");
             }
-            
-            
-            
         }
 
-        public async static Task GetWay(MapView mapCanvas)
+        private async static void Delivery_AddLivraison(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (DeliveriesLoaded && carteLoaded)
+            int index;
+            Livraison livraison = (sender as Delivery).livraison;
+            if (tournee == null)
+                return;
+
+            index = tournee.livraisons.IndexOf(livraison);
+
+            ContentDialog popup = new ContentDialog {
+                Title = "Créer une livraison",
+                Content = new DeliveryPopUp(),
+                PrimaryButtonText = "Créer",
+            };
+
+            await popup.ShowAsync();
+#if DEBUG
+            Debug.WriteLine((popup.Content as DeliveryPopUp).test());
+#endif
+
+        }
+
+        private static void Checkbox_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if((e.OriginalSource as CheckBox).IsChecked == true)
             {
-                List<Point> l;
-                l = Outils.startTsp(demandeLivraisons, carte);
-                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
-                Point start = demandeLivraisons.entrepot.adresse;
-                foreach (var point in l)
-                {
-                    if (point.id != start.id)
-                    {
-                        dijkstra.execute(start);
-                        LinkedList<Point> result = dijkstra.getPath(point);
-                        mapCanvas.LoadWay(result);
-                        start = point;
-                        await Task.Delay(TimeSpan.FromSeconds(1));
-                    }
-                }
+                countCheck++;
+            }
+            else
+            {
+                countCheck--;
+            }
+        }
+
+        public static void GetWay(MapView mapCanvas)
+        {
+            if (deliveriesLoaded && carteLoaded)
+            {
+                tournee = Outils.creerTournee(demandeLivraisons, carte);
+                mapCanvas.LoadWay(tournee);
             }
             else
             {
