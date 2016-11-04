@@ -21,6 +21,8 @@ namespace FastDelivery_IHM
 
     public class MapView : Canvas
     {
+        const int TAILLE_POINTS = 8;
+        const int TAILLE_POINTS_FAKE = 16;
         List<ItemsControl> calques;
         ItemsControl carteUI;
         ItemsControl cheminUI;
@@ -30,7 +32,6 @@ namespace FastDelivery_IHM
         {
             SizeChanged += MapView_SizeChanged;
             calques = new List<ItemsControl>();
-
         }
 
         public void LoadMap(Carte plan)
@@ -90,17 +91,78 @@ namespace FastDelivery_IHM
             foreach (var troncon in plan.troncons)
             {
                 Line line = new Line();
-
+                Line lineToAim = new Line();
+                lineToAim.PointerEntered += Line_PointerEntered;
+                lineToAim.PointerExited += Line_PointerExited;
                 line.Stroke = new SolidColorBrush(Colors.Green);
+                lineToAim.Stroke = new SolidColorBrush(Colors.Transparent);
+                ToolTip tt = new ToolTip();
+                tt.Content = troncon.Value.rue;
+                lineToAim.SetValue(ToolTipService.ToolTipProperty, tt);
+                //Flyout texte = new Flyout();
+                //TextBlock t = new TextBlock();
+                //Button b = new Button();
+                //b.Content = "bububu";
+                //t.Text = "hababa";
+                //texte.Content = b;
 
                 line.X1 = getX(troncon.Value.origine.x, minX, rX);
                 line.Y1 = getY(troncon.Value.origine.y, minY, rY);
                 line.X2 = getX(troncon.Value.destination.x, minX, rX);
                 line.Y2 = getY(troncon.Value.destination.y, minY, rY);
+                lineToAim.X1 = getX(troncon.Value.origine.x, minX, rX);
+                lineToAim.Y1 = getY(troncon.Value.origine.y, minY, rY);
+                lineToAim.X2 = getX(troncon.Value.destination.x, minX, rX);
+                lineToAim.Y2 = getY(troncon.Value.destination.y, minY, rY);
 
-                line.StrokeThickness = 1;
+                //Flyout.SetAttachedFlyout(line, texte);
+
+                line.StrokeThickness = 2;
+                lineToAim.StrokeThickness = 20;
                 this.Children.Add(line);
+                this.Children.Add(lineToAim);
             }
+            foreach (var point in plan.points)
+            {
+                Ellipse circle = new Ellipse();
+                Ellipse circleToAim = new Ellipse();
+                circle.Height = TAILLE_POINTS;
+                circleToAim.Height = TAILLE_POINTS_FAKE;
+                circle.Width = TAILLE_POINTS;
+                circleToAim.Width = TAILLE_POINTS_FAKE;
+                Brush color = new SolidColorBrush(Colors.Black);
+                Brush colorFake = new SolidColorBrush(Colors.Transparent);
+                circle.Fill = color;
+                circleToAim.Fill = colorFake;
+
+                Canvas.SetTop(circle,getY(point.Value.y, minY, rY)-(TAILLE_POINTS/2));
+                Canvas.SetLeft(circle, getX(point.Value.x, minY, rX) - (TAILLE_POINTS / 2));
+                Canvas.SetTop(circleToAim, getY(point.Value.y, minY, rY) - (TAILLE_POINTS_FAKE / 2));
+                Canvas.SetLeft(circleToAim, getX(point.Value.x, minY, rX) - (TAILLE_POINTS_FAKE / 2));
+
+                this.Children.Add(circle);
+                this.Children.Add(circleToAim);
+
+                //circleToAim.PointerEntered +=
+
+                ToolTip tt = new ToolTip();
+                tt.Content = "x : " + point.Value.x + "; y : " + point.Value.y;
+                circleToAim.SetValue(ToolTipService.ToolTipProperty, tt);
+            }
+        }
+
+        private void Line_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Line line = sender as Line;
+            ToolTip tt = line.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.IsOpen = false;
+        }
+
+        private void Line_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Line line = sender as Line;
+            ToolTip tt = line.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.IsOpen = true;
         }
 
         private async void DisplayDeliveries(Dictionary<int, Livraison> demandeLivraisons)
@@ -181,6 +243,10 @@ namespace FastDelivery_IHM
             this.Children.Add(intersection);
         }
 
+        void MouseDownHandler(Object sender, RoutedEventArgs args)
+        {
+            ((Line)sender).Stroke = new SolidColorBrush(Colors.Red);
+        }
 
         private static double getX(double X, double minX, double rX)
         {

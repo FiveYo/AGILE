@@ -124,6 +124,14 @@ namespace FastDelivery_IHM
                     ((Delivery)item).toggleAddButton();
                 }
             }
+
+//#if DEBUG
+//            Button button = sender as Button;
+//            ToolTip tt = new ToolTip();
+//            tt.Content = "hahahaha";
+//            button.SetValue(ToolTipService.ToolTipProperty, tt);
+//            tt.IsOpen = true;
+//#endif
         }
     }
 }
