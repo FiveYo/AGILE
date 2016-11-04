@@ -24,7 +24,7 @@ namespace FastDelivery_IHM
             this.InitializeComponent();
         }
 
-        public string test()
+        public string getInfos()
         {
             return id.Text;
         }

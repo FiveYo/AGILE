@@ -1,58 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using FastDelivery_Library;
+﻿using FastDelivery_Library;
 using FastDelivery_Library.Modele;
-
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Shapes;
-using Windows.UI;
-using Windows.UI.Xaml.Media;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Foundation.Collections;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Xaml;
-using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
+
+// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace FastDelivery_IHM
 {
-
-    public class MapView : Grid
+    public sealed partial class Map : UserControl
     {
-        Canvas carteUI;
-        Canvas cheminUI;
-        Canvas livraisonUI;
         double minX, minY, rX, rY;
 
         public SolidColorBrush colorMap { get; set; }
 
         public SolidColorBrush colorWay { get; set; }
 
-        
-
-        public MapView()
+        public Map()
         {
+            this.InitializeComponent();
             SizeChanged += MapView_SizeChanged;
             colorMap = new SolidColorBrush(Colors.Green);
             colorWay = new SolidColorBrush(Colors.Blue);
-            carteUI = new Canvas();
-            cheminUI = new Canvas();
-            livraisonUI = new Canvas();
-            Canvas.SetZIndex(carteUI, 0);
-            Canvas.SetZIndex(cheminUI, 1);
-            Canvas.SetZIndex(livraisonUI, 2);
-
-            Children.Add(carteUI);
-            Children.Add(cheminUI);
-            Children.Add(livraisonUI);
         }
 
         public void LoadMap(Carte plan)
         {
-            Children.Clear();
+            carteUI.Children.Clear();
             DisplayMap(plan);
         }
 
@@ -62,47 +52,26 @@ namespace FastDelivery_IHM
             DisplayDeliveries(demandeLivraisons.livraisons);
         }
 
-
         public async void LoadWay(Tournee t)
         {
-            foreach(var chemin in t.troncons.Values)
+            foreach (var chemin in t.troncons.Values)
             {
                 DisplayWay(chemin);
                 await Task.Delay(1000);
             }
         }
 
-
         private void MapView_SizeChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-
             //this.Display();
         }
-
-        //private void Display()
-        //{
-        //    // On supprime tout ce qu'on avait affiché
-        //    this.Children.Clear();
-        //    rX = this.ActualWidth / (this.plan.Xmax - this.plan.Xmin);
-        //    rY = this.ActualHeight / (this.plan.Ymax - this.plan.Ymin);
-
-        //    if (planLoaded)
-        //    {
-        //        this.DisplayMap();
-        //        // this.DisplayLivraison();
-        //        if(livraisonLoaded)
-        //        {
-        //            this.DisplayLivraison();
-        //        }
-        //    }
-        //}
 
         private void DisplayMap(Carte plan)
         {
             minX = plan.minX;
             minY = plan.minY;
-            rX = this.ActualWidth / (double)(plan.maxX - plan.minX);
-            rY = this.ActualHeight / (double)(plan.maxY - plan.minY);
+            rX = map.ActualWidth / (plan.maxX - plan.minX);
+            rY = map.ActualHeight / (plan.maxY - plan.minY);
 
             foreach (var troncon in plan.troncons)
             {
@@ -117,8 +86,7 @@ namespace FastDelivery_IHM
                 line.X2 = getX(troncon.Value.destination.x, minX, rX);
                 line.Y2 = getY(troncon.Value.destination.y, minY, rY);
 
-
-                line.StrokeThickness = 3;
+                line.StrokeThickness = 1;
                 carteUI.Children.Add(line);
             }
 
@@ -126,7 +94,7 @@ namespace FastDelivery_IHM
 
         private void DisplayWay(List<Troncon> chemin)
         {
-            foreach(var troncon in chemin)
+            foreach (var troncon in chemin)
             {
                 Point first = troncon.origine;
                 Point second = troncon.destination;
@@ -175,6 +143,7 @@ namespace FastDelivery_IHM
             }
         }
 
+
         private async void DisplayEntrepot(Entrepot entrepot)
         {
             Point entrepotPt = entrepot.adresse;
@@ -201,7 +170,6 @@ namespace FastDelivery_IHM
             Canvas.SetLeft(intersection, left);
             livraisonUI.Children.Add(intersection);
         }
-
 
         private static double getX(double X, double minX, double rX)
         {

@@ -7,15 +7,39 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="800">
 
-    <Grid Margin="0,0,-188,0">
-        <TextBox x:Name="id" HorizontalAlignment="Left" Margin="65,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="ID"/>
-        <TextBox x:Name="idPoint" HorizontalAlignment="Left" Margin="64,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="ID Point"/>
-        <TextBox x:Name="duree" HorizontalAlignment="Left" Margin="63,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="Durée"/>
-        <TimePicker HorizontalAlignment="Left" Margin="306,47,0,0" VerticalAlignment="Top" Header="Début plage"/>
-        <TimePicker HorizontalAlignment="Left" Margin="308,129,0,0" VerticalAlignment="Top" Header="Fin plage"/>
-
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Margin="10">
+            <StackPanel.Resources>
+                <Style TargetType="TextBox">
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="Width" Value="80"/>
+                    <Setter Property="TextAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Height" Value="50"/>
+                </Style>
+            </StackPanel.Resources>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="id" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="ID"/>
+                <Button FontFamily="Segoe MDL2 Assets" Content="&#xE718;" Height="50"/>
+            </StackPanel>
+            <TextBox x:Name="idPoint" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="ID Point"/>
+            <TextBox x:Name="duree" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="Durée"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TimePicker HorizontalAlignment="Left" VerticalAlignment="Top" Header="Début plage"/>
+            <TimePicker HorizontalAlignment="Left" VerticalAlignment="Top" Header="Fin plage"/>
+        </StackPanel>
 
 
     </Grid>

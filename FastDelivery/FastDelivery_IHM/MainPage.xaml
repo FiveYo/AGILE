@@ -17,9 +17,8 @@
                 <ColumnDefinition Width="0.3*" />
                 <ColumnDefinition Width="0.7*" />
             </Grid.ColumnDefinitions>
-            <Grid x:Name="mapGrid" Grid.Column="1" Padding="50" Background="WhiteSmoke">
-                <local:MapView x:Name="mapCanvas" Margin="0"/>
-            </Grid>
+            <local:Map x:Name="mapCanvas" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            </local:Map>
             <SplitView x:Name="navbar" DisplayMode="CompactOverlay"  IsPaneOpen="False" 
                    CompactPaneLength="50" OpenPaneLength="250">
                 <SplitView.Pane>

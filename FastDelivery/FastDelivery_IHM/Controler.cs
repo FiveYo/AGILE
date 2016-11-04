@@ -27,7 +27,7 @@ namespace FastDelivery_IHM
 
         private static Tournee tournee;
 
-        public static void loadMap(Stream file, MapView map)
+        public static void loadMap(Stream file, Map map)
         {
             
             carte = Outils.ParserXml_Plan(file);
@@ -35,7 +35,7 @@ namespace FastDelivery_IHM
             carteLoaded = true;
         }
 
-        public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
+        public static void loadDeliveries(Stream streamFile, Map mapCanvas, StackPanel list)
         {
             Delivery tmp;
             if(carteLoaded)
@@ -76,7 +76,7 @@ namespace FastDelivery_IHM
 
             await popup.ShowAsync();
 #if DEBUG
-            Debug.WriteLine((popup.Content as DeliveryPopUp).test());
+            Debug.WriteLine((popup.Content as DeliveryPopUp).getInfos());
 #endif
 
         }
@@ -93,7 +93,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        public static void GetWay(MapView mapCanvas)
+        public static void GetWay(Map mapCanvas)
         {
             if (deliveriesLoaded && carteLoaded)
             {
