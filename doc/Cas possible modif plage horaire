@@ -44,3 +44,8 @@ C'est la borne inférieure UNIQUEMENT dans le cas d'un RETARD du livreur
 Si cet enfoiré doit arriver en avance, on ne modifie que les livraisons qui se passent avant. Le problème est un chouia plus complexe.
 
 Il faut regarder l'heure de livraison précédente et regarder si elle
+
+Duvidas : 
+
+- Soit L la livraison initiallement prévue a 10h et LS la livraison suivante, mais dont ont a changé la plage horaire de 11h -> 12h.
+Si on se contente juste d'ajouter une heure à l'heure d'arrivée des livraisons suivantes, nous pouvons avoir des résultats abberrants. Il faut donc tester à chaque fois qu'on veux incrémenter une livraison si la nouvelle heure d'arrivée empiète sur le temps de la prochaine livraison. Comment me diriez vous ? Grâce au coût des tronçons. En ayant le chemin entre les 2 livraisons, nous avons le temps mit pour aller jusqu'à la prochaine livraison. On additionne ce temps avec le temps de livraison de L et sa nouvelle heure de passage, et si ce résultat est inférieur à l'heure de passage initiallement prévue pour LS, on a pas a changer son heure de passage.
