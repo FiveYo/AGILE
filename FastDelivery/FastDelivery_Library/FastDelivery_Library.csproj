@@ -36,7 +36,10 @@
   <ItemGroup>
     <Compile Include="Exceptions.cs" />
     <Compile Include="Modele\Carte.cs" />
+    <Compile Include="Modele\Chemin.cs" />
     <Compile Include="Modele\Lieu.cs" />
+    <Compile Include="PatternUndoRedo\ModifyTournee.cs" />
+    <Compile Include="PatternUndoRedo\UndoRedo.cs" />
     <Compile Include="TSP\InteratorSeq.cs" />
     <Compile Include="Modele\DemandeDeLivraisons.cs" />
     <Compile Include="Dijkstra.cs" />
