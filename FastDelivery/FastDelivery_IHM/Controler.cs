@@ -10,6 +10,7 @@ using FastDelivery_Library;
 using FastDelivery_Library.Modele;
 
 using Windows.UI.Xaml.Controls;
+using System.Diagnostics;
 
 namespace FastDelivery_IHM
 {
@@ -58,12 +59,18 @@ namespace FastDelivery_IHM
             
         }
 
-        public async static Task GetWay(MapView mapCanvas)
+        public async static Task<string> GetWay(MapView mapCanvas)
         {
+            string elapsedTime = "No runtime";
             if (DeliveriesLoaded && carteLoaded)
             {
                 List<Point> l;
+                Stopwatch sw = new Stopwatch();
+                sw.Start(); 
                 l = Outils.startTsp(demandeLivraisons, carte);
+                sw.Stop();
+                TimeSpan ts = sw.Elapsed;
+                elapsedTime = "RunTime " + String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
                 DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
                 Point start = demandeLivraisons.entrepot.adresse;
                 foreach (var point in l)
@@ -82,6 +89,7 @@ namespace FastDelivery_IHM
             {
                 throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
+            return elapsedTime;
         }
     }
 }

@@ -91,8 +91,10 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée";
-                await Controler.GetWay(mapCanvas);
-                feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
+                await Task.Delay(500);
+                string runtime = await Controler.GetWay(mapCanvas);
+                feedBack.Text = runtime;
+                //feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
             }
             catch (TimeoutException)
