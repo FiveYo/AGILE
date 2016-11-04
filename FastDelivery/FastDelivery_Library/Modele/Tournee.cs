@@ -257,5 +257,82 @@ namespace FastDelivery_Library
             }
             return listlivraisonout;
         }
+
+        // Cette méthode implémente la modification d'une plage horaire
+       
+        public void ModifPlage(Carte carte, Livraison livraisonNewPlage, int index, DateTime newPlage)
+        {
+            // Récupérer l'heure de livraison de la livraison à modif
+            DateTime DebutNewPlage = DateTime.Parse(livraisonNewPlage.debutPlage);
+            DateTime FinNewPlage = DateTime.Parse(livraisonNewPlage.finPlage);
+            DateTime heurePassage ;
+
+            if(HeuredePassage.TryGetValue(livraisonNewPlage, out heurePassage))
+            {
+                if (DebutNewPlage < heurePassage && heurePassage < FinNewPlage)
+                {
+                    return;
+                }
+
+                else
+                {
+                    
+
+                    Point positionelementprecedent = livraisons[index - 1].adresse;
+                    Point positionelementsuivant = livraisons[index].adresse;
+
+                    Lieu lieuprecedent = livraisons[index - 1];
+                    Lieu lieusuivant = livraisons[index];
+
+                    
+
+                    if (DebutNewPlage > heurePassage)
+                    {
+                        // Calcul de la nouvelle heure de passage
+
+
+                        // Modifie toutes les livraisons possédant une plage horaire
+                        List<Livraison> livraisonTemp = new List<Livraison>();
+                        foreach (var livraison in livraisons)
+                        {
+                            if( livraison =  )
+                        }
+
+                        //Supprime les livraisons que l'on changera dans Tournée pour former TourneeTemp1, appel de la fonction DelLivraison
+
+                        DelLivraison( carte, badlivraison, index);
+
+
+
+                        return;
+                    }
+
+                    // Ajoute le retard gagné à toute les livraisons post livraisonNewPlage
+                    else if (heurePassage > FinNewPlage)
+                    {
+                        TimeSpan retard = FinNewPlage.Subtract(heurePassage);
+                        HeuredePassage[livraisonNewPlage] = FinNewPlage;
+
+
+                        //commence à la livraison modifiée
+                        // créer un dictionnaire du même type que celui de milly dans la méthode Check() qui référence les livraisons dont les plages horaires 
+                        // ont été insultés, non respectées
+                        foreach(var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
+                        {
+                            HeuredePassage[livraison].Add(retard);
+                        }
+
+                        return;
+                    }
+                }
+                
+
+
+            }
+
+            // Comparer avec la nouvelle plage horaire
+
+            //
+        }
     }
 }
