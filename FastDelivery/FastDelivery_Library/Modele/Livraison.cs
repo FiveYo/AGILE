@@ -13,12 +13,14 @@ namespace FastDelivery_Library
     public class Livraison : Lieu
     {
         public int duree;
+
         public string debutPlage, finPlage;
-        public bool planifier = false;
+        public bool planifier { get; set; }
         public Point adresse { get; set; }
 
         public Livraison(Point adresse , int duree)
         {
+            planifier = false;
             this.adresse = adresse;
             this.duree = duree;
         }

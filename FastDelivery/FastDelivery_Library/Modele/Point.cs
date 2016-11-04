@@ -12,8 +12,11 @@ namespace FastDelivery_Library
     /// </summary>
     public class Point
     {
-        public int id, x, y;
-        public List<Troncon> voisins;
+        public int id { get; set; }
+        public int x {get; set;}
+        public int y {get; set;}
+
+        public List<Troncon> voisins { get; private set; }
 
         public Point(int ID , int X, int Y)
         {

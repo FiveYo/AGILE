@@ -91,7 +91,7 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée";
-                await Controler.GetWay(mapCanvas);
+                Controler.GetWay(mapCanvas);
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
             }
@@ -110,6 +110,18 @@ namespace FastDelivery_IHM
                 if(item is Delivery)
                 {
                     ((Delivery)item).toggleSplit();
+                }
+            }
+        }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Gérer le cas ou on appuie sur + et il n'y a pas de tournée créé
+            foreach (var item in listDeliveries.Children)
+            {
+                if (item is Delivery)
+                {
+                    ((Delivery)item).toggleAddButton();
                 }
             }
         }
