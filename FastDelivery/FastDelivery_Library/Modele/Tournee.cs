@@ -270,6 +270,7 @@ namespace FastDelivery_Library
 
             if (HeuredePassage.TryGetValue(livraisonNewPlage, out heurePassage))
             {
+                // Si la nouvelle plage horaire respecte l'heure de passage
                 if (DebutNewPlage < heurePassage && heurePassage < FinNewPlage)
                 {
                     return;
@@ -278,32 +279,26 @@ namespace FastDelivery_Library
                 else
                 {
 
-
-                    Point positionelementprecedent = livraisons[index - 1].adresse;
+                    /*Point positionelementprecedent = livraisons[index - 1].adresse;
                     Point positionelementsuivant = livraisons[index].adresse;
 
                     Lieu lieuprecedent = livraisons[index - 1];
-                    Lieu lieusuivant = livraisons[index];
+                    Lieu lieusuivant = livraisons[index];*/
 
 
-
+                    // Le livreur doit venir en avance
                     if (DebutNewPlage > heurePassage)
                     {
                         // Calcul de la nouvelle heure de passage
-
-
-                        // Modifie toutes les livraisons possédant une plage horaire
-                        List<Livraison> livraisonTemp = new List<Livraison>();
-                        foreach (var livraison in livraisons)
+                        foreach(var livraison in (livraisons.Reverse()))
                         {
-                            if (livraison =  )
+                            if(livraison.adresse.Equals(livraisonNewPlage.adresse))
+                            {
+
+                                break;
+                            }
                         }
-
-                        //Supprime les livraisons que l'on changera dans Tournée pour former TourneeTemp1, appel de la fonction DelLivraison
-
-                        DelLivraison(carte, badlivraison, index);
-
-
+                        // Modifie toutes les livraisons possédant une plage horaire
 
                         return;
                     }
@@ -311,7 +306,7 @@ namespace FastDelivery_Library
                     // Ajoute le retard gagné à toute les livraisons post livraisonNewPlage
                     else if (heurePassage > FinNewPlage)
                     {
-                        TimeSpan retard = FinNewPlage.Subtract(heurePassage);
+                        //TimeSpan retard = FinNewPlage.Subtract(heurePassage);
                         HeuredePassage[livraisonNewPlage] = FinNewPlage;
 
 
@@ -323,31 +318,34 @@ namespace FastDelivery_Library
                         {
                             Lieu pointDepart = livraison;
 
+                            //Plages de la nouvelle livraison
+                            DateTime FinPlageNextLivraison = DateTime.Parse(livraisonNewPlage.finPlage);
+
                             //Calcule l'heure d'arrivée minimale à la prochaine livraison en prenant compte du retard
                             Chemin f = Hashchemin[pointDepart];
-                            TimeSpan trajetPlusTempsLivraison = TimeSpan.FromMinutes((double) livraison.duree + Hashchemin[pointDepart].cout);
+                            TimeSpan trajetPlusTempsLivraison = TimeSpan.FromMinutes((double)livraisonPrecedente.duree + Hashchemin[pointDepart].cout);
                             DateTime heureArriveeMinNextLivraison = HeuredePassage[livraisonPrecedente].Add(trajetPlusTempsLivraison);
 
                             //Test si cela créée un retard sur la livraison suivante
-                            if (HeuredePassage[livraison].CompareTo(HeuredePassage[livraison]) < 0)
+                            if (heureArriveeMinNextLivraison.CompareTo(HeuredePassage[livraison]) > 0)
                             {
-                                HeuredePassage[livraison].Add(retard);
-                            }
-                            
+                                HeuredePassage[livraison] = heureArriveeMinNextLivraison;
+
+                                /*
+                                 * T0D0 : implémenter matrice check pour le retard 
+                                 */
+                                if( HeuredePassage[livraison].CompareTo(FinPlageNextLivraison) > 0)
+                                {
+
+                                }
+                            }                           
                             livraisonPrecedente = livraison;
                         }
-
                         return;
                     }
                 }
-
-
-
             }
-
             // Comparer avec la nouvelle plage horaire
-
-            //
         }
     }
 }
