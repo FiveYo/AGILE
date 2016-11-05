@@ -1,0 +1,51 @@
+Cas possible modif plage horaire
+
+Déjà, on part du principe que la livraison est déjà planifiée, c'est à dire on sait exactement à quelle heure le livreur sera au point de livraison X.
+
+I) Le cas le plus trivial est le cas où la modification de la plage horaire retombe sur un intervalle où le livreur est déjà prévu de passer -> RAM (rien à modifier, pour les incultes)
+
+II) Si la modification entraîne un retard du livreur, nous gardons le même découpage de la tournée JUSQU'A la livraison modifiée, où nous recalculons les plages horaires de toutes les autres livraisons
+
+III) La modification entraîne une avancée de l'heure de passage du livreur : nous devons alors recalculer les plages horaires des livraisons AVANT celle à modifier
+
+IV) Il reste un cas, fin et tordu comme le cou d'une dinde la veille de Noël, il est possible que la modification entrâine l'incapacité du livreur a effectué cette livraison.
+Plusieurs choix s'offrent à nous: 
+	- annuler toute la tournée (You mad bro ?)
+	- annuler seulement la livraison concernée et sauvé le repas de millier de personnes respectables
+	- garder l'ancienne plage horaire
+	- mettre toutes les livraisons au même endroit, comme ça il n'y aurait plus de conflit, Peeace & Loove
+
+
+
+
+Il ne faut pas modifier le chemin, il faut modifier les PLAGES HORAIRES !
+
+Le cas IV est devenu OBSOLETE
+
+
+
+Si on rentre en conflit à cause de la modif d"une plage horaire, on la supprime
+
+
+Un attribut heure d'arrivée sur les livraisons
+Lors de la modification d'une plage horaire, l'heure de passage de la livraison modifiée sera incrémenté d'un nombre X (positif ou négatif), qui devra être ajouté à toutes les livraisons précédente (dans le cas d'une avance du livreur) ou à toutes les livraisons suivantes (cas de retard du livreur).
+Cette modification entraînera très probablement des conflits avec les plages horaires des autres livraisons, il faudra juste notifier l'utilisateur que des conflits sont existants, en spécifiant quelles sont les livraisons en conflit.
+
+
+Méthode : Parcourir la liste ordonnée des livraisons, à partir de l'élément à modifier on ajoute
+
+Woww attend, si on modifie la plage horaire, ne sera PAS forcément les bornes inferieures/superieures, il faut recalculer l'heure d'arrivée de la livraison à changer. Avec cette heure d'arrivée on calcule la différence X avec l'ancienne heure puis on ajoute à toutes les livraisons suivantes ce X.
+
+C'est la borne inférieure UNIQUEMENT dans le cas d'un RETARD du livreur
+
+
+..
+
+Si cet enfoiré doit arriver en avance, on ne modifie que les livraisons qui se passent avant. Le problème est un chouia plus complexe.
+
+Il faut regarder l'heure de livraison précédente et regarder si elle
+
+Duvidas : 
+
+- Soit L la livraison initiallement prévue a 10h et LS la livraison suivante, mais dont ont a changé la plage horaire de 11h -> 12h.
+Si on se contente juste d'ajouter une heure à l'heure d'arrivée des livraisons suivantes, nous pouvons avoir des résultats abberrants. Il faut donc tester à chaque fois qu'on veux incrémenter une livraison si la nouvelle heure d'arrivée empiète sur le temps de la prochaine livraison. Comment me diriez vous ? Grâce au coût des tronçons. En ayant le chemin entre les 2 livraisons, nous avons le temps mit pour aller jusqu'à la prochaine livraison. On additionne ce temps avec le temps de livraison de L et sa nouvelle heure de passage, et si ce résultat est inférieur à l'heure de passage initiallement prévue pour LS, on a pas a changer son heure de passage.
