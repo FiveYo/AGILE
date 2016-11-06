@@ -34,6 +34,14 @@ namespace FastDelivery_IHM
 
         public SolidColorBrush colorAim { get; set; }
 
+        public SolidColorBrush colorPoint { get; set; }
+
+        const int TAILLE_POINTS = 8;
+        const int TAILLE_POINTS_FAKE = 16;
+        const int TAILLE_LIGNE_MAP = 2;
+        const int TAILLE_LIGNE_MAP_FAKE = 20;
+        const int TAILLE_LIGNE_CHEMIN = 3;
+
         public Map()
         {
             this.InitializeComponent();
@@ -41,6 +49,7 @@ namespace FastDelivery_IHM
             colorMap = new SolidColorBrush(Colors.Green);
             colorWay = new SolidColorBrush(Colors.Blue);
             colorAim = new SolidColorBrush(Colors.Transparent);
+            colorPoint = new SolidColorBrush(Colors.Black);
         }
 
         public void LoadMap(Carte plan)
@@ -84,6 +93,9 @@ namespace FastDelivery_IHM
                 Line line = new Line();
                 Line lineToAim = new Line();
 
+                lineToAim.PointerEntered += Line_PointerEntered;
+                lineToAim.PointerExited += Line_PointerExited;
+
                 X1 = getX(troncon.Value.origine.x, minX, rX);
                 Y1 = getY(troncon.Value.origine.y, minY, rY);
                 X2 = getX(troncon.Value.destination.x, minX, rX);
@@ -98,10 +110,8 @@ namespace FastDelivery_IHM
                 lineToAim.X2 = X2;
                 lineToAim.Y2 = Y2;
 
-                //lineToAim.PointerEntered += Line_PointerEntered;
-                //lineToAim.PointerExited += Line_PointerExited;
                 ToolTip tt = new ToolTip();
-                tt.Content = troncon.Value.rue;
+                tt.Content = "Nom rue: " + troncon.Value.rue;
                 lineToAim.SetValue(ToolTipService.ToolTipProperty, tt);
 
                 line.Stroke = colorMap;
@@ -110,8 +120,41 @@ namespace FastDelivery_IHM
                 lineToAim.StrokeThickness = 20;
                 
                 carteUI.Children.Add(line);
+                carteUI.Children.Add(lineToAim);
             }
 
+            foreach (var point in plan.points)
+            {
+                Ellipse circle = new Ellipse();
+                Ellipse circleToAim = new Ellipse();
+
+                circleToAim.PointerEntered += CircleToAim_PointerEntered;
+                circleToAim.PointerExited += CircleToAim_PointerExited;
+
+                ToolTip tt = new ToolTip();
+                tt.Content = "id : " + point.Value.id + "\n x : " + point.Value.x + "\n y : " + point.Value.y;
+                circleToAim.SetValue(ToolTipService.ToolTipProperty, tt);
+
+                circle.Height = TAILLE_POINTS;
+                circleToAim.Height = TAILLE_POINTS_FAKE;
+                circle.Width = TAILLE_POINTS;
+                circleToAim.Width = TAILLE_POINTS_FAKE;
+
+                circle.Fill = colorPoint;
+                circleToAim.Fill = colorAim;
+
+                X1 = getX(point.Value.x, minX, rX);
+                Y1 = getY(point.Value.y, minY, rY);
+
+                Canvas.SetTop(circle, Y1 - TAILLE_POINTS / 2);
+                Canvas.SetLeft(circle, X1 - TAILLE_POINTS / 2);
+
+                Canvas.SetTop(circleToAim, Y1 - TAILLE_POINTS_FAKE / 2);
+                Canvas.SetLeft(circleToAim, X1 - TAILLE_POINTS_FAKE / 2);
+
+                carteUI.Children.Add(circle);
+                carteUI.Children.Add(circleToAim);
+            }
         }
 
         private void DisplayWay(List<Troncon> chemin)
@@ -130,7 +173,8 @@ namespace FastDelivery_IHM
                 line.X2 = getX(second.x, minX, rX);
                 line.Y2 = getY(second.y, minY, rY);
 
-                line.StrokeThickness = 3;
+                line.StrokeThickness = TAILLE_LIGNE_CHEMIN;
+
                 cheminUI.Children.Add(line);
             }
         }
@@ -192,6 +236,38 @@ namespace FastDelivery_IHM
             Canvas.SetLeft(intersection, left);
             livraisonUI.Children.Add(intersection);
         }
+
+        private void Line_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Line line = sender as Line;
+            ToolTip tt = line.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.IsOpen = true;
+        }
+
+        private void Line_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Line line = sender as Line;
+            ToolTip tt = line.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.IsOpen = false;
+        }
+
+        private void CircleToAim_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Ellipse circle = sender as Ellipse;
+            ToolTip tt = circle.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.Placement = Windows.UI.Xaml.Controls.Primitives.PlacementMode.Left;
+            tt.IsOpen = true; //or false?!
+        }
+
+        private void CircleToAim_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Ellipse circle = sender as Ellipse;
+            ToolTip tt = circle.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.IsOpen = false;
+        }
+
+
+
 
         private static double getX(double X, double minX, double rX)
         {
