@@ -32,12 +32,15 @@ namespace FastDelivery_IHM
 
         public SolidColorBrush colorWay { get; set; }
 
+        public SolidColorBrush colorAim { get; set; }
+
         public Map()
         {
             this.InitializeComponent();
             SizeChanged += MapView_SizeChanged;
             colorMap = new SolidColorBrush(Colors.Green);
             colorWay = new SolidColorBrush(Colors.Blue);
+            colorAim = new SolidColorBrush(Colors.Transparent);
         }
 
         public void LoadMap(Carte plan)
@@ -70,6 +73,7 @@ namespace FastDelivery_IHM
 
         private void DisplayMap(Carte plan)
         {
+            double X1, Y1, X2, Y2;
             minX = plan.minX;
             minY = plan.minY;
             rX = map.ActualWidth / (plan.maxX - plan.minX);
@@ -78,17 +82,33 @@ namespace FastDelivery_IHM
             foreach (var troncon in plan.troncons)
             {
                 Line line = new Line();
+                Line lineToAim = new Line();
+
+                X1 = getX(troncon.Value.origine.x, minX, rX);
+                Y1 = getY(troncon.Value.origine.y, minY, rY);
+                X2 = getX(troncon.Value.destination.x, minX, rX);
+                Y2 = getY(troncon.Value.destination.y, minY, rY);
+
+                line.X1 = X1;
+                line.Y1 = Y1;
+                line.X2 = X2;
+                line.Y2 = Y2;
+                lineToAim.X1 = X1;
+                lineToAim.Y1 = Y1;
+                lineToAim.X2 = X2;
+                lineToAim.Y2 = Y2;
+
+                //lineToAim.PointerEntered += Line_PointerEntered;
+                //lineToAim.PointerExited += Line_PointerExited;
+                ToolTip tt = new ToolTip();
+                tt.Content = troncon.Value.rue;
+                lineToAim.SetValue(ToolTipService.ToolTipProperty, tt);
 
                 line.Stroke = colorMap;
-
-                line.SetValue(ToolTipService.ToolTipProperty, "hi");
-
-                line.X1 = getX(troncon.Value.origine.x, minX, rX);
-                line.Y1 = getY(troncon.Value.origine.y, minY, rY);
-                line.X2 = getX(troncon.Value.destination.x, minX, rX);
-                line.Y2 = getY(troncon.Value.destination.y, minY, rY);
-
-                line.StrokeThickness = 1;
+                lineToAim.Stroke = colorAim;
+                line.StrokeThickness = 2;
+                lineToAim.StrokeThickness = 20;
+                
                 carteUI.Children.Add(line);
             }
 
