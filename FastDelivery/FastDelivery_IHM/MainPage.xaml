@@ -61,7 +61,7 @@
 
                         </Grid>
                         <ScrollViewer Grid.Row="1" Height="Auto" Background="White">
-                            <StackPanel x:Name="listDeliveries">
+                            <StackPanel x:Name="listDeliveries" KeyDown="listDeliveries_KeyDown">
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>

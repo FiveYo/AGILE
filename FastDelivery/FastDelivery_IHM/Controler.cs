@@ -19,7 +19,6 @@ namespace FastDelivery_IHM
 {
     public static class Controler
     {
-        private static int countCheck = 0;
         private static Carte carte { get; set; }
         private static bool carteLoaded = false;
         private static bool deliveriesLoaded = false;
@@ -35,21 +34,17 @@ namespace FastDelivery_IHM
             carteLoaded = true;
         }
 
-        public static void loadDeliveries(Stream streamFile, Map mapCanvas, StackPanel list)
+        public static List<Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
-            Delivery tmp;
+            List<Delivery> livraisons = new List<Delivery>();
             if(carteLoaded)
             {   
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 
-                list.Children.Clear();
                 foreach (var livraison in demandeLivraisons.livraisons.Values)
                 {
-                    tmp = new Delivery(livraison);
-                    tmp.Checked += Checkbox_Checked;
-                    tmp.AddLivraison += Delivery_AddLivraison;
-                    list.Children.Add(tmp);
+                    livraisons.Add(new Delivery(livraison));
                 }
                 deliveriesLoaded = true;
             }
@@ -57,22 +52,21 @@ namespace FastDelivery_IHM
             {
                 throw new Exception_Stream("Load map before");
             }
+            return livraisons;
         }
 
-        private async static void Delivery_AddLivraison(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public static void UpdateTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
             int index;
-            Livraison livraison = (sender as Delivery).livraison;
-            if (tournee == null)
-                return;
 
-            index = tournee.livraisons.IndexOf(livraison);
-
-            DeliveryPop popup = new DeliveryPop();
-
-            await popup.ShowAsync();
-
-            //Switch en fonction du bouton appuyer + boucle while avec gestion erreur
+            if (lieu is Livraison)
+            {
+                index = tournee.livraisons.IndexOf(lieu as Livraison) + 1;
+            }
+            else
+            {
+                index = -1;
+            }
 
             Point ptLiv;
             int idPt = 0;
@@ -80,7 +74,7 @@ namespace FastDelivery_IHM
 
             int idLiv = 0;
 
-            if (int.TryParse(popup.idPointLiv, out idPt) && int.TryParse(popup.dureeLiv, out dureeLiv))
+            if (int.TryParse(livraison.idPointLiv, out idPt) && int.TryParse(livraison.dureeLiv, out dureeLiv))
             {
                 if (carte.points.TryGetValue(idPt, out ptLiv))
                 {
@@ -88,28 +82,14 @@ namespace FastDelivery_IHM
                         ptLiv, dureeLiv
                     );
 
-                    int.TryParse(popup.idLiv, out idLiv);
-                    // Tu as l'ID de la liv (je sais pas il sert a quoi mais bon) dans idLiv
-                    // Milllllyyyyyy c'est ici
-                    // tournee.AddLiv
-                    //
+                    int.TryParse(livraison.idLiv, out idLiv);
 
-                    // t'enerve pas si ça marche pas sur la map, il faut la réactualiser et j'arrive pas à le faire proprement
-                    
+                    // update tournée
                 }
-            }
-        }
 
-        private static void Checkbox_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if((e.OriginalSource as CheckBox).IsChecked == true)
-            {
-                countCheck++;
             }
-            else
-            {
-                countCheck--;
-            }
+
+            map.LoadWay(tournee);
         }
 
         public static void GetWay(Map mapCanvas)

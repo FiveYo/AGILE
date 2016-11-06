@@ -24,6 +24,8 @@ namespace FastDelivery_IHM
 
         public event RoutedEventHandler AddLivraison;
 
+        public event RoutedEventHandler Select;
+
         public string description
         {
             get
@@ -79,6 +81,10 @@ namespace FastDelivery_IHM
             add.Visibility = add.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        public void SetSelect(bool b)
+        {
+            select.IsChecked = b;
+        }
 
 
 
@@ -86,6 +92,11 @@ namespace FastDelivery_IHM
         private void NotifyPropertyChanged(string prop)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            Select?.Invoke(this, e);
         }
     }
 }

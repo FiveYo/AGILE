@@ -27,10 +27,13 @@ namespace FastDelivery_IHM
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        private Delivery selected;
         public MainPage()
         {
             this.InitializeComponent();
             this.navbar.IsPaneOpen = !navbar.IsPaneOpen;
+            selected = null;
             // Enable Previous Button
             // SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
         }
@@ -58,14 +61,16 @@ namespace FastDelivery_IHM
             }
             else
             {
-
+                
             }
             
         }
         
         private async void loadDeliveries_Click(object sender, RoutedEventArgs e)
         {
+            List<Delivery> livraisons;
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
+
 
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.FileTypeFilter.Add(".xml");
@@ -75,8 +80,16 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                Controler.loadDeliveries(streamFile, mapCanvas, listDeliveries);
+                
+                livraisons = Controler.loadDeliveries(streamFile, mapCanvas);
                 this.navbar.IsPaneOpen = false;
+                foreach (var livraison in livraisons)
+                {
+                    listDeliveries.Children.Add(livraison);
+                    livraison.Select += Livraison_Select;
+                    livraison.Checked += Livraison_Checked;
+                    livraison.AddLivraison += Livraison_AddLivraison;
+                }
                 feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 animFeedback.Begin();
             }
@@ -84,6 +97,41 @@ namespace FastDelivery_IHM
             {
 
             }
+        }
+
+        private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
+        {
+            Delivery d = sender as Delivery;
+            DeliveryPop popup = new DeliveryPop();
+            await popup.ShowAsync();
+            Controler.UpdateTournee(d.livraison, popup, mapCanvas);
+
+        }
+
+        private void Livraison_Checked(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Livraison_Select(object sender, RoutedEventArgs e)
+        {
+            
+            if((e.OriginalSource as ToggleButton).IsChecked == true)
+            {
+                selected = sender as Delivery;
+                foreach (var delivery in listDeliveries.Children)
+                {
+                    if(delivery != sender)
+                    {
+                        (delivery as Delivery).SetSelect(false);
+                    }
+                }
+            }
+            else
+            {
+                selected = null;
+            }
+            
         }
 
         private async void loadCircuit_Click(object sender, RoutedEventArgs e)
@@ -123,6 +171,29 @@ namespace FastDelivery_IHM
                 {
                     ((Delivery)item).toggleAddButton();
                 }
+            }
+        }
+
+        private void listDeliveries_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            int offset;
+
+            if (e.Key == Windows.System.VirtualKey.Up) { offset = -1; }
+            else if (e.Key == Windows.System.VirtualKey.Down) { offset = 1; }
+            else { return; }
+
+            if(selected != null)
+            {
+                int index = listDeliveries.Children.IndexOf(selected) + offset;
+                if (index >= 0 && index < listDeliveries.Children.Count)
+                {
+                    Delivery d = listDeliveries.Children.ElementAt(index) as Delivery;
+                    d.SetSelect(true);
+                }
+            }
+            else if (listDeliveries.Children.Count > 0)
+            {
+                (listDeliveries.Children.First() as Delivery).SetSelect(true);
             }
         }
     }
