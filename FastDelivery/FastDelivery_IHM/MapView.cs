@@ -92,19 +92,10 @@ namespace FastDelivery_IHM
             {
                 Line line = new Line();
                 Line lineToAim = new Line();
-                lineToAim.PointerEntered += Line_PointerEntered;
-                lineToAim.PointerExited += Line_PointerExited;
+                line.StrokeThickness = 2;
+                lineToAim.StrokeThickness = 20;
                 line.Stroke = new SolidColorBrush(Colors.Green);
                 lineToAim.Stroke = new SolidColorBrush(Colors.Transparent);
-                ToolTip tt = new ToolTip();
-                tt.Content = troncon.Value.rue;
-                lineToAim.SetValue(ToolTipService.ToolTipProperty, tt);
-                //Flyout texte = new Flyout();
-                //TextBlock t = new TextBlock();
-                //Button b = new Button();
-                //b.Content = "bububu";
-                //t.Text = "hababa";
-                //texte.Content = b;
 
                 line.X1 = getX(troncon.Value.origine.x, minX, rX);
                 line.Y1 = getY(troncon.Value.origine.y, minY, rY);
@@ -115,12 +106,16 @@ namespace FastDelivery_IHM
                 lineToAim.X2 = getX(troncon.Value.destination.x, minX, rX);
                 lineToAim.Y2 = getY(troncon.Value.destination.y, minY, rY);
 
-                //Flyout.SetAttachedFlyout(line, texte);
-
-                line.StrokeThickness = 2;
-                lineToAim.StrokeThickness = 20;
                 this.Children.Add(line);
                 this.Children.Add(lineToAim);
+
+                lineToAim.PointerEntered += Line_PointerEntered;
+                lineToAim.PointerExited += Line_PointerExited;
+
+                ToolTip tt = new ToolTip();
+                tt.Content = "Nom rue: " + troncon.Value.rue;
+                lineToAim.SetValue(ToolTipService.ToolTipProperty, tt);
+                
             }
             foreach (var point in plan.points)
             {
@@ -143,12 +138,28 @@ namespace FastDelivery_IHM
                 this.Children.Add(circle);
                 this.Children.Add(circleToAim);
 
-                //circleToAim.PointerEntered +=
+                circleToAim.PointerEntered += CircleToAim_PointerEntered;
+                circleToAim.PointerExited += CircleToAim_PointerExited;
 
                 ToolTip tt = new ToolTip();
-                tt.Content = "x : " + point.Value.x + "; y : " + point.Value.y;
+                tt.Content = "id : "+ point.Value.id + "\n x : " + point.Value.x + "\n y : " + point.Value.y;
                 circleToAim.SetValue(ToolTipService.ToolTipProperty, tt);
             }
+        }
+
+        private void CircleToAim_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Ellipse circle = sender as Ellipse;
+            ToolTip tt = circle.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.IsOpen = false;
+        }
+
+        private void CircleToAim_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Ellipse circle = sender as Ellipse;
+            ToolTip tt = circle.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
+            tt.Placement = Windows.UI.Xaml.Controls.Primitives.PlacementMode.Left;
+            tt.IsOpen = true; //or false?!
         }
 
         private void Line_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -162,7 +173,7 @@ namespace FastDelivery_IHM
         {
             Line line = sender as Line;
             ToolTip tt = line.GetValue(ToolTipService.ToolTipProperty) as ToolTip;
-            tt.IsOpen = true;
+            tt.IsOpen = true; //or false?!
         }
 
         private async void DisplayDeliveries(Dictionary<int, Livraison> demandeLivraisons)
