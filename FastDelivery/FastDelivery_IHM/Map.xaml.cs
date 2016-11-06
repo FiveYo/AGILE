@@ -68,11 +68,14 @@ namespace FastDelivery_IHM
         public async void LoadWay(Tournee t)
         {
             cheminUI.Children.Clear();
-            foreach (var chemin in t.Hashchemin.Values)
+            Chemin chemin;
+            foreach (var livraison in t.livraisons)
             {
+                t.Hashchemin.TryGetValue(livraison, out chemin);
                 DisplayWay(chemin.getTronconList());
                 await Task.Delay(1000);
             }
+            DisplayWay(t.Hashchemin[t.entrepot].getTronconList());
         }
 
         private void MapView_SizeChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -277,6 +280,30 @@ namespace FastDelivery_IHM
         private static double getY(double Y, double minY, double rY)
         {
             return (Y - minY) * rY;
+        }
+        public async void DisplayDelivery(Livraison point)
+        {
+            var source = new BitmapImage();
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
+
+            IRandomAccessStream stream = await rass.OpenReadAsync();
+            IRandomAccessStream stream2 = stream.CloneStream();
+
+            source.SetSource(stream2);
+
+            var decoder = await BitmapDecoder.CreateAsync(stream);
+            var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
+
+            var recenterY = -size.Height;
+            var recenterX = -size.Width / 2;
+
+            Image intersection = new Image();
+            intersection.Source = source;
+            double top = getY(point.adresse.y, minY, rY) + recenterY;
+            double left = getX(point.adresse.x, minX, rX) + recenterX;
+            Canvas.SetTop(intersection, top);
+            Canvas.SetLeft(intersection, left);
+            livraisonUI.Children.Add(intersection);
         }
     }
 }

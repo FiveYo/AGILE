@@ -18,6 +18,7 @@ namespace FastDelivery_Library
         public bool planifier { get; set; }
         public Point adresse { get; set; }
 
+        public DateTime HeureDePassage;
         public Livraison(Point adresse , int duree)
         {
             planifier = false;

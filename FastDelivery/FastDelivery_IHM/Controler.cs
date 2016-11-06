@@ -61,7 +61,7 @@ namespace FastDelivery_IHM
 
             if (lieu is Livraison)
             {
-                index = tournee.livraisons.IndexOf(lieu as Livraison) + 1;
+                index = tournee.livraisons.IndexOf(lieu as Livraison);
             }
             else
             {
@@ -84,10 +84,14 @@ namespace FastDelivery_IHM
 
                     int.TryParse(livraison.idLiv, out idLiv);
 
-                    // update tournée
+                    tournee.AddLivraison(carte, toAdd, index);
+
+                    map.DisplayDelivery(toAdd);
+
                 }
 
             }
+            
 
             map.LoadWay(tournee);
         }

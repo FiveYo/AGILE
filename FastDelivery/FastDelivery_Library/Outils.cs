@@ -366,7 +366,9 @@ namespace FastDelivery_Library
                 livraisons.entrepot,
                 new Chemin(PathToTroncon(dijkstra.getPath(livraisons.entrepot.adresse))));
             t = new Tournee(livraisons.entrepot, livraisonsOrdonnee, chemins);
+            t.CalculHeurePassage();
             return t;
+
         }
 
         public static List<Troncon> PathToTroncon(LinkedList<Point> points)

@@ -56,7 +56,7 @@ namespace FastDelivery_Library
                     }
 
                     HashLivraison.Add(livraison, Livtime);
-
+                    livraison.HeureDePassage = Livtime;
                     Livtime.Add(TimeSpan.FromSeconds(livraison.duree));
                 }
 
@@ -66,7 +66,7 @@ namespace FastDelivery_Library
         public Dictionary<Livraison, Error> AddLivraison(Carte carte, Livraison newlivraison, int index)
         {
 
-            Point positionelementprecedent = livraisons[index - 1].adresse;
+            Point positionelementprecedent ;
             Point positionelementsuivant = livraisons[index].adresse;
 
             Lieu lieuprecedent = livraisons[index - 1];
@@ -87,7 +87,14 @@ namespace FastDelivery_Library
             else if (index == livraisons.Count - 1)
             {
                 positionelementsuivant = entrepot.adresse;
+                positionelementprecedent = livraisons[index - 1].adresse;
                 lieusuivant = entrepot;
+
+            }
+
+            else
+            {
+                positionelementprecedent = livraisons[index - 1].adresse;
             }
             //calcul du plus court chemin menant à la nouvelle livraison depuis la livraison précédente
             dijkstra.execute(positionelementprecedent);
