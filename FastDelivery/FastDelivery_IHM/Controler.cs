@@ -89,12 +89,8 @@ namespace FastDelivery_IHM
                     );
 
                     int.TryParse(popup.idLiv, out idLiv);
-                    // Tu as l'ID de la liv (je sais pas il sert a quoi mais bon) dans idLiv
-                    // Milllllyyyyyy c'est ici
-                    // tournee.AddLiv
-                    //
-
-                    // t'enerve pas si ça marche pas sur la map, il faut la réactualiser et j'arrive pas à le faire proprement
+                    tournee.AddLivraison(carte, livraison, idLiv);
+                    
                     
                 }
             }
