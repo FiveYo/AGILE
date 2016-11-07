@@ -186,6 +186,8 @@ namespace FastDelivery_IHM
                     item.RemoveLivraison += Livraison_RemoveLivraison;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
+                string runtime = Controler.runtime;
+                feedBack.Text = runtime;
                 animFeedback.Begin();
             }
             catch (TimeoutException)

@@ -26,6 +26,8 @@ namespace FastDelivery_IHM
 
         private static Tournee tournee;
 
+        public static  string runtime { get; set; }
+
         public static void loadMap(Stream file, Map map)
         {
             
@@ -98,12 +100,24 @@ namespace FastDelivery_IHM
             return new Tuple<int, Delivery>(index, new Delivery(toAdd));
         }
 
+        public static void setRuntime(string run)
+        {
+            runtime = run;
+        }
+
         public static List<Delivery> GetWay(Map mapCanvas)
         {
+            string elapsedTime = "No runtime";
             List<Delivery> listOrder = new List<Delivery>();
             if (deliveriesLoaded && carteLoaded)
             {
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 tournee = Outils.creerTournee(demandeLivraisons, carte);
+                sw.Stop();
+                TimeSpan ts = sw.Elapsed;
+                elapsedTime = "RunTime " + String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                setRuntime(elapsedTime);
                 mapCanvas.LoadWay(tournee);
             }
             else
