@@ -29,7 +29,7 @@ namespace FastDelivery_IHM
 
         public static void loadMap(Stream file, MapView map)
         {
-            
+
             carte = Outils.ParserXml_Plan(file);
             map.LoadMap(carte);
             carteLoaded = true;
@@ -38,8 +38,8 @@ namespace FastDelivery_IHM
         public static void loadDeliveries(Stream streamFile, MapView mapCanvas, StackPanel list)
         {
             Delivery tmp;
-            if(carteLoaded)
-            {   
+            if (carteLoaded)
+            {
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 
@@ -68,7 +68,8 @@ namespace FastDelivery_IHM
 
             index = tournee.livraisons.IndexOf(livraison);
 
-            ContentDialog popup = new ContentDialog {
+            ContentDialog popup = new ContentDialog
+            {
                 Title = "Créer une livraison",
                 Content = new DeliveryPopUp(),
                 PrimaryButtonText = "Créer",
@@ -83,7 +84,7 @@ namespace FastDelivery_IHM
 
         private static void Checkbox_Checked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if((e.OriginalSource as CheckBox).IsChecked == true)
+            if ((e.OriginalSource as CheckBox).IsChecked == true)
             {
                 countCheck++;
             }
@@ -103,6 +104,34 @@ namespace FastDelivery_IHM
             else
             {
                 throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
+            }
+        }
+
+
+        public static async void GetRoadMap(Windows.Storage.StorageFile file)
+        {
+            if (file != null)
+            {
+                Windows.Storage.CachedFileManager.DeferUpdates(file);
+                // write to file
+                
+
+                //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                //iTextSharp.text.Document doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 30f, 30f, 30f, 30f);
+                //iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, ms);
+                //doc.Open();
+                //doc.Add(new iTextSharp.text.Chunk("hello world"));
+                //doc.Close();
+                //byte[] Result = ms.ToArray();
+                
+
+                
+                await Windows.Storage.FileIO.WriteTextAsync(file, "bonjour \r\n salut");
+                // Let Windows know that we're finished changing the file so
+                // the other app can update the remote version of the file.
+                // Completing updates may require Windows to ask for user input.
+                Windows.Storage.Provider.FileUpdateStatus status =
+                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
             }
         }
     }

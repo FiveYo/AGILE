@@ -103,6 +103,32 @@ namespace FastDelivery_IHM
             }
         }
 
+        private async void getRoadMap_Click(object sender, RoutedEventArgs e)
+        {
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+            savePicker.SuggestedStartLocation =
+                Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+            // Dropdown of file types the user can save the file as
+            savePicker.FileTypeChoices.Add("Plain text", new List<string>() { ".txt" });
+            // Default file name if the user does not type one in or select a file to replace
+            savePicker.SuggestedFileName = "New Document";
+
+            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
+            try
+            {
+                feedBack.Text = "Génération de la feuille de route";
+                Controler.GetRoadMap(file);
+                feedBack.Text = "Votre feuille de route à bien été générée.";
+                animFeedback.Begin();
+            }
+            catch (TimeoutException)
+            {
+                feedBack.Text = "La feuille de route n'a pas été générée";
+                var messageDialog = new MessageDialog("La feuille de route n'a pas été générée");
+                await messageDialog.ShowAsync();
+            }
+        }
+
         private void checkButton_Click(object sender, RoutedEventArgs e)
         {
             foreach (var item in listDeliveries.Children)
