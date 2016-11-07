@@ -28,7 +28,7 @@ namespace FastDelivery_Library.PatternUndoRedo
                 }
                 else if (UndoStruct.action==ActionType.ajouter)
                 {
-                    tournee.DelLivraison(UndoStruct.carte, UndoStruct.livraison, UndoStruct.index);
+                    tournee.DelLivraison(UndoStruct.carte, UndoStruct.livraison);
                     RedoPushInUnDoForAdd(UndoStruct.carte, UndoStruct.livraison, UndoStruct.index);
                 }
                 else if (UndoStruct.action==ActionType.modifier)
@@ -52,7 +52,7 @@ namespace FastDelivery_Library.PatternUndoRedo
                     
                     ModifyTournee ChangeforDelete = this.MakeChangeObjectForDelete(RedoStruct.carte, RedoStruct.livraison, RedoStruct.index);
                     _UndoActionsContainer.Push(ChangeforDelete);
-                    tournee.DelLivraison(RedoStruct.carte, RedoStruct.livraison, RedoStruct.index);
+                    tournee.DelLivraison(RedoStruct.carte, RedoStruct.livraison);
 
                 }
                 else if (RedoStruct.action == ActionType.ajouter)
