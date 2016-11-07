@@ -236,7 +236,7 @@
             </SplitView>
             <Grid x:Name="add" Grid.Column="1">
                 <Border Background="WhiteSmoke">
-                    <Button x:Name="addBtn" Content="Ajouter une livraison ici" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="10">
+                    <Button x:Name="addBtn" Content="Ajouter une livraison après celle ci" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13">
                     </Button>
                 </Border>
             </Grid>

@@ -68,7 +68,7 @@ namespace FastDelivery_IHM
         
         private async void loadDeliveries_Click(object sender, RoutedEventArgs e)
         {
-            List<Delivery> livraisons;
+            Entrepot entrepot;
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
 
 
@@ -81,9 +81,16 @@ namespace FastDelivery_IHM
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 
-                livraisons = Controler.loadDeliveries(streamFile, mapCanvas);
+                Tuple<List<Delivery>,Delivery> info = Controler.loadDeliveries(streamFile, mapCanvas);
                 this.navbar.IsPaneOpen = false;
-                foreach (var livraison in livraisons)
+
+                listDeliveries.Children.Add(info.Item2);
+
+                info.Item2.Select += Livraison_Select;
+                info.Item2.Checked += Livraison_Checked;
+                info.Item2.AddLivraison += Livraison_AddLivraison;
+
+                foreach (var livraison in info.Item1)
                 {
                     listDeliveries.Children.Add(livraison);
                     livraison.Select += Livraison_Select;
@@ -104,8 +111,9 @@ namespace FastDelivery_IHM
             Delivery d = sender as Delivery;
             DeliveryPop popup = new DeliveryPop();
             await popup.ShowAsync();
-            Controler.UpdateTournee(d.livraison, popup, mapCanvas);
-
+            Tuple<int, Delivery> toAdd = Controler.UpdateTournee(d.lieu, popup, mapCanvas);
+            listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+            toAdd.Item2.SetSelect(true);
         }
 
         private void Livraison_Checked(object sender, RoutedEventArgs e)
@@ -139,7 +147,9 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée";
+                Delivery first = listDeliveries.Children.First() as Delivery;
                 listDeliveries.Children.Clear();
+                listDeliveries.Children.Add(first);
                 foreach (var item in Controler.GetWay(mapCanvas))
                 {
                     listDeliveries.Children.Add(item);

@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls;
 using FastDelivery_Library;
 using Windows.UI.Xaml;
 using System.ComponentModel;
+using FastDelivery_Library.Modele;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -16,7 +17,7 @@ namespace FastDelivery_IHM
     public sealed partial class Delivery : UserControl, INotifyPropertyChanged
     {
         public bool displayCheck { get; set; }
-        public Livraison livraison { get; set; }
+        public Lieu lieu { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -30,8 +31,16 @@ namespace FastDelivery_IHM
         {
             get
             {
-                return String.Format("Adresse : ({0}, {1})\nDurée : {2}",
-                    livraison.adresse.x, livraison.adresse.y, livraison.duree);
+                if (lieu is Livraison)
+                {
+                    return String.Format("Adresse : ({0}, {1})\nDurée : {2}",
+                        lieu.adresse.x, lieu.adresse.y, (lieu as Livraison).duree);
+                }
+                else
+                {
+                    return String.Format("Entrepot\nAdresse : ({0}, {1})",
+                        lieu.adresse.x, lieu.adresse.y);
+                }
             }
         }
 
@@ -45,14 +54,14 @@ namespace FastDelivery_IHM
         }
 
 
-        public Delivery(Livraison liv)
+        public Delivery(Lieu liv)
         {
             this.InitializeComponent();
             // Permet de binder correctement les propriétés (magie)
             (this.Content as FrameworkElement).DataContext = this;
 
 
-            livraison = liv;
+            lieu = liv;
             displayCheck = false;
 
             checkbox.Checked += Checkbox_Checked;

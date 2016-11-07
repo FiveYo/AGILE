@@ -34,7 +34,7 @@ namespace FastDelivery_IHM
             carteLoaded = true;
         }
 
-        public static List<Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
+        public static Tuple<List<Delivery>,Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
             List<Delivery> livraisons = new List<Delivery>();
             if(carteLoaded)
@@ -52,11 +52,12 @@ namespace FastDelivery_IHM
             {
                 throw new Exception_Stream("Load map before");
             }
-            return livraisons;
+            return new Tuple<List<Delivery>, Delivery>(livraisons, new Delivery(demandeLivraisons.entrepot));
         }
 
-        public static void UpdateTournee(Lieu lieu, DeliveryPop livraison, Map map)
+        public static Tuple<int, Delivery> UpdateTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
+            Livraison toAdd = null;
             int index;
 
             if (lieu is Livraison)
@@ -78,7 +79,7 @@ namespace FastDelivery_IHM
             {
                 if (carte.points.TryGetValue(idPt, out ptLiv))
                 {
-                    Livraison toAdd = new Livraison(
+                    toAdd = new Livraison(
                         ptLiv, dureeLiv
                     );
 
@@ -94,6 +95,7 @@ namespace FastDelivery_IHM
             
 
             map.LoadWay(tournee);
+            return new Tuple<int, Delivery>(index, new Delivery(toAdd));
         }
 
         public static List<Delivery> GetWay(Map mapCanvas)
