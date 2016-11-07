@@ -143,6 +143,9 @@ namespace FastDelivery_IHM
                 foreach (var item in Controler.GetWay(mapCanvas))
                 {
                     listDeliveries.Children.Add(item);
+                    item.AddLivraison += Livraison_AddLivraison;
+                    item.Checked += Livraison_Checked;
+                    item.Select += Livraison_Select;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
