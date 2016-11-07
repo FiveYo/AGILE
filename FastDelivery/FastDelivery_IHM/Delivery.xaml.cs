@@ -21,11 +21,11 @@ namespace FastDelivery_IHM
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public event RoutedEventHandler Checked;
-
         public event RoutedEventHandler AddLivraison;
 
         public event RoutedEventHandler Select;
+
+        public event RoutedEventHandler RemoveLivraison;
 
         public string description
         {
@@ -49,8 +49,6 @@ namespace FastDelivery_IHM
             this.InitializeComponent();
             // Permet de binder correctement les propriétés (magie)
             (this.Content as FrameworkElement).DataContext = this;
-
-            checkbox.Checked += Checkbox_Checked;
         }
 
 
@@ -64,14 +62,7 @@ namespace FastDelivery_IHM
             lieu = liv;
             displayCheck = false;
 
-            checkbox.Checked += Checkbox_Checked;
-
             addBtn.Click += AddBtn_Click;
-        }
-
-        private void Checkbox_Checked(object sender, RoutedEventArgs e)
-        {
-            Checked?.Invoke(this, e);
         }
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
@@ -85,18 +76,16 @@ namespace FastDelivery_IHM
             NotifyPropertyChanged("displayCheck");
         }
 
-        public void toggleAddButton()
+        internal void displayAddButton()
         {
-            add.Visibility = add.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            borderAdd.Visibility = Visibility.Visible;
+            borderRm.Visibility = Visibility.Collapsed;
         }
 
         public void SetSelect(bool b)
         {
             select.IsChecked = b;
         }
-
-
-
 
         private void NotifyPropertyChanged(string prop)
         {
@@ -106,6 +95,17 @@ namespace FastDelivery_IHM
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             Select?.Invoke(this, e);
+        }
+
+        internal void displayRemoveButton()
+        {
+            borderRm.Visibility = Visibility.Visible;
+            borderAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void rmBtn_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveLivraison?.Invoke(this, e);
         }
     }
 }

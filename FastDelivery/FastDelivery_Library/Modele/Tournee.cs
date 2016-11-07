@@ -66,8 +66,8 @@ namespace FastDelivery_Library
         public Dictionary<Livraison, Error> AddLivraison(Carte carte, Livraison newlivraison, int index)
         {
 
-            Point positionelementprecedent ;
-            Point positionelementsuivant = livraisons[index].adresse;
+            Point positionelementprecedent;
+            Point positionelementsuivant;
 
             Lieu lieuprecedent;
             Lieu lieusuivant;
@@ -111,7 +111,7 @@ namespace FastDelivery_Library
             Chemin cheminsuivant = new Chemin(Outils.PathToTroncon(dijkstra.getPath(positionelementsuivant)));
 
             //on met a jour la liste des livraisons
-            livraisons.Insert(index, newlivraison);
+            livraisons.Insert(index + 1 , newlivraison);
 
 
             //on met a jour la liste des tronçons

@@ -87,15 +87,14 @@ namespace FastDelivery_IHM
                 listDeliveries.Children.Add(info.Item2);
 
                 info.Item2.Select += Livraison_Select;
-                info.Item2.Checked += Livraison_Checked;
                 info.Item2.AddLivraison += Livraison_AddLivraison;
 
                 foreach (var livraison in info.Item1)
                 {
                     listDeliveries.Children.Add(livraison);
                     livraison.Select += Livraison_Select;
-                    livraison.Checked += Livraison_Checked;
                     livraison.AddLivraison += Livraison_AddLivraison;
+                    livraison.RemoveLivraison += Livraison_RemoveLivraison;
                 }
                 feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 animFeedback.Begin();
@@ -106,21 +105,25 @@ namespace FastDelivery_IHM
             }
         }
 
+        private void Livraison_RemoveLivraison(object sender, RoutedEventArgs e)
+        {
+            Delivery d = sender as Delivery;
+            Controler.RmLivTournee(d, mapCanvas);
+            listDeliveries.Children.Remove(d);
+        }
+
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
         {
             Delivery d = sender as Delivery;
             DeliveryPop popup = new DeliveryPop();
             await popup.ShowAsync();
-            Tuple<int, Delivery> toAdd = Controler.UpdateTournee(d.lieu, popup, mapCanvas);
+            Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
             listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+            toAdd.Item2.Select += Livraison_Select;
+            toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+            toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
             toAdd.Item2.SetSelect(true);
         }
-
-        private void Livraison_Checked(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void Livraison_Select(object sender, RoutedEventArgs e)
         {
             
@@ -154,8 +157,8 @@ namespace FastDelivery_IHM
                 {
                     listDeliveries.Children.Add(item);
                     item.AddLivraison += Livraison_AddLivraison;
-                    item.Checked += Livraison_Checked;
                     item.Select += Livraison_Select;
+                    item.RemoveLivraison += Livraison_RemoveLivraison;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
@@ -168,17 +171,6 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void checkButton_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in listDeliveries.Children)
-            {
-                if(item is Delivery)
-                {
-                    ((Delivery)item).toggleSplit();
-                }
-            }
-        }
-
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             // Gérer le cas ou on appuie sur + et il n'y a pas de tournée créé
@@ -186,7 +178,7 @@ namespace FastDelivery_IHM
             {
                 if (item is Delivery)
                 {
-                    ((Delivery)item).toggleAddButton();
+                    ((Delivery)item).displayAddButton();
                 }
             }
         }
@@ -211,6 +203,17 @@ namespace FastDelivery_IHM
             else if (listDeliveries.Children.Count > 0)
             {
                 (listDeliveries.Children.First() as Delivery).SetSelect(true);
+            }
+        }
+
+        private void removeButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in listDeliveries.Children)
+            {
+                if (item is Delivery)
+                {
+                    ((Delivery)item).displayRemoveButton();
+                }
             }
         }
     }

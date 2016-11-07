@@ -55,7 +55,7 @@ namespace FastDelivery_IHM
             return new Tuple<List<Delivery>, Delivery>(livraisons, new Delivery(demandeLivraisons.entrepot));
         }
 
-        public static Tuple<int, Delivery> UpdateTournee(Lieu lieu, DeliveryPop livraison, Map map)
+        public static Tuple<int, Delivery> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
             Livraison toAdd = null;
             int index;
@@ -116,6 +116,12 @@ namespace FastDelivery_IHM
                 listOrder.Add(new Delivery(livraison));
             }
             return listOrder;
+        }
+
+        internal static void RmLivTournee(Delivery d, Map map)
+        {
+
+            map.LoadWay(tournee);
         }
     }
 }

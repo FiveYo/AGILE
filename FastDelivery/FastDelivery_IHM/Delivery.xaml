@@ -235,8 +235,12 @@
                 </StackPanel>
             </SplitView>
             <Grid x:Name="add" Grid.Column="1">
-                <Border Background="WhiteSmoke">
+                <Border Background="WhiteSmoke" x:Name="borderAdd" Visibility="Collapsed">
                     <Button x:Name="addBtn" Content="Ajouter une livraison après celle ci" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13">
+                    </Button>
+                </Border>
+                <Border Background="WhiteSmoke" x:Name="borderRm" Visibility="Collapsed">
+                    <Button x:Name="rmBtn" Content="Supprimer cette livraison" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13">
                     </Button>
                 </Border>
             </Grid>
