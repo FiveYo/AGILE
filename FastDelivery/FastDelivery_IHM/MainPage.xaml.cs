@@ -139,7 +139,11 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée";
-                Controler.GetWay(mapCanvas);
+                listDeliveries.Children.Clear();
+                foreach (var item in Controler.GetWay(mapCanvas))
+                {
+                    listDeliveries.Children.Add(item);
+                } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
             }

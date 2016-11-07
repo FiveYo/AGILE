@@ -2,6 +2,7 @@
 using FastDelivery_Library.Modele;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -91,6 +92,8 @@ namespace FastDelivery_IHM
             rX = map.ActualWidth / (plan.maxX - plan.minX);
             rY = map.ActualHeight / (plan.maxY - plan.minY);
 
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             foreach (var troncon in plan.troncons)
             {
                 Line line = new Line();
@@ -158,6 +161,11 @@ namespace FastDelivery_IHM
                 carteUI.Children.Add(circle);
                 carteUI.Children.Add(circleToAim);
             }
+
+            sw.Stop();
+            TimeSpan ts = sw.Elapsed;
+            string elapsedTime = "RunTime " + String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+            Debug.WriteLine(elapsedTime);
         }
 
         private void DisplayWay(List<Troncon> chemin)
@@ -211,7 +219,6 @@ namespace FastDelivery_IHM
                 livraisonUI.Children.Add(intersection);
             }
         }
-
 
         private async void DisplayEntrepot(Entrepot entrepot)
         {

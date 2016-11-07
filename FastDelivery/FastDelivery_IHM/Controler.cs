@@ -96,8 +96,9 @@ namespace FastDelivery_IHM
             map.LoadWay(tournee);
         }
 
-        public static void GetWay(Map mapCanvas)
+        public static List<Delivery> GetWay(Map mapCanvas)
         {
+            List<Delivery> listOrder = new List<Delivery>();
             if (deliveriesLoaded && carteLoaded)
             {
                 tournee = Outils.creerTournee(demandeLivraisons, carte);
@@ -107,6 +108,12 @@ namespace FastDelivery_IHM
             {
                 throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
             }
+
+            foreach (var livraison in tournee.livraisons)
+            {
+                listOrder.Add(new Delivery(livraison));
+            }
+            return listOrder;
         }
     }
 }
