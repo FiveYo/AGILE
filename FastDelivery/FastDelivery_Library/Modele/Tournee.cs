@@ -79,7 +79,7 @@ namespace FastDelivery_Library
             List<Troncon> tronconsuivant = new List<Troncon>();
 
 
-            if (index == 1)
+            if (index == 0)
             {
                 positionelementprecedent = entrepot.adresse;
                 lieuprecedent = entrepot;
@@ -114,22 +114,22 @@ namespace FastDelivery_Library
             Hashchemin[lieusuivant] = cheminsuivant;
 
             //on check si tout va bien
-            Dictionary<Livraison, List<double>> result = Check();
+            //Dictionary<Livraison, List<double>> result = Check();
 
             Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
 
-            foreach (Livraison livraison in result.Keys)
-            {
-                if (result[livraison][0] == 1)
-                {
-                    ErrorLivraison.Add(livraison, Error.After);
-                }
-                else if (result[livraison][0] == -1)
-                {
+            //foreach (Livraison livraison in result.Keys)
+            //{
+            //    if (result[livraison][0] == 1)
+            //    {
+            //        ErrorLivraison.Add(livraison, Error.After);
+            //    }
+            //    else if (result[livraison][0] == -1)
+            //    {
 
-                    ErrorLivraison.Add(livraison, Error.Before);
-                }
-            }
+            //        ErrorLivraison.Add(livraison, Error.Before);
+            //    }
+            //}
 
             return ErrorLivraison;
 
