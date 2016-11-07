@@ -141,10 +141,12 @@ namespace FastDelivery_Library
 
         }
 
-        public Dictionary<Livraison, Error> DelLivraison(Carte carte, Livraison badlivraison, int index)
+        public Dictionary<Livraison, Error> DelLivraison(Carte carte, Livraison badlivraison)
         {
             Point positionelementprecedent; 
             Point positionelementsuivant;
+            int index;
+            index = livraisons.IndexOf(badlivraison);
 
             Lieu lieuprecedent;
             Lieu lieusuivant ;
