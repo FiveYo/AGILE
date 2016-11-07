@@ -40,6 +40,11 @@
                             Width="50" Height="50" Background="Transparent" Click="loadCircuit_Click"/>
                             <TextBlock Text="Calculer une tournée" FontSize="18" VerticalAlignment="Center" />
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="getRoadMap" FontFamily="Segoe MDL2 Assets" Content="&#xE7C3;"
+                            Width="50" Height="50" Background="Transparent" Click="getRoadMap_Click"/>
+                            <TextBlock Text="Générer feuille de route" FontSize="18" VerticalAlignment="Center" />
+                        </StackPanel>
                     </StackPanel>
                 </SplitView.Pane>
                 <SplitView.Content>

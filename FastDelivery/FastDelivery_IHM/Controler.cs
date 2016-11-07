@@ -118,6 +118,33 @@ namespace FastDelivery_IHM
             return listOrder;
         }
 
+        public static async void GetRoadMap(Windows.Storage.StorageFile file)
+        {
+            if (file != null)
+            {
+                Windows.Storage.CachedFileManager.DeferUpdates(file);
+                // write to file
+
+
+                //System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                //iTextSharp.text.Document doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 30f, 30f, 30f, 30f);
+                //iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, ms);
+                //doc.Open();
+                //doc.Add(new iTextSharp.text.Chunk("hello world"));
+                //doc.Close();
+                //byte[] Result = ms.ToArray();
+
+
+
+                await Windows.Storage.FileIO.WriteTextAsync(file, "bonjour \r\n salut");
+                // Let Windows know that we're finished changing the file so
+                // the other app can update the remote version of the file.
+                // Completing updates may require Windows to ask for user input.
+                Windows.Storage.Provider.FileUpdateStatus status =
+                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+            }
+        }
+
         internal static void RmLivTournee(Delivery d, Map map)
         {
             Livraison l;
