@@ -23,6 +23,8 @@ namespace FastDelivery_Library
             planifier = false;
             this.adresse = adresse;
             this.duree = duree;
+            this.debutPlage = "";
+            this.finPlage = "";
         }
         
         public void SetPlage(string debut, string fin)

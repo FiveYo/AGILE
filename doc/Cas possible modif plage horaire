@@ -81,4 +81,10 @@ Cas possible, AVANCE livreur :
 		-on teste si 
 		-
 
-On parcours la liste à l'envers depuis la livraison à modifier
+On parcours la liste à l'envers depuis la livraison à modifier :
+
+	Une fois sur une livraison, on regarde si son heure de passage plus le temps de trajet et de livraison rentre dans la plage horaire de la livraison précédente
+
+	Bon dernière modif : 
+
+	Si le livreur est en avance, on modifie l'heure de passage, et on regarde si ça a modif la livraison juste avant
