@@ -270,6 +270,12 @@ namespace FastDelivery_Library
             DateTime FinNewPlage = DateTime.Parse(livraisonNewPlage.finPlage);
             DateTime heurePassage;
 
+            //Copie la liste de livraisons dans une nouvelle liste
+            List<Livraison> livraisonsInversee = new List<Livraison>(livraisons);
+            livraisonsInversee.Reverse();
+            int indexLivraisonInverseeNewPlage = livraisonsInversee.IndexOf(livraisonNewPlage);
+            int indexLivraisonNewPlage = livraisonsInversee.IndexOf(livraisonNewPlage);
+
             if (HeuredePassage.TryGetValue(livraisonNewPlage, out heurePassage))
             {
                 // Si la nouvelle plage horaire respecte l'heure de passage
@@ -283,11 +289,8 @@ namespace FastDelivery_Library
                     // Le livreur doit venir en avance
                     if (DebutNewPlage.CompareTo(heurePassage) > 0)
                     {
-                        //Copie la liste de livraisons dans une nouvelle liste
-                        List<Livraison> livraisonsInversee = new List<Livraison>(livraisons);
-                        livraisonsInversee.Reverse();
-
                         //Attribution de la nouvelle heure de passage pour la livraison avec une nouvelle plage
+                        
 
                         Livraison livraisonSuivante = livraisonNewPlage;
                         foreach (var livraison in livraisonsInversee.Skip(livraisonsInversee.IndexOf(livraisonNewPlage)))
@@ -335,48 +338,61 @@ namespace FastDelivery_Library
                         return;
                     }                        
                     
-                    // Ajoute le retard gagné à toute les livraisons post livraisonNewPlage
+                    // le livreur arrive plus tard que prévu
                     else if (DebutNewPlage.CompareTo(heurePassage) > 0)
                     {
-                        //TimeSpan retard = FinNewPlage.Subtract(heurePassage);
-                        HeuredePassage[livraisonNewPlage] = FinNewPlage;
+                        //HeuredePassage[livraisonNewPlage] = FinNewPlage;
 
+                        // Calcul de l'heure d'arrivee pour la livraison dont on a modif la plage horaire
+                        Livraison suitLivraisonAModif = livraisons[indexLivraisonNewPlage+1];
+                        Lieu pointArrivee = suitLivraisonAModif;
+
+                        //Plages de la nouvelle livraison
+                        DateTime FinPlageNextLivraison = DateTime.Parse(suitLivraisonAModif.finPlage);
+
+                        //Calcule l'heure d'arrivée minimale à la prochaine livraison en prenant compte du retard
+                        TimeSpan trajetPlusTempsLivraison = TimeSpan.FromMinutes((double)livraisonNewPlage.duree + Hashchemin[pointArrivee].cout);
+                        DateTime heureArriveeMinPreviousLivraison = HeuredePassage[suitLivraisonAModif].Subtract(trajetPlusTempsLivraison);
+
+                        if (heureArriveeMinPreviousLivraison.CompareTo(FinNewPlage) > 0)
+                        {
+                            HeuredePassage[livraisonNewPlage] = FinNewPlage;
+                        }
+                        else if(heureArriveeMinPreviousLivraison.CompareTo(DebutNewPlage) < 0)
+                        {
+                            HeuredePassage[livraisonNewPlage] = DebutNewPlage;
+                        }
+                        else
+                        {
+                            HeuredePassage[livraisonNewPlage] = heureArriveeMinPreviousLivraison;
+                            return;
+                        }
 
                         //commence à la livraison modifiée
-                        // créer un dictionnaire du même type que celui de milly dans la méthode Check() qui référence les livraisons dont les plages horaires 
-                        // ont été insultés, non respectées
-                        Livraison livraisonPrecedente = livraisonNewPlage;
-                        foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
+                        Livraison livraisonPrecedente = suitLivraisonAModif;
+                        foreach (var livraison in livraisons.Skip(livraisons.IndexOf(suitLivraisonAModif)))
                         {
-                            Lieu pointArrivee = livraison;
-
-                            //Plages de la nouvelle livraison
-                            DateTime FinPlageNextLivraison = DateTime.Parse(livraison.finPlage);
+                            pointArrivee = suitLivraisonAModif;
 
                             //Calcule l'heure d'arrivée minimale à la prochaine livraison en prenant compte du retard
-                            TimeSpan trajetPlusTempsLivraison = TimeSpan.FromMinutes((double)livraisonPrecedente.duree + Hashchemin[pointArrivee].cout);
-                            DateTime heureArriveeMinNextLivraison = HeuredePassage[livraisonPrecedente].Add(trajetPlusTempsLivraison);
+                            trajetPlusTempsLivraison = TimeSpan.FromMinutes((double)livraison.duree + Hashchemin[pointArrivee].cout);
+                            heureArriveeMinPreviousLivraison = HeuredePassage[livraison].Subtract(trajetPlusTempsLivraison);
 
-                            //Test si cela créée un retard sur la livraison suivante
-                            if (heureArriveeMinNextLivraison.CompareTo(HeuredePassage[livraison]) > 0)
+
+                            if (heureArriveeMinPreviousLivraison.Compare())
                             {
-                                HeuredePassage[livraison] = heureArriveeMinNextLivraison;
-
-                                /*
-                                 * T0D0 : implémenter matrice check pour le retard 
-                                 */
-                                if( HeuredePassage[livraison].CompareTo(FinPlageNextLivraison) > 0)
-                                {
-
-                                }
-                            }                           
+                                
+                            }
+                           else
+                            {
+                                return;
+                            }
                             livraisonPrecedente = livraison;
                         }
                         return;
                     }
                 }
             }
-            // Comparer avec la nouvelle plage horaire
         }
     }
 }
