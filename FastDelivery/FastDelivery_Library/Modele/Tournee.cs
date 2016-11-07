@@ -69,8 +69,8 @@ namespace FastDelivery_Library
             Point positionelementprecedent ;
             Point positionelementsuivant = livraisons[index].adresse;
 
-            Lieu lieuprecedent = livraisons[index - 1];
-            Lieu lieusuivant = livraisons[index];
+            Lieu lieuprecedent;
+            Lieu lieusuivant;
            
 
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
@@ -79,22 +79,28 @@ namespace FastDelivery_Library
             List<Troncon> tronconsuivant = new List<Troncon>();
 
 
-            if (index == 0)
+            if (index == -1)
             {
                 positionelementprecedent = entrepot.adresse;
                 lieuprecedent = entrepot;
+                lieusuivant = livraisons[0];
+                positionelementsuivant = livraisons[0].adresse;
             }
             else if (index == livraisons.Count - 1)
             {
                 positionelementsuivant = entrepot.adresse;
-                positionelementprecedent = livraisons[index - 1].adresse;
+                positionelementprecedent = livraisons[index].adresse;
                 lieusuivant = entrepot;
+                lieuprecedent = livraisons[index];
 
             }
 
             else
             {
-                positionelementprecedent = livraisons[index - 1].adresse;
+                lieuprecedent = livraisons[index];
+                positionelementsuivant = livraisons[index + 1].adresse;
+                lieusuivant = livraisons[index+1];
+                positionelementprecedent = livraisons[index].adresse;
             }
             //calcul du plus court chemin menant à la nouvelle livraison depuis la livraison précédente
             dijkstra.execute(positionelementprecedent);
