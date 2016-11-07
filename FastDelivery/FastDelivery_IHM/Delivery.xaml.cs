@@ -33,8 +33,14 @@ namespace FastDelivery_IHM
             {
                 if (lieu is Livraison)
                 {
-                    return String.Format("Adresse : ({0}, {1})\nDurée : {2}",
+                    string retour = String.Format("Adresse : ({0}, {1})\nDurée : {2}",
                         lieu.adresse.x, lieu.adresse.y, (lieu as Livraison).duree);
+                    if((lieu as Livraison).planifier)
+                    {
+                        retour += String.Format("\ndébut: : {0}\n fin : {1}",
+                        (lieu as Livraison).debutPlage, (lieu as Livraison).finPlage);
+                    }
+                    return retour;
                 }
                 else
                 {

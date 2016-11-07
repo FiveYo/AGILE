@@ -51,15 +51,34 @@ namespace FastDelivery_Library
          * @param nonVus
          * @param sommetCrt
          */
-        public IteratorSeq(ICollection<int> nonVus, int sommetCrt)
+        public IteratorSeq(ICollection<int> nonVus, int sommetCrt, int[,] cout, int[] duree)
         {
-            this.candidats = new int[nonVus.Count()];
-            nbCandidats = 0;
+            List<int> listeCouts = new List<int>();
             foreach (int s in nonVus)
             {
-                candidats[nbCandidats++] = s;
+                listeCouts.Add(cout[sommetCrt, s]);
+            }
+            List<int> listeCoutsTri = new List<int>(listeCouts);
+            listeCoutsTri.Sort();
+            this.candidats = new int[nonVus.Count()];
+            nbCandidats = 0;
+            int test = nonVus.Count - 1;
+            foreach (int s in nonVus)
+            {
+                candidats[test--] = nonVus.ElementAt(listeCouts.IndexOf(listeCoutsTri[nbCandidats++]));
             }
         }
+
+        //public IteratorSeq(ICollection<int> nonVus, int sommetCrt, int[,] cout, int[] duree)
+        //{
+        //    this.candidats = new int[nonVus.Count()];
+        //    nbCandidats = 0;
+        //    foreach (int s in nonVus)
+        //    {
+        //        candidats[nbCandidats++] = s;
+        //    }
+        //}
+
         public int MoveNext()
         {
             return candidats[--nbCandidats];

@@ -16,15 +16,17 @@ namespace FastDelivery_Library
     public int[] meilleureSolution;
     private int coutMeilleureSolution = 0;
     private Boolean tempsLimiteAtteint;
+        private DemandeDeLivraisons demande;
 
     public Boolean getTempsLimiteAtteint()
     {
         return tempsLimiteAtteint;
     }
 
-    public void chercheSolution(TimeSpan tpsLimite, int nbSommets, int[,] cout, int[] duree)
+    public void chercheSolution(TimeSpan tpsLimite, int nbSommets, int[,] cout, int[] duree, DemandeDeLivraisons demandeLiv)
     {
         tempsLimiteAtteint = false;
+        demande = demandeLiv;
         coutMeilleureSolution = int.MaxValue;
         meilleureSolution = new int [nbSommets];
         List<int> nonVus = new List<int>();
@@ -55,7 +57,7 @@ namespace FastDelivery_Library
 	 * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	 * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	 */
-    protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree);
+    protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande);
 
     /*
 	 * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -88,13 +90,14 @@ namespace FastDelivery_Library
         if (nonVus.Count == 0)
         { // tous les sommets ont ete visites
             coutVus += cout[sommetCrt,0];
+                //there test si on arrive avant la plage de debut, ajouter la diff entre temsp arrivee et plage debut
             if (coutVus < coutMeilleureSolution)
             { // on a trouve une solution meilleure que meilleureSolution
                 meilleureSolution = vus.ToArray<int>();
                 coutMeilleureSolution = coutVus;
             }
         }
-        else if (coutVus + bound(sommetCrt, nonVus, cout, duree) < coutMeilleureSolution)
+        else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande) < coutMeilleureSolution)
         {
             IIterator<int> it = iterator(sommetCrt, nonVus, cout, duree);
             while (it.MoveNext())
@@ -102,6 +105,7 @@ namespace FastDelivery_Library
                 int prochainSommet=it.Current; 
                 vus.Add(prochainSommet);
                 nonVus.Remove(prochainSommet);
+                //there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
                 branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt,prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
                 vus.Remove(prochainSommet); 
                 nonVus.Add(prochainSommet);
