@@ -68,7 +68,6 @@ namespace FastDelivery_IHM
         
         private async void loadDeliveries_Click(object sender, RoutedEventArgs e)
         {
-            Entrepot entrepot;
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
 
 

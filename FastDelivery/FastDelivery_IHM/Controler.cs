@@ -120,8 +120,14 @@ namespace FastDelivery_IHM
 
         internal static void RmLivTournee(Delivery d, Map map)
         {
-
-            map.LoadWay(tournee);
+            Livraison l;
+            if (d.lieu is Livraison)
+            {
+                
+                tournee.DelLivraison(carte,d.lieu as Livraison);
+                map.LoadWay(tournee);
+            }
+            
         }
     }
 }
