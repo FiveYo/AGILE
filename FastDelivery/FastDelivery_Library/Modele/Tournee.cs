@@ -143,26 +143,39 @@ namespace FastDelivery_Library
 
         public Dictionary<Livraison, Error> DelLivraison(Carte carte, Livraison badlivraison, int index)
         {
-            Point positionelementprecedent = livraisons[index - 1].adresse;
-            Point positionelementsuivant = livraisons[index].adresse;
+            Point positionelementprecedent; 
+            Point positionelementsuivant;
 
-            Lieu lieuprecedent = livraisons[index - 1];
-            Lieu lieusuivant = livraisons[index];
+            Lieu lieuprecedent;
+            Lieu lieusuivant ;
 
 
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
             List<Troncon> tronconsuivant = new List<Troncon>();
 
 
-            if (index == 1)
+            if (index == 0)
             {
-                positionelementprecedent = entrepot.adresse;
+                positionelementprecedent = entrepot.adresse;   
+                positionelementsuivant = livraisons[index + 1].adresse;
                 lieuprecedent = entrepot;
+                lieusuivant = livraisons[index + 1];
+
+
             }
             else if (index == livraisons.Count - 1)
             {
                 positionelementsuivant = entrepot.adresse;
+                positionelementprecedent = livraisons[index - 1].adresse;
                 lieusuivant = entrepot;
+                lieuprecedent = livraisons[index - 1];
+            }
+            else
+            {
+                positionelementprecedent = livraisons[index - 1].adresse;
+                positionelementsuivant = livraisons[index + 1].adresse;
+                lieuprecedent = livraisons[index - 1];
+                lieusuivant = livraisons[index + 1];
             }
             
 
