@@ -55,8 +55,15 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                Controler.loadMap(streamFile, mapCanvas);
-                feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
+                try
+                {
+                    Controler.loadMap(streamFile, mapCanvas);
+                    feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
+                }
+                catch (Exception)
+                {
+                    feedBack.Text = "toto";
+                }
                 animFeedback.Begin();
             }
             else

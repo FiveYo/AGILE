@@ -28,9 +28,14 @@ namespace FastDelivery_IHM
 
         public static void loadMap(Stream file, Map map)
         {
-            
-            carte = Outils.ParserXml_Plan(file);
-            map.LoadMap(carte);
+            try
+            {
+                carte = Outils.ParserXml_Plan(file);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             carteLoaded = true;
         }
 
@@ -156,5 +161,12 @@ namespace FastDelivery_IHM
             }
             
         }
+    }
+
+    enum etat
+    {
+        Initial,
+        CarteCharge,
+
     }
 }
