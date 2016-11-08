@@ -42,7 +42,7 @@ namespace FastDelivery_IHM
         public static Tuple<List<Delivery>,Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
             List<Delivery> livraisons = new List<Delivery>();
-            if(etatActuel > etat.carteCharge)
+            if(etatActuel >= etat.carteCharge)
             {   
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
