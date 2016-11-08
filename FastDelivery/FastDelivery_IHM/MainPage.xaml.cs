@@ -145,6 +145,12 @@ namespace FastDelivery_IHM
 
         }
 
+        private void Livraison_ChangePlage(object sender, RoutedEventArgs e)
+        {
+            Delivery d = sender as Delivery;
+            Controler.ChangePlage(d, mapCanvas);
+        }
+
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
         {
             Delivery d = sender as Delivery;
@@ -250,6 +256,17 @@ namespace FastDelivery_IHM
                 if (item is Delivery)
                 {
                     ((Delivery)item).displayRemoveButton();
+                }
+            }
+        }
+
+        private void chgPlageButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in listDeliveries.Children)
+            {
+                if (item is Delivery)
+                {
+                    ((Delivery)item).displayChgPlageButton();
                 }
             }
         }

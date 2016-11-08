@@ -27,6 +27,8 @@ namespace FastDelivery_IHM
 
         public event RoutedEventHandler RemoveLivraison;
 
+        public event RoutedEventHandler ChgPlage;
+
         public string description
         {
             get
@@ -103,9 +105,20 @@ namespace FastDelivery_IHM
             borderAdd.Visibility = Visibility.Collapsed;
         }
 
+        internal void displayChgPlageButton()
+        {
+            borderRm.Visibility = Visibility.Visible;
+            borderAdd.Visibility = Visibility.Collapsed;
+        }
+
         private void rmBtn_Click(object sender, RoutedEventArgs e)
         {
             RemoveLivraison?.Invoke(this, e);
+        }
+
+        private void chgBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ChgPlage?.Invoke(this, e);
         }
     }
 }

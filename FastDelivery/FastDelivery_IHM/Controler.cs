@@ -172,6 +172,19 @@ namespace FastDelivery_IHM
                 }
             }
         }
+
+        internal static void ChangePlage(Delivery d, Map map)
+        {
+            if (etatActuel == etat.tourneeCalculee)
+            {
+                if (d.lieu is Livraison)
+                {
+
+                    tournee.DelLivraison(carte, d.lieu as Livraison);
+                    map.LoadWay(tournee);
+                }
+            }
+        }
     }
 
     public enum etat
