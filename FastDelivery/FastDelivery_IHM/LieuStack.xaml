@@ -11,6 +11,8 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     <UserControl.Resources>
+        <Image x:Key="livraison" Source="/Assets/pointeur_livraison.png"/>
+        <Image x:Key="entrepot" Source="/Assets/pointeur_entrepot.png"/>
         <Style x:Key="ToggleButtonStyle1" TargetType="ToggleButton">
             <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
@@ -220,20 +222,19 @@
     </UserControl.Resources>
 
     <ToggleButton x:Name="select" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Style="{StaticResource ToggleButtonStyle1}" Background="Transparent" Checked="ToggleButton_Checked">
-        <Grid Padding="10" >
+        <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Bottom" Padding="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="153*"/>
+                <ColumnDefinition Width="117*"/>
             </Grid.ColumnDefinitions>
-            <SplitView DisplayMode="Inline"  IsPaneOpen="{Binding displayCheck, ElementName=livUI}" 
-               OpenPaneLength="20" PaneBackground="Transparent" Grid.Column="0">
-                <SplitView.Pane>
-                    <CheckBox x:Name="checkbox" Width="20" Height="20" />
-                </SplitView.Pane>
-                <StackPanel Padding="10" VerticalAlignment="Center" MaxWidth="300">
-                    <TextBlock HorizontalAlignment="Left" Margin="0" TextWrapping="Wrap" Text="{Binding description, ElementName=livUI}" />
-                </StackPanel>
-            </SplitView>
+            <Image x:Name="typeBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                     Grid.Column="0" Margin="0,0,0,-2"/>
+            <TextBox x:Name="addressBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
+                                     Grid.Column="1" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
+            <TextBox x:Name="dureeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch"
+                                     Grid.Column="2" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
+            
             <Grid x:Name="add" Grid.Column="1">
                 <Border Background="WhiteSmoke" x:Name="borderAdd" Visibility="Collapsed">
                     <Button x:Name="addBtn" Content="Ajouter une livraison après celle ci" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13">

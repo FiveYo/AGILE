@@ -19,6 +19,9 @@ namespace FastDelivery_IHM
         public bool displayCheck { get; set; }
         public Lieu lieu { get; set; }
 
+        public string address;
+        public string duree;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event RoutedEventHandler AddLivraison;
@@ -49,19 +52,29 @@ namespace FastDelivery_IHM
         public LieuStack()
         {
             this.InitializeComponent();
-            // Permet de binder correctement les propriétés (magie)
-            (this.Content as FrameworkElement).DataContext = this;
         }
 
 
         public LieuStack(Lieu liv)
         {
             this.InitializeComponent();
-            // Permet de binder correctement les propriétés (magie)
-            (this.Content as FrameworkElement).DataContext = this;
-
-
+            if (liv is Livraison)
+            {
+                dureeBox.Text = (liv as Livraison).duree.ToString();
+                Image img = (Image)Resources["livraison"];
+                typeBox.Source = img.Source;
+            }
+            else
+            {
+                Image img = (Image)Resources["entrepot"];
+                typeBox.Source = img.Source;
+            }
+            
             lieu = liv;
+
+            addressBox.Text = String.Format("({0}, {1})", lieu.adresse.x, lieu.adresse.y);
+
+
             displayCheck = false;
 
             addBtn.Click += AddBtn_Click;
