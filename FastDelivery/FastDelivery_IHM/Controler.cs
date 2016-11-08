@@ -161,6 +161,17 @@ namespace FastDelivery_IHM
             }
             
         }
+
+        internal static void ChgLivPlage(Delivery d, Map map)
+        {
+            Livraison l;
+            if (d.lieu is Livraison)
+            {
+                tournee.ModifPlage(d.lieu as Livraison);
+                map.LoadWay(tournee);
+            }
+
+        }
     }
 
     enum etat

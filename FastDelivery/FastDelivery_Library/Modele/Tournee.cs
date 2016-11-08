@@ -291,7 +291,7 @@ namespace FastDelivery_Library
         /*
          ** T0D0 : check si la plage horaire n'existe pas
          */
-        Dictionary<Livraison, Error> ModifPlage(Carte carte, Livraison livraisonNewPlage, int index, DateTime newPlage)
+        public Dictionary<Livraison, Error> ModifPlage(Livraison livraisonNewPlage)
         {
             // Récupérer l'heure de livraison de la livraison à modif
             DateTime DebutNewPlage = DateTime.Parse(livraisonNewPlage.debutPlage);
