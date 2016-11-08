@@ -26,8 +26,8 @@ namespace FastDelivery_Library
             int i = 0;
             foreach (int s in nonVus)
             {
-               
-                if (demande.livraisons[s].planifier)
+                
+                if (demande.livraisons[s].planifier && s!=0)
                 {
                     DateTime finHoraire = DateTime.Parse(demande.livraisons[s].finPlage);
                     DateTime debutHoraire = DateTime.Parse(demande.livraisons[s].debutPlage);
