@@ -74,7 +74,7 @@ namespace FastDelivery_IHM
 
         public void SetSelect(bool b)
         {
-            if (b)
+            if (b != _isChecked)
             {
                 if(lieu is Livraison)
                 {

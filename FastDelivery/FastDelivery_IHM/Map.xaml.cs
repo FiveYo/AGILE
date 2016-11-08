@@ -70,16 +70,20 @@ namespace FastDelivery_IHM
             DisplayMap(plan);
         }
 
-        public void LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
+        public List<LieuMap> LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
         {
             livraisonUI.Children.Clear();
             cheminUI.Children.Clear();
 
-            DisplayLieu(demandeLivraisons.entrepot);
+            List<LieuMap> list = new List<LieuMap>();
+
+            list.Add(DisplayLieu(demandeLivraisons.entrepot));
             foreach (var livraison in demandeLivraisons.livraisons.Values)
             {
-                DisplayLieu(livraison);
+                list.Add(DisplayLieu(livraison));
             }
+
+            return list;
         }
 
         public void AddDelivery(Livraison l)
@@ -257,7 +261,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void DisplayLieu(Lieu l)
+        private LieuMap DisplayLieu(Lieu l)
         {
             LieuMap lieu = new LieuMap(l);
             double top = getY(l.adresse.y, minY, rY);
@@ -270,6 +274,23 @@ namespace FastDelivery_IHM
 
             Canvas.SetTop(lieu, top - lieu.ActualHeight);
             Canvas.SetLeft(lieu, left - lieu.ActualWidth / 2);
+
+            return lieu;
+        }
+
+        internal void SetSelect(Lieu lieu)
+        {
+            foreach (var l in livraisonUI.Children)
+            {
+                if((l as LieuMap).lieu == lieu)
+                {
+                    (l as LieuMap).SetSelect(true);
+                }
+                else
+                {
+                    (l as LieuMap).SetSelect(false);
+                }
+            }
         }
 
         #region gestion du mouse over sur les éléments

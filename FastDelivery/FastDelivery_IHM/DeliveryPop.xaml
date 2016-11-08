@@ -22,7 +22,7 @@
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="10"/>
                     <Setter Property="Height" Value="Auto"/>
-                    <Setter Property="Width" Value="200"/>
+                    <Setter Property="Width" Value="100"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>
                 <Style TargetType="Button">
@@ -35,7 +35,11 @@
                      Header="Durée (s)" TextChanged="duree_TextChanged"/>
             <StackPanel Orientation="Horizontal" Visibility="Visible">
                 <TextBox x:Name="idLivPrec" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="12" InputScope="Number" 
-                         Header="Livraison précédente" TextChanged="id_TextChanged"/>
+                         TextChanged="id_TextChanged">
+                    <TextBox.Header>
+                        <TextBlock Text="Livraison précédente" TextWrapping="Wrap"/>
+                    </TextBox.Header>
+                </TextBox>
                 <Button FontFamily="Segoe MDL2 Assets" Content="&#xE718;" ToolTipService.ToolTip="Choisir sur la carte" Height="30" Click="Button_Click"/>
             </StackPanel>
         </StackPanel>

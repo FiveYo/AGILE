@@ -46,9 +46,9 @@ namespace FastDelivery_IHM
                 // null doit être remplacer par la livraison séléctionné
                 Tuple<int, LieuStack> toAdd = Controler.AddLivTournee(null, popup, mapCanvas);
                 listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-                toAdd.Item2.Select += Livraison_Select;
-                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.Select += LieuStack_Selected;
+                toAdd.Item2.AddLivraison += LieuStack_AddLiv;
+                toAdd.Item2.RemoveLivraison += LieuStack_RmLiv;
                 toAdd.Item2.SetSelect(true);
             }
         }
@@ -107,20 +107,20 @@ namespace FastDelivery_IHM
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 try
                 {
-                    Tuple<List<LieuStack>, LieuStack> info = Controler.loadDeliveries(streamFile, mapCanvas);
+                    Tuple<List<LieuStack>, List<LieuMap>> info = Controler.loadDeliveries(streamFile, mapCanvas);
                     this.navbar.IsPaneOpen = false;
 
-                    listDeliveries.Children.Add(info.Item2);
-
-                    info.Item2.Select += Livraison_Select;
-                    info.Item2.AddLivraison += Livraison_AddLivraison;
-
-                    foreach (var livraison in info.Item1)
+                    foreach (var lieu in info.Item1)
                     {
-                        listDeliveries.Children.Add(livraison);
-                        livraison.Select += Livraison_Select;
-                        livraison.AddLivraison += Livraison_AddLivraison;
-                        livraison.RemoveLivraison += Livraison_RemoveLivraison;
+                        listDeliveries.Children.Add(lieu);
+                        lieu.Select += LieuStack_Selected;
+                        lieu.AddLivraison += LieuStack_AddLiv;
+                        lieu.RemoveLivraison += LieuStack_RmLiv;
+                    }
+
+                    foreach (var lieu in info.Item2)
+                    {
+                        lieu.Checked += LieuMap_Checked;
                     }
                     feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 }
@@ -141,6 +141,19 @@ namespace FastDelivery_IHM
             else
             {
                 feedBack.Text = "Échec du chargement : aucun fichier fourni.";
+            }
+        }
+
+        private void LieuMap_Checked(object sender, RoutedEventArgs e)
+        {
+            mapCanvas.SetSelect((sender as LieuMap).lieu);
+
+            foreach (var lieuStack in listDeliveries.Children)
+            {
+                if ((lieuStack as LieuStack).lieu != (sender as LieuMap).lieu)
+                {
+                    (lieuStack as LieuStack).SetSelect(false);
+                }
             }
         }
 
@@ -170,7 +183,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void Livraison_RemoveLivraison(object sender, RoutedEventArgs e)
+        private void LieuStack_RmLiv(object sender, RoutedEventArgs e)
         {
             LieuStack d = sender as LieuStack;
             Controler.RmLivTournee(d, mapCanvas);
@@ -196,7 +209,7 @@ namespace FastDelivery_IHM
             
         }
 
-        private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
+        private async void LieuStack_AddLiv(object sender, RoutedEventArgs e)
         {
             LieuStack d = sender as LieuStack;
             DeliveryPop popup = new DeliveryPop();
@@ -205,14 +218,14 @@ namespace FastDelivery_IHM
             {
                 Tuple<int, LieuStack> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
                 listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-                toAdd.Item2.Select += Livraison_Select;
-                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.Select += LieuStack_Selected;
+                toAdd.Item2.AddLivraison += LieuStack_AddLiv;
+                toAdd.Item2.RemoveLivraison += LieuStack_RmLiv;
                 toAdd.Item2.SetSelect(true);
             }
             
         }
-        private void Livraison_Select(object sender, RoutedEventArgs e)
+        private void LieuStack_Selected(object sender, RoutedEventArgs e)
         {
             
             if((e.OriginalSource as ToggleButton).IsChecked == true)
@@ -225,6 +238,8 @@ namespace FastDelivery_IHM
                         (LieuStack as LieuStack).SetSelect(false);
                     }
                 }
+
+                mapCanvas.SetSelect(selected.lieu);
             }
             else
             {
@@ -246,9 +261,9 @@ namespace FastDelivery_IHM
                 foreach (var item in deliveriesOrder)
                 {
                     listDeliveries.Children.Add(item);
-                    item.AddLivraison += Livraison_AddLivraison;
-                    item.Select += Livraison_Select;
-                    item.RemoveLivraison += Livraison_RemoveLivraison;
+                    item.AddLivraison += LieuStack_AddLiv;
+                    item.Select += LieuStack_Selected;
+                    item.RemoveLivraison += LieuStack_RmLiv;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();

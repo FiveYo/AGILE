@@ -39,19 +39,21 @@ namespace FastDelivery_IHM
             etatActuel = etat.carteCharge;
         }
 
-        public static Tuple<List<LieuStack>,LieuStack> loadDeliveries(Stream streamFile, Map mapCanvas)
+        public static Tuple<List<LieuStack>,List<LieuMap>> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
-            List<LieuStack> livraisons = new List<LieuStack>();
+            List<LieuStack> lieuStack = new List<LieuStack>();
+            List<LieuMap> lieuMap;
             if(etatActuel >= etat.carteCharge)
             {   
                 try
                 {
-                demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
-                mapCanvas.LoadDeliveries(demandeLivraisons);
+                    demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
 
+                    lieuMap = mapCanvas.LoadDeliveries(demandeLivraisons);
+                    lieuStack.Add(new LieuStack(demandeLivraisons.entrepot));
                     foreach (var livraison in demandeLivraisons.livraisons.Values)
                     {
-                        livraisons.Add(new LieuStack(livraison));
+                        lieuStack.Add(new LieuStack(livraison));
                     }
                 }
                 catch
@@ -64,7 +66,7 @@ namespace FastDelivery_IHM
             {
                 throw new Exception_Stream("Veuillez charger une carte en premier");
             }
-            return new Tuple<List<LieuStack>, LieuStack>(livraisons, new LieuStack(demandeLivraisons.entrepot));
+            return new Tuple<List<LieuStack>, List<LieuMap>>(lieuStack, lieuMap);
         }
 
         public static Tuple<int, LieuStack> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
