@@ -321,7 +321,7 @@ namespace FastDelivery_Library
                 }
             }
 #if DEBUG
-            tsp.chercheSolution(new TimeSpan(0,0,0,20), LivStruct.livraisons.Count + 1, cost,
+            tsp.chercheSolution(new TimeSpan(0,0,20,0), LivStruct.livraisons.Count + 1, cost,
                 duree, LivStruct);
 #else
             tsp.chercheSolution(new TimeSpan(0,0,1,0), LivStruct.livraisons.Count + 1, cost,

@@ -62,7 +62,7 @@ namespace FastDelivery_Library
 	     * @return une borne inferieure du cout des permutations commencant par sommetCourant, 
 	     * contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0
 	     */
-        protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande);
+        protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande,DateTime heuredepassage);
 
         /*
 	     * Methode devant etre redefinie par les sous-classes de TemplateTSP
@@ -90,10 +90,6 @@ namespace FastDelivery_Library
             if (sommetCrt == 0)
             {
                 var currentLivraison = demande.entrepot;
-            }
-            else
-            {
-                var currentLivraison = demande.livraisons[sommetCrt];
             }
             
             if (DateTime.Now - tpsDebut > tpsLimite)
@@ -128,7 +124,7 @@ namespace FastDelivery_Library
 
                 }
             }
-            else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande) < coutMeilleureSolution)
+            else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande,heurePassage) < coutMeilleureSolution)
             {
                 
                 IIterator<int> it = iterator(sommetCrt, nonVus, cout, duree);
@@ -152,6 +148,11 @@ namespace FastDelivery_Library
                                 vus.Remove(prochainSommet);
                                 nonVus.Add(prochainSommet);
                             }
+                            else
+                            {
+                                vus.Remove(prochainSommet);
+                                nonVus.Add(prochainSommet);
+                            }
                         }
                         else
                         {
@@ -163,6 +164,7 @@ namespace FastDelivery_Library
                     }
                     else
                     {
+                        heurePassage += new TimeSpan(0, 0, coutVus);
                         branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
                         vus.Remove(prochainSommet);
                         nonVus.Add(prochainSommet);
