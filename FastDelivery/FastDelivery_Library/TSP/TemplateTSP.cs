@@ -91,6 +91,12 @@ namespace FastDelivery_Library
         { // tous les sommets ont ete visites
             coutVus += cout[sommetCrt,0];
                 //there test si on arrive avant la plage de debut, ajouter la diff entre temsp arrivee et plage debut
+                //TimeSpan couttime = new TimeSpan(0, 0, coutVus);
+                //if(couttime+ TempsActuel <= PlageDebut)
+                //{
+                //    fairetruc
+                //    difference = (TimeSpan)(DebutPlage).Substract(couttime + TempActuel);
+                //}
             if (coutVus < coutMeilleureSolution)
             { // on a trouve une solution meilleure que meilleureSolution
                 meilleureSolution = vus.ToArray<int>();
@@ -106,6 +112,10 @@ namespace FastDelivery_Library
                 vus.Add(prochainSommet);
                 nonVus.Remove(prochainSommet);
                 //there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
+                //TimeSpan couttime = new TimeSpan(0, 0, cout[0,prochainSommet] + duree[prochainSommet]);
+                //DateTime TempsDebut = DateTime.Now;
+                //if (couttime+TempsActuel=<FinPlageHoraire)
+                //    { Faire des trucs }
                 branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt,prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
                 vus.Remove(prochainSommet); 
                 nonVus.Add(prochainSommet);
