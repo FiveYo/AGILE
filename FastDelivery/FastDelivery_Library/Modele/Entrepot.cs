@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastDelivery_Library
+namespace FastDelivery_Library.Modele
 {
     /// <summary>
     /// Contient l'adresse et l'heure de départ de l'entrepot

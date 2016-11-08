@@ -13,10 +13,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using FastDelivery_Library;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using FastDelivery_Library;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -75,15 +75,19 @@ namespace FastDelivery_IHM
                     Controler.loadMap(streamFile, mapCanvas);
                     feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
                 }
-                catch (Exception)
+                catch (Exception_XML exc)
                 {
-                    feedBack.Text = "toto";
+                    feedBack.Text = "Échec du chargement de la carte : " + exc.Message;
+                }
+                catch
+                {
+                    feedBack.Text = "Une erreur est survenue lors du chargement de la carte. Veuillez réessayer.";
                 }
                 animFeedback.Begin();
             }
             else
             {
-                
+                feedBack.Text = "Échec du chargement : aucun fichier fourni.";
             }
             
         }
@@ -101,28 +105,42 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                
-                Tuple<List<LieuStack>,LieuStack> info = Controler.loadDeliveries(streamFile, mapCanvas);
-                this.navbar.IsPaneOpen = false;
-
-                listDeliveries.Children.Add(info.Item2);
-
-                info.Item2.Select += Livraison_Select;
-                info.Item2.AddLivraison += Livraison_AddLivraison;
-
-                foreach (var livraison in info.Item1)
+                try
                 {
-                    listDeliveries.Children.Add(livraison);
-                    livraison.Select += Livraison_Select;
-                    livraison.AddLivraison += Livraison_AddLivraison;
-                    livraison.RemoveLivraison += Livraison_RemoveLivraison;
+                    Tuple<List<LieuStack>, LieuStack> info = Controler.loadDeliveries(streamFile, mapCanvas);
+                    this.navbar.IsPaneOpen = false;
+
+                    listDeliveries.Children.Add(info.Item2);
+
+                    info.Item2.Select += Livraison_Select;
+                    info.Item2.AddLivraison += Livraison_AddLivraison;
+
+                    foreach (var livraison in info.Item1)
+                    {
+                        listDeliveries.Children.Add(livraison);
+                        livraison.Select += Livraison_Select;
+                        livraison.AddLivraison += Livraison_AddLivraison;
+                        livraison.RemoveLivraison += Livraison_RemoveLivraison;
+                    }
+                    feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 }
-                feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
+                catch (Exception_XML exc)
+                {
+                    feedBack.Text = "Échec du chargement de la tournée : " + exc.Message;
+                }
+                catch (Exception_Stream exc)
+                {
+                    feedBack.Text = exc.Message;
+                }
+                catch
+                {
+                    feedBack.Text = "Une erreur est survenue lors le chargement de la tournée. Veuillez réessayer.";
+                }
                 animFeedback.Begin();
             }
             else
             {
-
+                feedBack.Text = "Échec du chargement : aucun fichier fourni.";
             }
         }
 
@@ -200,11 +218,11 @@ namespace FastDelivery_IHM
             if((e.OriginalSource as ToggleButton).IsChecked == true)
             {
                 selected = sender as LieuStack;
-                foreach (var delivery in listDeliveries.Children)
+                foreach (var LieuStack in listDeliveries.Children)
                 {
-                    if(delivery != sender)
+                    if(LieuStack != sender)
                     {
-                        (delivery as LieuStack).SetSelect(false);
+                        (LieuStack as LieuStack).SetSelect(false);
                     }
                 }
             }
@@ -219,11 +237,13 @@ namespace FastDelivery_IHM
         {
             try
             {
-                feedBack.Text = "Chargement en cours de la tournée";
+                feedBack.Text = "Chargement en cours de la tournée...";
+                List<LieuStack> deliveriesOrder = Controler.GetWay(mapCanvas);
                 LieuStack first = listDeliveries.Children.First() as LieuStack;
+                
                 listDeliveries.Children.Clear();
                 listDeliveries.Children.Add(first);
-                foreach (var item in Controler.GetWay(mapCanvas))
+                foreach (var item in deliveriesOrder)
                 {
                     listDeliveries.Children.Add(item);
                     item.AddLivraison += Livraison_AddLivraison;
@@ -232,6 +252,10 @@ namespace FastDelivery_IHM
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
+            }
+            catch (Exception_Stream exc)
+            {
+                feedBack.Text = exc.Message;
             }
             catch (TimeoutException)
             {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastDelivery_Library
+namespace FastDelivery_Library.Modele
 {
     /// <summary>
     /// Contient la durée, l'adresse d'une livraison. Si celle-ci est planifié contient la plage horaire
