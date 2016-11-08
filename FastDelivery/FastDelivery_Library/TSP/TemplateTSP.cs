@@ -91,7 +91,6 @@ namespace FastDelivery_Library
             {
                 var currentLivraison = demande.entrepot;
             }
-            
             if (DateTime.Now - tpsDebut > tpsLimite)
             {
                 tempsLimiteAtteint = true;
@@ -99,7 +98,7 @@ namespace FastDelivery_Library
             }
             if (nonVus.Count == 0)
             { // tous les sommets ont ete visites
-                coutVus += cout[sommetCrt,0];
+               
 
                 //there test si on arrive avant la plage de debut, ajouter la diff entre temsp arrivee et plage debut
                 DateTime heuretemp = heurePassage + new TimeSpan(0, 0, coutVus);
@@ -114,7 +113,17 @@ namespace FastDelivery_Library
                             coutVus += ((TimeSpan)DebutPlage.Subtract(heurePassage)).Seconds;
                         }
                     }
+                    else
+                    {
+                        coutVus += cout[sommetCrt, 0];
+                    }
                 }
+                else
+                {
+                    coutVus += cout[sommetCrt, 0];
+                }
+                
+               
 
                 if (coutVus < coutMeilleureSolution) 
                 { // on a trouve une solution meilleure que meilleureSolution
@@ -140,7 +149,7 @@ namespace FastDelivery_Library
                         if (currentLivraison.planifier)
                         {
                             DateTime FinPlage = DateTime.Parse(currentLivraison.finPlage);
-                            DateTime heureprevu = heurePassage + new TimeSpan(0, 0, cout[0, prochainSommet] + duree[prochainSommet]);
+                            DateTime heureprevu = heurePassage + new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[prochainSommet]);
                             if (heureprevu.CompareTo(FinPlage) < 0)
                             {
                                 heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
@@ -151,7 +160,6 @@ namespace FastDelivery_Library
                             else
                             {
                                 vus.Remove(prochainSommet);
-                                nonVus.Add(prochainSommet);
                             }
                         }
                         else
