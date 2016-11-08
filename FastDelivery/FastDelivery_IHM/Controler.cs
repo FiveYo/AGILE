@@ -20,8 +20,7 @@ namespace FastDelivery_IHM
     public static class Controler
     {
         private static Carte carte { get; set; }
-        private static bool carteLoaded = false;
-        private static bool deliveriesLoaded = false;
+        private static etat etatActuel { get; set; }
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
         private static Tournee tournee;
@@ -31,19 +30,20 @@ namespace FastDelivery_IHM
             try
             {
                 carte = Outils.ParserXml_Plan(file);
+                etatActuel = etat.CarteCharge;
+                map.LoadMap(carte);
             }
             catch (Exception)
             {
                 throw;
             }
-            carteLoaded = true;
         }
 
         public static Tuple<List<Delivery>,Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
-            List<Delivery> livraisons = new List<Delivery>();
-            if(carteLoaded)
-            {   
+            if (etatActuel > etat.CarteCharge)
+            {
+                List<Delivery> livraisons = new List<Delivery>();
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 
@@ -178,6 +178,7 @@ namespace FastDelivery_IHM
     {
         Initial,
         CarteCharge,
-
+        LivraisonCharge,
+        TourneeCalculee,
     }
 }

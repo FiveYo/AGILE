@@ -149,12 +149,16 @@ namespace FastDelivery_IHM
             Delivery d = sender as Delivery;
             DeliveryPop popup = new DeliveryPop();
             await popup.ShowAsync();
-            Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
-            listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-            toAdd.Item2.Select += Livraison_Select;
-            toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-            toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
-            toAdd.Item2.SetSelect(true);
+            if(popup.continu)
+            {
+                Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
+                listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);
+            }
+            
         }
         private void Livraison_Select(object sender, RoutedEventArgs e)
         {
