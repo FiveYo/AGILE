@@ -20,9 +20,9 @@ namespace FastDelivery_IHM
     public static class Controler
     {
         private static Carte carte { get; set; }
-        private static etat etatActuel { get; set; }
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
+        private static etat etatActuel { get; set; }
         private static Tournee tournee;
 
         public static void loadMap(Stream file, Map map)
@@ -30,8 +30,8 @@ namespace FastDelivery_IHM
             try
             {
                 carte = Outils.ParserXml_Plan(file);
-                etatActuel = etat.CarteCharge;
                 map.LoadMap(carte);
+                etatActuel = etat.carteCharge;
             }
             catch (Exception)
             {
@@ -41,9 +41,9 @@ namespace FastDelivery_IHM
 
         public static Tuple<List<Delivery>,Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
-            if (etatActuel > etat.CarteCharge)
-            {
-                List<Delivery> livraisons = new List<Delivery>();
+            List<Delivery> livraisons = new List<Delivery>();
+            if(etatActuel > etat.carteCharge)
+            {   
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 
@@ -51,7 +51,8 @@ namespace FastDelivery_IHM
                 {
                     livraisons.Add(new Delivery(livraison));
                 }
-                deliveriesLoaded = true;
+
+                etatActuel = etat.livraisonCharge;
             }
             else
             {
@@ -62,51 +63,58 @@ namespace FastDelivery_IHM
 
         public static Tuple<int, Delivery> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
-            Livraison toAdd = null;
-            int index;
-
-            if (lieu is Livraison)
+            if (etatActuel == etat.tourneeCalculee)
             {
-                index = tournee.livraisons.IndexOf(lieu as Livraison);
-            }
-            else
-            {
-                index = -1;
-            }
+                Livraison toAdd = null;
+                int index;
 
-            Point ptLiv;
-            int idPt = 0;
-            int dureeLiv = 0;
-
-            int idLiv = 0;
-
-            if (int.TryParse(livraison.idPointLiv, out idPt) && int.TryParse(livraison.dureeLiv, out dureeLiv))
-            {
-                if (carte.points.TryGetValue(idPt, out ptLiv))
+                if (lieu is Livraison)
                 {
-                    toAdd = new Livraison(
-                        ptLiv, dureeLiv
-                    );
+                    index = tournee.livraisons.IndexOf(lieu as Livraison);
+                }
+                else
+                {
+                    index = -1;
+                }
 
-                    int.TryParse(livraison.idLiv, out idLiv);
+                Point ptLiv;
+                int idPt = 0;
+                int dureeLiv = 0;
 
-                    tournee.AddLivraison(carte, toAdd, index);
+                int idLiv = 0;
 
-                    map.DisplayDelivery(toAdd);
+                if (int.TryParse(livraison.idPointLiv, out idPt) && int.TryParse(livraison.dureeLiv, out dureeLiv))
+                {
+                    if (carte.points.TryGetValue(idPt, out ptLiv))
+                    {
+                        toAdd = new Livraison(
+                            ptLiv, dureeLiv
+                        );
+
+                        int.TryParse(livraison.idLiv, out idLiv);
+
+                        tournee.AddLivraison(carte, toAdd, index);
+
+                        map.DisplayDelivery(toAdd);
+
+                    }
 
                 }
 
-            }
-            
 
-            map.LoadWay(tournee);
-            return new Tuple<int, Delivery>(index, new Delivery(toAdd));
+                map.LoadWay(tournee);
+                return new Tuple<int, Delivery>(index, new Delivery(toAdd));
+            }
+            else
+            {
+                throw new Exception("toto");
+            }
         }
 
         public static List<Delivery> GetWay(Map mapCanvas)
         {
             List<Delivery> listOrder = new List<Delivery>();
-            if (deliveriesLoaded && carteLoaded)
+            if (etatActuel == etat.livraisonCharge)
             {
                 tournee = Outils.creerTournee(demandeLivraisons, carte);
                 mapCanvas.LoadWay(tournee);
@@ -152,33 +160,23 @@ namespace FastDelivery_IHM
 
         internal static void RmLivTournee(Delivery d, Map map)
         {
-            Livraison l;
-            if (d.lieu is Livraison)
+            if (etatActuel == etat.tourneeCalculee)
             {
-                
-                tournee.DelLivraison(carte,d.lieu as Livraison);
-                map.LoadWay(tournee);
-            }
-            
-        }
+                if (d.lieu is Livraison)
+                {
 
-        internal static void ChgLivPlage(Delivery d, Map map)
-        {
-            Livraison l;
-            if (d.lieu is Livraison)
-            {
-                tournee.ModifPlage(d.lieu as Livraison);
-                map.LoadWay(tournee);
+                    tournee.DelLivraison(carte, d.lieu as Livraison);
+                    map.LoadWay(tournee);
+                }
             }
-
         }
     }
 
-    enum etat
+    public enum etat
     {
-        Initial,
-        CarteCharge,
-        LivraisonCharge,
-        TourneeCalculee,
+        intial,
+        carteCharge,
+        livraisonCharge,
+        tourneeCalculee
     }
 }

@@ -54,12 +54,12 @@ namespace FastDelivery_IHM
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            continu = true;
+            continu = false;
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            continu = false;
+            continu = true;
         }
         
 
