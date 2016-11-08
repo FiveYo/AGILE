@@ -64,7 +64,7 @@
                                     HorizontalAlignment="Stretch" Margin="0,0,8,0" VerticalAlignment="Stretch" Grid.Column="1" Click="addButton_Click" Grid.ColumnSpan="2"/>
                             <Button x:Name="removeButton" FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" Background="Transparent" 
                                     HorizontalAlignment="Stretch" Margin="0.625,0,0,0" VerticalAlignment="Stretch" Grid.Column="2" Click="removeButton_Click"/>
-                            <Button x:Name="chgPlageButton" FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" Background="Transparent" 
+                            <Button x:Name="chgPlageButton" FontFamily="Segoe MDL2 Assets" Content="&#xE713;" Background="Transparent" 
                                     HorizontalAlignment="Stretch" Margin="0.625,0,0,0" VerticalAlignment="Stretch" Grid.Column="3" Click="chgPlageButton_Click"/>
 
                         </Grid>

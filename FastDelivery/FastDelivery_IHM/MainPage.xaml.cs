@@ -145,10 +145,22 @@ namespace FastDelivery_IHM
 
         }
 
-        private void Livraison_ChangePlage(object sender, RoutedEventArgs e)
+        private async void Livraison_ChangePlage(object sender, RoutedEventArgs e)
         {
             Delivery d = sender as Delivery;
-            Controler.ChangePlage(d, mapCanvas);
+            ChangePlagePop popup = new ChangePlagePop();
+            await popup.ShowAsync();
+
+            if (popup.continu)
+            {
+                //Tuple<int, Delivery> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
+                /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);*/
+            }
+            
         }
 
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)

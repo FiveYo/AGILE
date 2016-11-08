@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChangePlagePop.xaml.cs">
+      <DependentUpon>ChangePlagePop.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controler.cs" />
     <Compile Include="Delivery.xaml.cs">
       <DependentUpon>Delivery.xaml</DependentUpon>
@@ -134,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ChangePlagePop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Delivery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

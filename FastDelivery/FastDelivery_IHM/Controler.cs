@@ -173,7 +173,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        internal static void ChangePlage(Delivery d, Map map)
+        /*public static Tuple<int, Delivery> ChangePlage(Lieu lieu, DeliveryPop livraison, Map map)
         {
             if (etatActuel == etat.tourneeCalculee)
             {
@@ -184,7 +184,7 @@ namespace FastDelivery_IHM
                     map.LoadWay(tournee);
                 }
             }
-        }
+        }*/
     }
 
     public enum etat
