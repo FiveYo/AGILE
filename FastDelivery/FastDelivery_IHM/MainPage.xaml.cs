@@ -157,6 +157,25 @@ namespace FastDelivery_IHM
             LieuStack d = sender as LieuStack;
             Controler.RmLivTournee(d, mapCanvas);
             listDeliveries.Children.Remove(d);
+
+        }
+
+        private async void Livraison_ChangePlage(object sender, RoutedEventArgs e)
+        {
+            LieuStack d = sender as LieuStack;
+            ChangePlagePop popup = new ChangePlagePop();
+            await popup.ShowAsync();
+
+            if (popup.continu)
+            {
+                //Tuple<int, LieuStack> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
+                /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);*/
+            }
+            
         }
 
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
@@ -264,6 +283,17 @@ namespace FastDelivery_IHM
                 if (item is LieuStack)
                 {
                     ((LieuStack)item).displayRemoveButton();
+                }
+            }
+        }
+
+        private void chgPlageButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in listDeliveries.Children)
+            {
+                if (item is LieuStack)
+                {
+                    ((LieuStack)item).displayChgPlageButton();
                 }
             }
         }

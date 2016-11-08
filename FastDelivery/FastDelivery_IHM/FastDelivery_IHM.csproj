@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChangePlagePop.xaml.cs">
+      <DependentUpon>ChangePlagePop.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controler.cs" />
     <Compile Include="LieuStack.xaml.cs">
       <DependentUpon>LieuStack.xaml</DependentUpon>
@@ -155,6 +158,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Map.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChangePlagePop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

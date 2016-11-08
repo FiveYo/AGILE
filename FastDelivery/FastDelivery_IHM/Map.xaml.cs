@@ -82,6 +82,11 @@ namespace FastDelivery_IHM
             }
         }
 
+        public void AddDelivery(Livraison l)
+        {
+            DisplayLieu(l);
+        }
+
         public async void LoadWay(Tournee t)
         {
             cheminUI.Children.Clear();
@@ -92,7 +97,7 @@ namespace FastDelivery_IHM
             {
                 t.Hashchemin.TryGetValue(livraison, out chemin);
                 DisplayWay(chemin.getTronconList());
-                await Task.Delay(500);
+                await Task.Delay(20);
             }
             DisplayWay(t.Hashchemin[t.entrepot].getTronconList());
         }

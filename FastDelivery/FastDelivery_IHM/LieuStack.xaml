@@ -243,6 +243,10 @@
                     <Button x:Name="rmBtn" Content="Supprimer cette livraison" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13" Click="rmBtn_Click">
                     </Button>
                 </Border>
+                <Border Background="WhiteSmoke" x:Name="borderChg" Visibility="Collapsed">
+                    <Button x:Name="chgBtn" Content="Changer plage horaire" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13" Click="chgBtn_Click">
+                    </Button>
+                </Border>
             </Grid>
         </Grid>
     </ToggleButton>

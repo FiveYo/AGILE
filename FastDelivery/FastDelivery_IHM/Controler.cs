@@ -95,7 +95,7 @@ namespace FastDelivery_IHM
 
                         tournee.AddLivraison(carte, toAdd, index);
 
-                        map.DisplayDelivery(toAdd);
+                        map.AddDelivery(toAdd);
 
                     }
 
@@ -118,10 +118,11 @@ namespace FastDelivery_IHM
             {
                 tournee = Outils.creerTournee(demandeLivraisons, carte);
                 mapCanvas.LoadWay(tournee);
+                etatActuel = etat.tourneeCalculee;
             }
             else
             {
-                throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
+                throw new Exception_Stream("Map not loaded or Deliveries not loaded , load one before this button");
             }
 
             foreach (var livraison in tournee.livraisons)
@@ -167,9 +168,23 @@ namespace FastDelivery_IHM
 
                     tournee.DelLivraison(carte, d.lieu as Livraison);
                     map.LoadWay(tournee);
+                    //map.ReloadDelivery(tournee);
                 }
             }
         }
+
+        /*public static Tuple<int, LieuStack> ChangePlage(Lieu lieu, DeliveryPop livraison, Map map)
+        {
+            if (etatActuel == etat.tourneeCalculee)
+            {
+                if (d.lieu is Livraison)
+                {
+
+                    tournee.DelLivraison(carte, d.lieu as Livraison);
+                    map.LoadWay(tournee);
+                }
+            }
+        }*/
     }
 
     public enum etat

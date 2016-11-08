@@ -55,14 +55,17 @@
                         </Grid.RowDefinitions>
                         <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.7*"/>
-                                <ColumnDefinition Width="0.15*"/>
-                                <ColumnDefinition Width="0.15*"/>
+                                <ColumnDefinition Width="31*"/>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="10*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="addButton" FontFamily="Segoe MDL2 Assets" Content="&#xE710;" Background="Transparent" 
-                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1" Click="addButton_Click"/>
+                                    HorizontalAlignment="Stretch" Margin="0,0,8,0" VerticalAlignment="Stretch" Grid.Column="1" Click="addButton_Click" Grid.ColumnSpan="2"/>
                             <Button x:Name="removeButton" FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" Background="Transparent" 
-                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="2" Click="removeButton_Click"/>
+                                    HorizontalAlignment="Stretch" Margin="0.625,0,0,0" VerticalAlignment="Stretch" Grid.Column="2" Click="removeButton_Click"/>
+                            <Button x:Name="chgPlageButton" FontFamily="Segoe MDL2 Assets" Content="&#xE713;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0.625,0,0,0" VerticalAlignment="Stretch" Grid.Column="3" Click="chgPlageButton_Click"/>
 
                         </Grid>
                         <ScrollViewer Grid.Row="1" Height="Auto" Background="White">
