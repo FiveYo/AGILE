@@ -309,10 +309,7 @@ namespace FastDelivery_Library
                 // Si la nouvelle plage horaire respecte l'heure de passage
                 if (DebutNewPlage < heurePassage && heurePassage < FinNewPlage)
                 {
-                    Dictionary<Livraison, List<double>> result = Check();
 
-                    Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
-                    return ErrorLivraison;
                 }
 
                 /* Dans cette partie nous prenons en compte 3 variables livraison
@@ -351,25 +348,6 @@ namespace FastDelivery_Library
                         else
                         {
                             HeuredePassage[livraisonNewPlage] = heureArrivMinLivr1;
-                            //on check si tout va bien
-                            Dictionary<Livraison, List<double>> result1 = Check();
-
-                            Dictionary<Livraison, Error> ErrorLivraison1 = new Dictionary<Livraison, Error>();
-
-                            foreach (Livraison livraisonCheck in result1.Keys)
-                            {
-                                if (result1[livraisonCheck][0] == 1)
-                                {
-                                    ErrorLivraison1.Add(livraisonCheck, Error.After);
-                                }
-                                else if (result1[livraisonCheck][0] == -1)
-                                {
-
-                                    ErrorLivraison1.Add(livraisonCheck, Error.Before);
-                                }
-                            }
-
-                            return ErrorLivraison1;
                         }
 
                         foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
@@ -386,33 +364,10 @@ namespace FastDelivery_Library
                             }
                             else
                             {
-                                Dictionary<Livraison, List<double>> result2 = Check();
-
-                                Dictionary<Livraison, Error> ErrorLivraison2 = new Dictionary<Livraison, Error>();
-
-                                foreach (Livraison livraisonCheck in result2.Keys)
-                                {
-                                    if (result2[livraisonCheck][0] == 1)
-                                    {
-                                        ErrorLivraison2.Add(livraisonCheck, Error.After);
-                                    }
-                                    else if (result2[livraisonCheck][0] == -1)
-                                    {
-
-                                        ErrorLivraison2.Add(livraisonCheck, Error.Before);
-                                    }
-                                }
-
-                                return ErrorLivraison2;
+                                break;                               
                             }
                             livraison1 = livraison;
                         }
-                        Dictionary<Livraison, List<double>> result = Check();
-
-                        Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
-                        return ErrorLivraison;
-
-
                     }
 
                     // le livreur arrive plus tard que prévu
@@ -444,11 +399,6 @@ namespace FastDelivery_Library
                         else
                         {
                             HeuredePassage[livraisonNewPlage] = heureArrivMinLivr1;
-
-                            Dictionary<Livraison, List<double>> result3 = Check();
-
-                            Dictionary<Livraison, Error> ErrorLivraison3 = new Dictionary<Livraison, Error>();
-                            return ErrorLivraison3;
                         }
 
 
@@ -466,42 +416,35 @@ namespace FastDelivery_Library
                             }
                             else
                             {
-                                Dictionary<Livraison, List<double>> result4 = Check();
-
-                                Dictionary<Livraison, Error> ErrorLivraison4 = new Dictionary<Livraison, Error>();
-
-                                foreach (Livraison livraisonCheck4 in result4.Keys)
-                                {
-                                    if (result4[livraisonCheck4][0] == 1)
-                                    {
-                                        ErrorLivraison4.Add(livraisonCheck4, Error.After);
-                                    }
-                                    else if (result4[livraisonCheck4][0] == -1)
-                                    {
-
-                                        ErrorLivraison4.Add(livraisonCheck4, Error.Before);
-                                    }
-                                }
-
-                                return ErrorLivraison4;
+                                break;
                             }
                             livraison1 = livraison;
                         }
-                        Dictionary<Livraison, List<double>> result = Check();
-
-                        Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
-                        return ErrorLivraison;
-
                     }
                 }
             }
             else
             {
-                Dictionary<Livraison, List<double>> result = Check();
-
-                Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
-                return ErrorLivraison;
+                
             }
+            //on check si tout va bien
+            Dictionary<Livraison, List<double>> result = Check();
+
+            Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
+
+            foreach (Livraison livraisonCheck in result.Keys)
+            {
+                if (result[livraisonCheck][0] == 1)
+                {
+                    ErrorLivraison.Add(livraisonCheck, Error.After);
+                }
+                else if (result[livraisonCheck][0] == -1)
+                {
+
+                    ErrorLivraison.Add(livraisonCheck, Error.Before);
+                }
+            }
+            return ErrorLivraison;
         }
     }
 }
