@@ -10,7 +10,7 @@ namespace FastDelivery_Library.Modele
     {
         List<Troncon> tronconList = new List<Troncon>();
 
-        double cout;
+        public double cout;
         public Chemin(List<Troncon> troncons)
         {
             this.tronconList = troncons;

@@ -36,7 +36,7 @@ namespace FastDelivery_IHM
                     return String.Format("Adresse : ({0}, {1})\nDurée : {2}",
                         lieu.adresse.x, lieu.adresse.y, (lieu as Livraison).duree);
                 }
-                else
+                else 
                 {
                     return String.Format("Entrepot\nAdresse : ({0}, {1})",
                         lieu.adresse.x, lieu.adresse.y);

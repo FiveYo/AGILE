@@ -55,13 +55,24 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                Controler.loadMap(streamFile, mapCanvas);
-                feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
+                try
+                {
+                    Controler.loadMap(streamFile, mapCanvas);
+                    feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
+                }
+                catch (Exception_XML exc)
+                {
+                    feedBack.Text = "Échec du chargement de la carte : " + exc.Message;
+                }
+                catch
+                {
+                    feedBack.Text = "Une erreur est survenue lors du chargement de la carte. Veuillez réessayer.";
+                }
                 animFeedback.Begin();
             }
             else
             {
-                
+                feedBack.Text = "Échec du chargement : aucun fichier fourni.";
             }
             
         }
@@ -79,28 +90,42 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
-                
-                Tuple<List<Delivery>,Delivery> info = Controler.loadDeliveries(streamFile, mapCanvas);
-                this.navbar.IsPaneOpen = false;
-
-                listDeliveries.Children.Add(info.Item2);
-
-                info.Item2.Select += Livraison_Select;
-                info.Item2.AddLivraison += Livraison_AddLivraison;
-
-                foreach (var livraison in info.Item1)
+                try
                 {
-                    listDeliveries.Children.Add(livraison);
-                    livraison.Select += Livraison_Select;
-                    livraison.AddLivraison += Livraison_AddLivraison;
-                    livraison.RemoveLivraison += Livraison_RemoveLivraison;
+                    Tuple<List<Delivery>, Delivery> info = Controler.loadDeliveries(streamFile, mapCanvas);
+                    this.navbar.IsPaneOpen = false;
+
+                    listDeliveries.Children.Add(info.Item2);
+
+                    info.Item2.Select += Livraison_Select;
+                    info.Item2.AddLivraison += Livraison_AddLivraison;
+
+                    foreach (var livraison in info.Item1)
+                    {
+                        listDeliveries.Children.Add(livraison);
+                        livraison.Select += Livraison_Select;
+                        livraison.AddLivraison += Livraison_AddLivraison;
+                        livraison.RemoveLivraison += Livraison_RemoveLivraison;
+                    }
+                    feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 }
-                feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
+                catch (Exception_XML exc)
+                {
+                    feedBack.Text = "Échec du chargement de la tournée : " + exc.Message;
+                }
+                catch (Exception_Stream exc)
+                {
+                    feedBack.Text = exc.Message;
+                }
+                catch
+                {
+                    feedBack.Text = "Une erreur est survenue lors le chargement de la tournée. Veuillez réessayer.";
+                }
                 animFeedback.Begin();
             }
             else
             {
-
+                feedBack.Text = "Échec du chargement : aucun fichier fourni.";
             }
         }
 
@@ -142,12 +167,16 @@ namespace FastDelivery_IHM
             Delivery d = sender as Delivery;
             DeliveryPop popup = new DeliveryPop();
             await popup.ShowAsync();
-            Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
-            listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-            toAdd.Item2.Select += Livraison_Select;
-            toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-            toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
-            toAdd.Item2.SetSelect(true);
+            if(popup.continu)
+            {
+                Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
+                listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);
+            }
+            
         }
         private void Livraison_Select(object sender, RoutedEventArgs e)
         {
@@ -174,11 +203,12 @@ namespace FastDelivery_IHM
         {
             try
             {
-                feedBack.Text = "Chargement en cours de la tournée";
+                feedBack.Text = "Chargement en cours de la tournée...";
+                List<Delivery> deliveriesOrder = Controler.GetWay(mapCanvas);
                 Delivery first = listDeliveries.Children.First() as Delivery;
                 listDeliveries.Children.Clear();
                 listDeliveries.Children.Add(first);
-                foreach (var item in Controler.GetWay(mapCanvas))
+                foreach (var item in deliveriesOrder)
                 {
                     listDeliveries.Children.Add(item);
                     item.AddLivraison += Livraison_AddLivraison;
@@ -187,6 +217,10 @@ namespace FastDelivery_IHM
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
+            }
+            catch (Exception_Stream exc)
+            {
+                feedBack.Text = exc.Message;
             }
             catch (TimeoutException)
             {

@@ -74,7 +74,7 @@ namespace FastDelivery_IHM
             {
                 t.Hashchemin.TryGetValue(livraison, out chemin);
                 DisplayWay(chemin.getTronconList());
-                await Task.Delay(1000);
+                await Task.Delay(500);
             }
             DisplayWay(t.Hashchemin[t.entrepot].getTronconList());
         }
@@ -291,7 +291,7 @@ namespace FastDelivery_IHM
         public async void DisplayDelivery(Livraison point)
         {
             var source = new BitmapImage();
-            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_livraison.png"));
 
             IRandomAccessStream stream = await rass.OpenReadAsync();
             IRandomAccessStream stream2 = stream.CloneStream();

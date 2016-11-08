@@ -46,7 +46,5 @@
             <TimePicker HorizontalAlignment="Center" VerticalAlignment="Top" Header="Fin plage" TimeChanged="TimePicker_TimeChanged"/>
             <TextBlock x:Name="error" Text="Veuillez entrer une heure supérieure à celle de départ" Padding="10" Foreground="Red" TextWrapping="Wrap" Width="250" Visibility="Collapsed"/>
         </StackPanel>
-
-
     </Grid>
 </ContentDialog>
