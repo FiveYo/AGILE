@@ -34,10 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ExTime.cs" />
     <Compile Include="Modele\Chemin.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Modele\Carte.cs" />
     <Compile Include="Modele\Lieu.cs" />
+    <Compile Include="TSP2\TSP2.cs" />
     <Compile Include="UndoRedo\ModifyTournee.cs" />
     <Compile Include="Modele\Tournee.cs" />
     <Compile Include="TSP\InteratorSeq.cs" />
