@@ -51,6 +51,7 @@
                     <Grid HorizontalAlignment="Stretch" Margin="0" Height="Auto">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
+                            <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
@@ -65,9 +66,23 @@
                                     HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="2" Click="removeButton_Click"/>
 
                         </Grid>
-                        <ScrollViewer Grid.Row="1" Height="Auto" Background="White">
+                        <Grid HorizontalAlignment="Stretch" Height="30" Margin="0" VerticalAlignment="Bottom" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.3*"/>
+                                <ColumnDefinition Width="0.35*"/>
+                                <ColumnDefinition Width="0.35*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="typeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Type" VerticalAlignment="Stretch"
+                                     Grid.Column="0" BorderThickness="0" TextAlignment="Center"/>
+                            <TextBox x:Name="addressTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
+                                     Grid.Column="1" BorderThickness="0" TextAlignment="Center"/>
+                            <TextBox x:Name="dureeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Durée" VerticalAlignment="Stretch"
+                                     Grid.Column="2" BorderThickness="0" TextAlignment="Center"/>
+                        </Grid>
+                        <ScrollViewer Grid.Row="2" Height="Auto" Background="White">
                             <StackPanel x:Name="listDeliveries" KeyDown="listDeliveries_KeyDown">
                             </StackPanel>
+                            
                         </ScrollViewer>
                     </Grid>
                 </SplitView.Content>

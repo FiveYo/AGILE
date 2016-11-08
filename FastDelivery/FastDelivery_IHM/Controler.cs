@@ -27,8 +27,15 @@ namespace FastDelivery_IHM
 
         public static void loadMap(Stream file, Map map)
         {
-            carte = Outils.ParserXml_Plan(file);
-            map.LoadMap(carte);
+            try
+            {
+                carte = Outils.ParserXml_Plan(file);
+                map.LoadMap(carte);
+            }
+            catch
+            {
+                throw;
+            }
             etatActuel = etat.carteCharge;
         }
 
@@ -37,19 +44,25 @@ namespace FastDelivery_IHM
             List<Delivery> livraisons = new List<Delivery>();
             if (etatActuel >= etat.carteCharge)
             {
-                demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
-                mapCanvas.LoadDeliveries(demandeLivraisons);
-
-                foreach (var livraison in demandeLivraisons.livraisons.Values)
+                try
                 {
-                    livraisons.Add(new Delivery(livraison));
-                }
+                    demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
+                    mapCanvas.LoadDeliveries(demandeLivraisons);
 
+                    foreach (var livraison in demandeLivraisons.livraisons.Values)
+                    {
+                        livraisons.Add(new Delivery(livraison));
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
                 etatActuel = etat.livraisonCharge;
             }
             else
             {
-                throw new Exception_Stream("Load map before");
+                throw new Exception_Stream("Veuillez charger une carte en premier");
             }
             return new Tuple<List<Delivery>, Delivery>(livraisons, new Delivery(demandeLivraisons.entrepot));
         }
@@ -100,21 +113,29 @@ namespace FastDelivery_IHM
             }
             else
             {
-                throw new Exception("toto");
+                throw new Exception_Stream("Une tournée doit préalablement être calculée");
             }
         }
 
         public static List<Delivery> GetWay(Map mapCanvas)
         {
             List<Delivery> listOrder = new List<Delivery>();
-            if (etatActuel == etat.livraisonCharge)
+            if (etatActuel == etat.livraisonCharge || etatActuel == etat.tourneeCalculee)
             {
-                tournee = Outils.creerTournee(demandeLivraisons, carte);
-                mapCanvas.LoadWay(tournee);
+                try
+                {
+                    tournee = Outils.creerTournee(demandeLivraisons, carte);
+                    mapCanvas.LoadWay(tournee);
+                }
+                catch
+                {
+                    throw;
+                }
+                etatActuel = etat.tourneeCalculee;
             }
             else
             {
-                throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
+                throw new Exception_Stream("Veuillez charger une carte et une tournée en premier");
             }
 
             foreach (var livraison in tournee.livraisons)

@@ -146,7 +146,7 @@ namespace FastDelivery_Library
             //On récupète dans un dictionnaire la data avec le node qu'on veut 
             Dictionary<int, Livraison> LivHash = new Dictionary<int, Livraison>();
 
-            // On fait une liste d'entrepot car on sait jamais poto
+            // On fait une liste d'entrepot
             List<Entrepot> ListEntrepot = new List<Entrepot>();
 
             // On initialise la structure
@@ -175,7 +175,7 @@ namespace FastDelivery_Library
             }
             catch (System.NullReferenceException ex)
             {
-                throw new Exception_XML("Dossier XML incorrect", ex);
+                throw new Exception_XML("Fichier mal formaté", ex);
 
             } 
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
