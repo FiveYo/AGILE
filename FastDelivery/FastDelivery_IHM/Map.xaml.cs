@@ -74,7 +74,7 @@ namespace FastDelivery_IHM
             {
                 t.Hashchemin.TryGetValue(livraison, out chemin);
                 DisplayWay(chemin.getTronconList());
-                await Task.Delay(500);
+                await Task.Delay(20);
             }
             DisplayWay(t.Hashchemin[t.entrepot].getTronconList());
         }
@@ -312,5 +312,13 @@ namespace FastDelivery_IHM
             Canvas.SetLeft(intersection, left);
             livraisonUI.Children.Add(intersection);
         }
+
+
+
+
+
+
+
+
     }
 }

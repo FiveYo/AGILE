@@ -118,10 +118,11 @@ namespace FastDelivery_IHM
             {
                 tournee = Outils.creerTournee(demandeLivraisons, carte);
                 mapCanvas.LoadWay(tournee);
+                etatActuel = etat.tourneeCalculee;
             }
             else
             {
-                throw new Exception_Stream("Map not loaded or Deliveries not loaded please use your brain before this button");
+                throw new Exception_Stream("Map not loaded or Deliveries not loaded , load one before this button");
             }
 
             foreach (var livraison in tournee.livraisons)

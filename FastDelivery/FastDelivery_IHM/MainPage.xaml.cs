@@ -142,6 +142,7 @@ namespace FastDelivery_IHM
             Delivery d = sender as Delivery;
             Controler.RmLivTournee(d, mapCanvas);
             listDeliveries.Children.Remove(d);
+
         }
 
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
