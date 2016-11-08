@@ -302,7 +302,7 @@ namespace FastDelivery_Library
             List<Livraison> livraisonsInversee = new List<Livraison>(livraisons);
             livraisonsInversee.Reverse();
             int indexLivraisonInverseeNewPlage = livraisonsInversee.IndexOf(livraisonNewPlage);
-            int indexLivraisonNewPlage = livraisonsInversee.IndexOf(livraisonNewPlage);
+            int indexLivraisonNewPlage = livraisons.IndexOf(livraisonNewPlage);
 
             if (HeuredePassage.TryGetValue(livraisonNewPlage, out heurePassage))
             {
