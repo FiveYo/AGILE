@@ -286,5 +286,222 @@ namespace FastDelivery_Library
             }
             return listlivraisonout;
         }
+
+        // Cette méthode implémente la modification d'une plage horaire
+        /*
+         ** T0D0 : check si la plage horaire n'existe pas
+         */
+        Dictionary<Livraison, Error> ModifPlage(Carte carte, Livraison livraisonNewPlage, int index, DateTime newPlage)
+        {
+            // Récupérer l'heure de livraison de la livraison à modif
+            DateTime DebutNewPlage = DateTime.Parse(livraisonNewPlage.debutPlage);
+            DateTime FinNewPlage = DateTime.Parse(livraisonNewPlage.finPlage);
+            DateTime heurePassage;
+
+            //Copie la liste de livraisons dans une nouvelle liste
+            List<Livraison> livraisonsInversee = new List<Livraison>(livraisons);
+            livraisonsInversee.Reverse();
+            int indexLivraisonInverseeNewPlage = livraisonsInversee.IndexOf(livraisonNewPlage);
+            int indexLivraisonNewPlage = livraisonsInversee.IndexOf(livraisonNewPlage);
+
+            if (HeuredePassage.TryGetValue(livraisonNewPlage, out heurePassage))
+            {
+                // Si la nouvelle plage horaire respecte l'heure de passage
+                if (DebutNewPlage < heurePassage && heurePassage < FinNewPlage)
+                {
+                    Dictionary<Livraison, List<double>> result = Check();
+
+                    Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
+                    return ErrorLivraison;
+                }
+
+                /* Dans cette partie nous prenons en compte 3 variables livraison
+                 * livraison1, et livraison2, qui est la livraison suivante à la 1
+                 * livraisonNewPlage qui est la livraison dont nous avons changer le plage horaire
+                 * Calcul de l'heure d'arrivee pour la livraison dont on a modif la plage horaire
+                 */
+                else
+                {
+                    // Le livreur doit venir en avance
+                    // livraison2 est initialisée à livraisonNewPlage
+                    if (FinNewPlage.CompareTo(heurePassage) < 0)
+                    {
+
+                        // Calcul de l'heure d'arrivee pour la livraison dont on a modif la plage horaire
+                        Livraison livraison1 = livraisonsInversee[indexLivraisonInverseeNewPlage + 1];
+                        Livraison livraison2 = livraisonNewPlage;
+                        Lieu pointArrivee = livraison2;
+
+                        //Plages de la nouvelle livraison
+                        DateTime finPlageLivraison2 = DateTime.Parse(livraison2.finPlage);
+
+                        //Calcule l'heure d'arrivée minimale à la prochaine livraison
+                        TimeSpan trajetALivraison2 = TimeSpan.FromMinutes((double)livraison1.duree + Hashchemin[pointArrivee].cout);
+                        DateTime heureArrivMinLivr1 = HeuredePassage[livraison2].Subtract(trajetALivraison2); // heure minimum pour arriver à la livraison
+
+
+                        if (heureArrivMinLivr1.CompareTo(FinNewPlage) > 0)
+                        {
+                            HeuredePassage[livraisonNewPlage] = FinNewPlage;
+                        }
+                        else if (heureArrivMinLivr1.CompareTo(DebutNewPlage) < 0)
+                        {
+                            HeuredePassage[livraisonNewPlage] = DebutNewPlage;
+                        }
+                        else
+                        {
+                            HeuredePassage[livraisonNewPlage] = heureArrivMinLivr1;
+                            //on check si tout va bien
+                            Dictionary<Livraison, List<double>> result1 = Check();
+
+                            Dictionary<Livraison, Error> ErrorLivraison1 = new Dictionary<Livraison, Error>();
+
+                            foreach (Livraison livraisonCheck in result1.Keys)
+                            {
+                                if (result1[livraisonCheck][0] == 1)
+                                {
+                                    ErrorLivraison1.Add(livraisonCheck, Error.After);
+                                }
+                                else if (result1[livraisonCheck][0] == -1)
+                                {
+
+                                    ErrorLivraison1.Add(livraisonCheck, Error.Before);
+                                }
+                            }
+
+                            return ErrorLivraison1;
+                        }
+
+                        foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
+                        {
+                            pointArrivee = livraison;
+
+                            trajetALivraison2 = TimeSpan.FromMinutes(Hashchemin[pointArrivee].cout);
+
+                            // Teste si l'heure de passage actuel de livraison2 est humainement faisable
+                            if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
+                            {
+                                HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+
+                            }
+                            else
+                            {
+                                Dictionary<Livraison, List<double>> result2 = Check();
+
+                                Dictionary<Livraison, Error> ErrorLivraison2 = new Dictionary<Livraison, Error>();
+
+                                foreach (Livraison livraisonCheck in result2.Keys)
+                                {
+                                    if (result2[livraisonCheck][0] == 1)
+                                    {
+                                        ErrorLivraison2.Add(livraisonCheck, Error.After);
+                                    }
+                                    else if (result2[livraisonCheck][0] == -1)
+                                    {
+
+                                        ErrorLivraison2.Add(livraisonCheck, Error.Before);
+                                    }
+                                }
+
+                                return ErrorLivraison2;
+                            }
+                            livraison1 = livraison;
+                        }
+                        Dictionary<Livraison, List<double>> result = Check();
+
+                        Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
+                        return ErrorLivraison;
+
+
+                    }
+
+                    // le livreur arrive plus tard que prévu
+                    // livraison2 est initialisée à livraisonNewPlage
+                    else if (DebutNewPlage.CompareTo(heurePassage) > 0)
+                    {
+
+                        // Calcul de l'heure d'arrivee pour la livraison dont on a modif la plage horaire
+                        Livraison livraison2 = livraisons[indexLivraisonNewPlage + 1];
+                        Livraison livraison1 = livraisonNewPlage;
+                        Lieu pointArrivee = livraison2;
+
+                        //Plages de la nouvelle livraison
+                        DateTime finPlageLivraison2 = DateTime.Parse(livraison2.finPlage);
+
+                        //Calcule l'heure d'arrivée minimale à la prochaine livraison
+                        TimeSpan trajetALivraison2 = TimeSpan.FromMinutes((double)livraison1.duree + Hashchemin[pointArrivee].cout);
+                        DateTime heureArrivMinLivr1 = HeuredePassage[livraison2].Subtract(trajetALivraison2); // heure minimum pour arriver à la livraison
+
+
+                        if (heureArrivMinLivr1.CompareTo(FinNewPlage) > 0)
+                        {
+                            HeuredePassage[livraisonNewPlage] = FinNewPlage;
+                        }
+                        else if (heureArrivMinLivr1.CompareTo(DebutNewPlage) < 0)
+                        {
+                            HeuredePassage[livraisonNewPlage] = DebutNewPlage;
+                        }
+                        else
+                        {
+                            HeuredePassage[livraisonNewPlage] = heureArrivMinLivr1;
+
+                            Dictionary<Livraison, List<double>> result3 = Check();
+
+                            Dictionary<Livraison, Error> ErrorLivraison3 = new Dictionary<Livraison, Error>();
+                            return ErrorLivraison3;
+                        }
+
+
+                        foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
+                        {
+                            pointArrivee = livraison;
+
+                            trajetALivraison2 = TimeSpan.FromMinutes(Hashchemin[pointArrivee].cout);
+
+                            // Teste si l'heure de passage actuel de livraison2 est humainement faisable
+                            if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
+                            {
+                                HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+
+                            }
+                            else
+                            {
+                                Dictionary<Livraison, List<double>> result4 = Check();
+
+                                Dictionary<Livraison, Error> ErrorLivraison4 = new Dictionary<Livraison, Error>();
+
+                                foreach (Livraison livraisonCheck4 in result4.Keys)
+                                {
+                                    if (result4[livraisonCheck4][0] == 1)
+                                    {
+                                        ErrorLivraison4.Add(livraisonCheck4, Error.After);
+                                    }
+                                    else if (result4[livraisonCheck4][0] == -1)
+                                    {
+
+                                        ErrorLivraison4.Add(livraisonCheck4, Error.Before);
+                                    }
+                                }
+
+                                return ErrorLivraison4;
+                            }
+                            livraison1 = livraison;
+                        }
+                        Dictionary<Livraison, List<double>> result = Check();
+
+                        Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
+                        return ErrorLivraison;
+
+                    }
+                }
+            }
+            else
+            {
+                Dictionary<Livraison, List<double>> result = Check();
+
+                Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
+                return ErrorLivraison;
+            }
+        }
     }
 }
