@@ -312,13 +312,45 @@ namespace FastDelivery_IHM
             Canvas.SetLeft(intersection, left);
             livraisonUI.Children.Add(intersection);
         }
+        //public async void ReloadDelivery(Tournee tournee)
+        //{
+        //    var source = new BitmapImage();
+
+        //    var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_livraison.png"));
+        //    IRandomAccessStream stream = await rass.OpenReadAsync();
+
+        //    IRandomAccessStream stream2 = stream.CloneStream();
 
 
+        //    var decoder = await BitmapDecoder.CreateAsync(stream);
+        //    var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
 
+        //    source.SetSource(stream2);
 
+        //    var recenterY = -size.Height;
+        //    var recenterX = -size.Width / 2;
+        //    foreach(var livraison in tournee.livraisons)
+        //    {
+        //        Image intersection = new Image();
+        //        intersection.Source = source;
+        //        double top = getY(livraison.adresse.y, minY, rY) + recenterY;
+        //        double left = getX(livraison.adresse.x, minX, rX) + recenterX;
+        //        Canvas.SetTop(intersection, top);
+        //        Canvas.SetLeft(intersection, left);
+        //        livraisonUI.Children.Clear();
+        //    }
 
+        //    foreach (var point in tournee.livraisons)
+        //    {
+        //        Image intersection = new Image();
+        //        intersection.Source = source;
+        //        double top = getY(point.adresse.y, minY, rY) + recenterY;
+        //        double left = getX(point.adresse.x, minX, rX) + recenterX;
+        //        Canvas.SetTop(intersection, top);
+        //        Canvas.SetLeft(intersection, left);
+        //        livraisonUI.Children.Add(intersection);
 
-
-
+        //    }
+        //}
     }
 }

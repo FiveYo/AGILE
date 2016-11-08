@@ -168,6 +168,7 @@ namespace FastDelivery_IHM
 
                     tournee.DelLivraison(carte, d.lieu as Livraison);
                     map.LoadWay(tournee);
+                    //map.ReloadDelivery(tournee);
                 }
             }
         }
