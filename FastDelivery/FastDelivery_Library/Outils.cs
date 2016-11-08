@@ -32,6 +32,10 @@ namespace FastDelivery_Library
             Carte carte;
 
             var nodes = MyData.Descendants("noeud");
+            if (nodes.Count() == 0 || (MyData.Descendants("troncon").Count() == 0))
+            {
+                throw new Exception_XML("Fichier mal formaté");
+            }
 
 
             //Initialisation variables 
@@ -53,7 +57,7 @@ namespace FastDelivery_Library
                 }
                 catch (NullReferenceException ex)
                 {
-                    throw new Exception_XML("Dossier XML incorrect", ex);
+                    throw new Exception_XML("Fichier mal formaté", ex);
                 }
                 Point pt = new Point(Id, x, y);
                 ymax = y;
@@ -80,7 +84,8 @@ namespace FastDelivery_Library
                 PointHash.Add(Id, pt);
             }
             int ID = 1;
-            //On génère les Troncons depuis le fichier XML en paramètre 
+            //On génère les Troncons depuis le fichier XML en paramètre
+
             foreach (var node in MyData.Descendants("troncon"))
             {
                 //on récpuère les id des points d'origine
@@ -92,7 +97,7 @@ namespace FastDelivery_Library
                 }
                 catch (NullReferenceException ex)
                 {
-                    throw new Exception_XML("Dossier XML incorrect", ex);
+                    throw new Exception_XML("Fichier mal formaté", ex);
                 }
 
                 // on crée les Points pour le constructeur
@@ -111,7 +116,7 @@ namespace FastDelivery_Library
                     }
                     catch (NullReferenceException ex)
                     {
-                        throw new Exception_XML("Dossier XML incorrect", ex);
+                        throw new Exception_XML("Fichier mal formaté", ex);
                     }
                     Troncon Troncon_temp = new Troncon(
                         Dest_Point,

@@ -76,7 +76,7 @@
         </Grid>
         <Grid Grid.Row="1">
             <Border BorderThickness="0 1 0 0" BorderBrush="Black">
-                <TextBlock x:Name="feedBack" HorizontalAlignment="Stretch" Padding="10 0"  TextWrapping="Wrap" FontSize="20"
+                <TextBlock x:Name="feedBack" HorizontalAlignment="Stretch" Padding="10 0"  TextWrapping="Wrap" FontSize="18"
                            Text="Bienvenue Utilisateur. Vous pouvez dès maintenant charger le plan de votre choix." VerticalAlignment="Center" >
                     <TextBlock.Triggers>
                         <EventTrigger RoutedEvent="TextBlock.Loaded">

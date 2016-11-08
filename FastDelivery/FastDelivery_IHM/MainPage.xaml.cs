@@ -60,9 +60,9 @@ namespace FastDelivery_IHM
                     Controler.loadMap(streamFile, mapCanvas);
                     feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
                 }
-                catch (Exception)
+                catch (Exception_XML exc)
                 {
-                    feedBack.Text = "toto";
+                    feedBack.Text = "Une erreur est survenue lors du chargement de la carte : " + exc.Message;
                 }
                 animFeedback.Begin();
             }
