@@ -138,7 +138,6 @@ namespace FastDelivery_Library
         {
             //On initialise notre Xdocument avec le Path du fichier xml
             XDocument MyData = XDocument.Load(streamFile);
-
             //On récupète dans un dictionnaire la data avec le node qu'on veut 
             Dictionary<int, Livraison> LivHash = new Dictionary<int, Livraison>();
 

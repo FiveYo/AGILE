@@ -23,9 +23,6 @@ L'application ne doit pas crasher par tous les moyens
 
 ### IHM
 
-- Afficher liste checkbox a gauche des livraisons                                   **Mathieu**
-- Possibilité de cocher les checkbox, les livraisons cochées sont affichées         **Mathieu**
-- bouton checkall uncheckall                                                        **Mathieu**
 - bouton modifier qui apparait onmouseover                                          **Mathieu**
 - plus d'infos ou moins d'espace entre les livraisons a gauche                      **Quentin**
 - Synchroniser l'affichage des infos et ordonner les livraisons                     **Quentin**
