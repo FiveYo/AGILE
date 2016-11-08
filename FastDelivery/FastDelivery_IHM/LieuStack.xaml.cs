@@ -14,7 +14,7 @@ using FastDelivery_Library.Modele;
 
 namespace FastDelivery_IHM
 {
-    public sealed partial class Delivery : UserControl, INotifyPropertyChanged
+    public sealed partial class LieuStack : UserControl, INotifyPropertyChanged
     {
         public bool displayCheck { get; set; }
         public Lieu lieu { get; set; }
@@ -44,7 +44,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        public Delivery()
+        public LieuStack()
         {
             this.InitializeComponent();
             // Permet de binder correctement les propriétés (magie)
@@ -52,7 +52,7 @@ namespace FastDelivery_IHM
         }
 
 
-        public Delivery(Lieu liv)
+        public LieuStack(Lieu liv)
         {
             this.InitializeComponent();
             // Permet de binder correctement les propriétés (magie)

@@ -27,6 +27,7 @@ namespace FastDelivery_IHM
 {
     public sealed partial class Map : UserControl
     {
+
         double minX, minY, rX, rY;
 
         public SolidColorBrush colorMap { get; set; }
@@ -37,11 +38,18 @@ namespace FastDelivery_IHM
 
         public SolidColorBrush colorPoint { get; set; }
 
+        public delegate void ClickMapHandler(object sender, EventMap e);
+
+        public event ClickMapHandler PointClicked;
+
         const int TAILLE_POINTS = 8;
         const int TAILLE_POINTS_FAKE = 16;
         const int TAILLE_LIGNE_MAP = 2;
         const int TAILLE_LIGNE_MAP_FAKE = 20;
         const int TAILLE_LIGNE_CHEMIN = 3;
+
+        const int LARGEUR_POINTEUR = 59;
+        const int HAUTEUR_POINTEUR = 33;
 
         public Map()
         {
@@ -56,20 +64,30 @@ namespace FastDelivery_IHM
         public void LoadMap(Carte plan)
         {
             carteUI.Children.Clear();
+            livraisonUI.Children.Clear();
+            cheminUI.Children.Clear();
+
             DisplayMap(plan);
         }
 
         public void LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
         {
             livraisonUI.Children.Clear();
-            DisplayEntrepot(demandeLivraisons.entrepot);
-            DisplayDeliveries(demandeLivraisons.livraisons);
+            cheminUI.Children.Clear();
+
+            DisplayLieu(demandeLivraisons.entrepot);
+            foreach (var livraison in demandeLivraisons.livraisons.Values)
+            {
+                DisplayLieu(livraison);
+            }
         }
 
         public async void LoadWay(Tournee t)
         {
             cheminUI.Children.Clear();
+
             Chemin chemin;
+
             foreach (var livraison in t.livraisons)
             {
                 t.Hashchemin.TryGetValue(livraison, out chemin);
@@ -111,6 +129,7 @@ namespace FastDelivery_IHM
                 line.Y1 = Y1;
                 line.X2 = X2;
                 line.Y2 = Y2;
+
                 lineToAim.X1 = X1;
                 lineToAim.Y1 = Y1;
                 lineToAim.X2 = X2;
@@ -136,10 +155,21 @@ namespace FastDelivery_IHM
 
                 circleToAim.PointerEntered += CircleToAim_PointerEntered;
                 circleToAim.PointerExited += CircleToAim_PointerExited;
+                circleToAim.RightTapped += CircleToAim_RightTapped;
 
                 ToolTip tt = new ToolTip();
                 tt.Content = "id : " + point.Value.id + "\n x : " + point.Value.x + "\n y : " + point.Value.y;
                 circleToAim.SetValue(ToolTipService.ToolTipProperty, tt);
+
+                try
+                {
+                    circleToAim.SetValue(PointService.infoPoint, point.Value);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                    throw;
+                }
 
                 circle.Height = TAILLE_POINTS;
                 circleToAim.Height = TAILLE_POINTS_FAKE;
@@ -168,6 +198,38 @@ namespace FastDelivery_IHM
             Debug.WriteLine(elapsedTime);
         }
 
+        #region gestion du clic sur un point
+
+        
+
+        private void CircleToAim_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            Flyout f = new Flyout();
+            Button b = new Button();
+            b.Content = "Créer une livraison ici";
+            f.Content = b;
+            b.Click += Ellipse_Click;
+
+            b.SetValue(PointService.infoPoint, (sender as FrameworkElement).GetValue(PointService.infoPoint));
+
+            Debug.WriteLine((sender as FrameworkElement).GetValue(PointService.infoPoint).ToString());
+            Debug.WriteLine(b.GetValue(PointService.infoPoint).ToString());
+
+
+            f.ShowAt((FrameworkElement)sender);
+        }
+
+        private void Ellipse_Click(object sender, RoutedEventArgs e)
+        {
+            Point p = (sender as FrameworkElement).GetValue(PointService.infoPoint) as Point;
+            EventMap em = new EventMap();
+            em.point = p;
+            PointClicked?.Invoke(this, em);
+        }
+
+        #endregion
+
+
         private void DisplayWay(List<Troncon> chemin)
         {
             foreach (var troncon in chemin)
@@ -190,62 +252,22 @@ namespace FastDelivery_IHM
             }
         }
 
-        private async void DisplayDeliveries(Dictionary<int, Livraison> demandeLivraisons)
+        private void DisplayLieu(Lieu l)
         {
-            var source = new BitmapImage();
+            LieuMap lieu = new LieuMap(l);
+            double top = getY(l.adresse.y, minY, rY);
+            double left = getX(l.adresse.x, minX, rX);
+            Canvas.SetTop(lieu, top);
+            Canvas.SetLeft(lieu, left);
 
-            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_livraison.png"));
-            IRandomAccessStream stream = await rass.OpenReadAsync();
+            livraisonUI.Children.Add(lieu);
+            lieu.UpdateLayout();
 
-            IRandomAccessStream stream2 = stream.CloneStream();
-
-
-            var decoder = await BitmapDecoder.CreateAsync(stream);
-            var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
-
-            source.SetSource(stream2);
-
-            var recenterY = -size.Height;
-            var recenterX = -size.Width / 2;
-
-            foreach (var point in demandeLivraisons)
-            {
-                Image intersection = new Image();
-                intersection.Source = source;
-                double top = getY(point.Value.adresse.y, minY, rY) + recenterY;
-                double left = getX(point.Value.adresse.x, minX, rX) + recenterX;
-                Canvas.SetTop(intersection, top);
-                Canvas.SetLeft(intersection, left);
-                livraisonUI.Children.Add(intersection);
-            }
+            Canvas.SetTop(lieu, top - lieu.ActualHeight);
+            Canvas.SetLeft(lieu, left - lieu.ActualWidth / 2);
         }
 
-        private async void DisplayEntrepot(Entrepot entrepot)
-        {
-            Point entrepotPt = entrepot.adresse;
-            var source = new BitmapImage();
-
-            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_entrepot.png"));
-            IRandomAccessStream stream = await rass.OpenReadAsync();
-
-            IRandomAccessStream stream2 = stream.CloneStream();
-
-
-            var decoder = await BitmapDecoder.CreateAsync(stream);
-            var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
-
-            source.SetSource(stream2);
-
-            var recenterY = -size.Height;
-            var recenterX = -size.Width / 2;
-            Image intersection = new Image();
-            intersection.Source = source;
-            double top = getY(entrepotPt.y, minY, rY) + recenterY;
-            double left = getX(entrepotPt.x, minX, rX) + recenterX;
-            Canvas.SetTop(intersection, top);
-            Canvas.SetLeft(intersection, left);
-            livraisonUI.Children.Add(intersection);
-        }
+        #region gestion du mouse over sur les éléments
 
         private void Line_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
@@ -276,7 +298,7 @@ namespace FastDelivery_IHM
             tt.IsOpen = false;
         }
 
-
+        #endregion
 
 
         private static double getX(double X, double minX, double rX)
@@ -287,30 +309,6 @@ namespace FastDelivery_IHM
         private static double getY(double Y, double minY, double rY)
         {
             return (Y - minY) * rY;
-        }
-        public async void DisplayDelivery(Livraison point)
-        {
-            var source = new BitmapImage();
-            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.BaseUri, "/Assets/pointeur_livraison.png"));
-
-            IRandomAccessStream stream = await rass.OpenReadAsync();
-            IRandomAccessStream stream2 = stream.CloneStream();
-
-            source.SetSource(stream2);
-
-            var decoder = await BitmapDecoder.CreateAsync(stream);
-            var size = new BitmapSize { Width = decoder.PixelWidth, Height = decoder.PixelHeight };
-
-            var recenterY = -size.Height;
-            var recenterX = -size.Width / 2;
-
-            Image intersection = new Image();
-            intersection.Source = source;
-            double top = getY(point.adresse.y, minY, rY) + recenterY;
-            double left = getX(point.adresse.x, minX, rX) + recenterX;
-            Canvas.SetTop(intersection, top);
-            Canvas.SetLeft(intersection, left);
-            livraisonUI.Children.Add(intersection);
         }
     }
 }

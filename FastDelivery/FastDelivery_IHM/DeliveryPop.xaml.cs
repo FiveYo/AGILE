@@ -24,20 +24,10 @@ namespace FastDelivery_IHM
         {
             get; set;
         }
-        public string idLiv
-        {
-            get
-            {
-                return id.Text;
-            }
-        }
 
         public string idPointLiv
         {
-            get
-            {
-                return idPoint.Text;
-            }
+            get; set;
         }
 
         public string dureeLiv
@@ -107,6 +97,11 @@ namespace FastDelivery_IHM
             {
                 error.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

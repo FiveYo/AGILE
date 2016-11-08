@@ -17,12 +17,12 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Margin="10 10 30 10">
+        <StackPanel Grid.Column="0" Margin="10 10 30 10" VerticalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="10"/>
                     <Setter Property="Height" Value="Auto"/>
-                    <Setter Property="Width" Value="80"/>
+                    <Setter Property="Width" Value="200"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>
                 <Style TargetType="Button">
@@ -31,15 +31,13 @@
                     <Setter Property="VerticalAlignment" Value="Bottom"/>
                 </Style>
             </StackPanel.Resources>
-            <TextBox x:Name="id" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="100" InputScope="Number" 
-                     Header="ID livraison" TextChanged="idPoint_TextChanged"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="idPoint" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="12" InputScope="Number" 
-                         Header="ID point" TextChanged="id_TextChanged"/>
-                <Button FontFamily="Segoe MDL2 Assets" Content="&#xE718;" ToolTipService.ToolTip="Choisir sur la carte" Height="30"/>
-            </StackPanel>
             <TextBox x:Name="duree" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="800" InputScope="Number" 
                      Header="Durée (s)" TextChanged="duree_TextChanged"/>
+            <StackPanel Orientation="Horizontal" Visibility="Visible">
+                <TextBox x:Name="idLivPrec" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="12" InputScope="Number" 
+                         Header="Livraison précédente" TextChanged="id_TextChanged"/>
+                <Button FontFamily="Segoe MDL2 Assets" Content="&#xE718;" ToolTipService.ToolTip="Choisir sur la carte" Height="30" Click="Button_Click"/>
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10" Padding="20">
             <TimePicker x:Name="start" HorizontalAlignment="Center" VerticalAlignment="Top" Header="Début plage"/>

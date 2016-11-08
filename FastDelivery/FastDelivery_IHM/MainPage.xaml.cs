@@ -28,14 +28,29 @@ namespace FastDelivery_IHM
     public sealed partial class MainPage : Page
     {
 
-        private Delivery selected;
+        private LieuStack selected;
         public MainPage()
         {
             this.InitializeComponent();
             this.navbar.IsPaneOpen = !navbar.IsPaneOpen;
             selected = null;
-            // Enable Previous Button
-            // SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            mapCanvas.PointClicked += MapCanvas_PointClicked;
+        }
+
+        private async void MapCanvas_PointClicked(object sender, EventMap e)
+        {
+            DeliveryPop popup = new DeliveryPop();
+            await popup.ShowAsync();
+            if (popup.continu)
+            {
+                // null doit être remplacer par la livraison séléctionné
+                Tuple<int, LieuStack> toAdd = Controler.AddLivTournee(null, popup, mapCanvas);
+                listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);
+            }
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -87,7 +102,7 @@ namespace FastDelivery_IHM
             {
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 
-                Tuple<List<Delivery>,Delivery> info = Controler.loadDeliveries(streamFile, mapCanvas);
+                Tuple<List<LieuStack>,LieuStack> info = Controler.loadDeliveries(streamFile, mapCanvas);
                 this.navbar.IsPaneOpen = false;
 
                 listDeliveries.Children.Add(info.Item2);
@@ -139,19 +154,19 @@ namespace FastDelivery_IHM
 
         private void Livraison_RemoveLivraison(object sender, RoutedEventArgs e)
         {
-            Delivery d = sender as Delivery;
+            LieuStack d = sender as LieuStack;
             Controler.RmLivTournee(d, mapCanvas);
             listDeliveries.Children.Remove(d);
         }
 
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
         {
-            Delivery d = sender as Delivery;
+            LieuStack d = sender as LieuStack;
             DeliveryPop popup = new DeliveryPop();
             await popup.ShowAsync();
             if(popup.continu)
             {
-                Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
+                Tuple<int, LieuStack> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
                 listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
                 toAdd.Item2.Select += Livraison_Select;
                 toAdd.Item2.AddLivraison += Livraison_AddLivraison;
@@ -165,12 +180,12 @@ namespace FastDelivery_IHM
             
             if((e.OriginalSource as ToggleButton).IsChecked == true)
             {
-                selected = sender as Delivery;
+                selected = sender as LieuStack;
                 foreach (var delivery in listDeliveries.Children)
                 {
                     if(delivery != sender)
                     {
-                        (delivery as Delivery).SetSelect(false);
+                        (delivery as LieuStack).SetSelect(false);
                     }
                 }
             }
@@ -186,7 +201,7 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée";
-                Delivery first = listDeliveries.Children.First() as Delivery;
+                LieuStack first = listDeliveries.Children.First() as LieuStack;
                 listDeliveries.Children.Clear();
                 listDeliveries.Children.Add(first);
                 foreach (var item in Controler.GetWay(mapCanvas))
@@ -212,9 +227,9 @@ namespace FastDelivery_IHM
             // Gérer le cas ou on appuie sur + et il n'y a pas de tournée créé
             foreach (var item in listDeliveries.Children)
             {
-                if (item is Delivery)
+                if (item is LieuStack)
                 {
-                    ((Delivery)item).displayAddButton();
+                    ((LieuStack)item).displayAddButton();
                 }
             }
         }
@@ -232,13 +247,13 @@ namespace FastDelivery_IHM
                 int index = listDeliveries.Children.IndexOf(selected) + offset;
                 if (index >= 0 && index < listDeliveries.Children.Count)
                 {
-                    Delivery d = listDeliveries.Children.ElementAt(index) as Delivery;
+                    LieuStack d = listDeliveries.Children.ElementAt(index) as LieuStack;
                     d.SetSelect(true);
                 }
             }
             else if (listDeliveries.Children.Count > 0)
             {
-                (listDeliveries.Children.First() as Delivery).SetSelect(true);
+                (listDeliveries.Children.First() as LieuStack).SetSelect(true);
             }
         }
 
@@ -246,9 +261,9 @@ namespace FastDelivery_IHM
         {
             foreach (var item in listDeliveries.Children)
             {
-                if (item is Delivery)
+                if (item is LieuStack)
                 {
-                    ((Delivery)item).displayRemoveButton();
+                    ((LieuStack)item).displayRemoveButton();
                 }
             }
         }
