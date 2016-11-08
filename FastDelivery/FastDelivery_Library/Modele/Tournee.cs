@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastDelivery_Library
+namespace FastDelivery_Library.Modele
 {
     /// <summary>
     /// Contient la liste des livraisons ordonnées et des tronçons ainsi que l'entrepot

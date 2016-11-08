@@ -13,10 +13,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using FastDelivery_Library;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using FastDelivery_Library;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -28,14 +28,29 @@ namespace FastDelivery_IHM
     public sealed partial class MainPage : Page
     {
 
-        private Delivery selected;
+        private LieuStack selected;
         public MainPage()
         {
             this.InitializeComponent();
             this.navbar.IsPaneOpen = !navbar.IsPaneOpen;
             selected = null;
-            // Enable Previous Button
-            // SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            mapCanvas.PointClicked += MapCanvas_PointClicked;
+        }
+
+        private async void MapCanvas_PointClicked(object sender, EventMap e)
+        {
+            DeliveryPop popup = new DeliveryPop();
+            await popup.ShowAsync();
+            if (popup.continu)
+            {
+                // null doit être remplacer par la livraison séléctionné
+                Tuple<int, LieuStack> toAdd = Controler.AddLivTournee(null, popup, mapCanvas);
+                listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);
+            }
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -92,7 +107,7 @@ namespace FastDelivery_IHM
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 try
                 {
-                    Tuple<List<Delivery>, Delivery> info = Controler.loadDeliveries(streamFile, mapCanvas);
+                    Tuple<List<LieuStack>, LieuStack> info = Controler.loadDeliveries(streamFile, mapCanvas);
                     this.navbar.IsPaneOpen = false;
 
                     listDeliveries.Children.Add(info.Item2);
@@ -157,19 +172,38 @@ namespace FastDelivery_IHM
 
         private void Livraison_RemoveLivraison(object sender, RoutedEventArgs e)
         {
-            Delivery d = sender as Delivery;
+            LieuStack d = sender as LieuStack;
             Controler.RmLivTournee(d, mapCanvas);
             listDeliveries.Children.Remove(d);
+
+        }
+
+        private async void Livraison_ChangePlage(object sender, RoutedEventArgs e)
+        {
+            LieuStack d = sender as LieuStack;
+            ChangePlagePop popup = new ChangePlagePop();
+            await popup.ShowAsync();
+
+            if (popup.continu)
+            {
+                //Tuple<int, LieuStack> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
+                /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
+                toAdd.Item2.Select += Livraison_Select;
+                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
+                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.SetSelect(true);*/
+            }
+            
         }
 
         private async void Livraison_AddLivraison(object sender, RoutedEventArgs e)
         {
-            Delivery d = sender as Delivery;
+            LieuStack d = sender as LieuStack;
             DeliveryPop popup = new DeliveryPop();
             await popup.ShowAsync();
             if(popup.continu)
             {
-                Tuple<int, Delivery> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
+                Tuple<int, LieuStack> toAdd = Controler.AddLivTournee(d.lieu, popup, mapCanvas);
                 listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
                 toAdd.Item2.Select += Livraison_Select;
                 toAdd.Item2.AddLivraison += Livraison_AddLivraison;
@@ -183,12 +217,12 @@ namespace FastDelivery_IHM
             
             if((e.OriginalSource as ToggleButton).IsChecked == true)
             {
-                selected = sender as Delivery;
-                foreach (var delivery in listDeliveries.Children)
+                selected = sender as LieuStack;
+                foreach (var LieuStack in listDeliveries.Children)
                 {
-                    if(delivery != sender)
+                    if(LieuStack != sender)
                     {
-                        (delivery as Delivery).SetSelect(false);
+                        (LieuStack as LieuStack).SetSelect(false);
                     }
                 }
             }
@@ -204,8 +238,9 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée...";
-                List<Delivery> deliveriesOrder = Controler.GetWay(mapCanvas);
-                Delivery first = listDeliveries.Children.First() as Delivery;
+                List<LieuStack> deliveriesOrder = Controler.GetWay(mapCanvas);
+                LieuStack first = listDeliveries.Children.First() as LieuStack;
+                
                 listDeliveries.Children.Clear();
                 listDeliveries.Children.Add(first);
                 foreach (var item in deliveriesOrder)
@@ -235,9 +270,9 @@ namespace FastDelivery_IHM
             // Gérer le cas ou on appuie sur + et il n'y a pas de tournée créé
             foreach (var item in listDeliveries.Children)
             {
-                if (item is Delivery)
+                if (item is LieuStack)
                 {
-                    ((Delivery)item).displayAddButton();
+                    ((LieuStack)item).displayAddButton();
                 }
             }
         }
@@ -255,13 +290,13 @@ namespace FastDelivery_IHM
                 int index = listDeliveries.Children.IndexOf(selected) + offset;
                 if (index >= 0 && index < listDeliveries.Children.Count)
                 {
-                    Delivery d = listDeliveries.Children.ElementAt(index) as Delivery;
+                    LieuStack d = listDeliveries.Children.ElementAt(index) as LieuStack;
                     d.SetSelect(true);
                 }
             }
             else if (listDeliveries.Children.Count > 0)
             {
-                (listDeliveries.Children.First() as Delivery).SetSelect(true);
+                (listDeliveries.Children.First() as LieuStack).SetSelect(true);
             }
         }
 
@@ -269,9 +304,20 @@ namespace FastDelivery_IHM
         {
             foreach (var item in listDeliveries.Children)
             {
-                if (item is Delivery)
+                if (item is LieuStack)
                 {
-                    ((Delivery)item).displayRemoveButton();
+                    ((LieuStack)item).displayRemoveButton();
+                }
+            }
+        }
+
+        private void chgPlageButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in listDeliveries.Children)
+            {
+                if (item is LieuStack)
+                {
+                    ((LieuStack)item).displayChgPlageButton();
                 }
             }
         }

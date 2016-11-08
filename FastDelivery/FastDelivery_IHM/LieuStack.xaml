@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
-    x:Class="FastDelivery_IHM.Delivery"
+    x:Class="FastDelivery_IHM.LieuStack"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -241,6 +241,10 @@
                 </Border>
                 <Border Background="WhiteSmoke" x:Name="borderRm" Visibility="Collapsed">
                     <Button x:Name="rmBtn" Content="Supprimer cette livraison" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13" Click="rmBtn_Click">
+                    </Button>
+                </Border>
+                <Border Background="WhiteSmoke" x:Name="borderChg" Visibility="Collapsed">
+                    <Button x:Name="chgBtn" Content="Changer plage horaire" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13" Click="chgBtn_Click">
                     </Button>
                 </Border>
             </Grid>

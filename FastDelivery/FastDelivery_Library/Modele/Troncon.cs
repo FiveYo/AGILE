@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastDelivery_Library
+namespace FastDelivery_Library.Modele
 {
     /// <summary>
     /// Contient la longueur, la vitesse, les points d'origine et de destination ainsi que le nom de la rue

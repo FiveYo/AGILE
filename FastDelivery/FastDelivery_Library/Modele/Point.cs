@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastDelivery_Library
+namespace FastDelivery_Library.Modele
 {
     /// <summary>
     /// Contient ses coordonnées et les tronçons empruntable depuis ce point.
@@ -30,6 +30,11 @@ namespace FastDelivery_Library
         public void AddVoisins(Troncon voisin)
         {
             voisins.Add(voisin);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Point {0} : ({1}, {2})", id, x, y);
         }
     }
 }

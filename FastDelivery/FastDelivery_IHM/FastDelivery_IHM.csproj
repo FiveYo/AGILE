@@ -95,12 +95,19 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ChangePlagePop.xaml.cs">
+      <DependentUpon>ChangePlagePop.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controler.cs" />
-    <Compile Include="Delivery.xaml.cs">
-      <DependentUpon>Delivery.xaml</DependentUpon>
+    <Compile Include="LieuStack.xaml.cs">
+      <DependentUpon>LieuStack.xaml</DependentUpon>
     </Compile>
     <Compile Include="DeliveryPop.xaml.cs">
       <DependentUpon>DeliveryPop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Event.cs" />
+    <Compile Include="LieuMap.xaml.cs">
+      <DependentUpon>LieuMap.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -108,7 +115,7 @@
     <Compile Include="Map.xaml.cs">
       <DependentUpon>Map.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MapView.cs" />
+    <Compile Include="PointService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -134,11 +141,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Delivery.xaml">
+    <Page Include="LieuStack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DeliveryPop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LieuMap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -147,6 +158,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Map.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChangePlagePop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
