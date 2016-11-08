@@ -137,8 +137,8 @@ namespace FastDelivery_Library
                     int prochainSommet=it.Current; 
                     vus.Add(prochainSommet);
                     nonVus.Remove(prochainSommet);
-                    
-                    if (prochainSommet!=0)
+
+                    if (prochainSommet != 0)
                     {
                         var currentLivraison = demande.livraisons[prochainSommet];
                         if (currentLivraison.planifier)
@@ -153,6 +153,19 @@ namespace FastDelivery_Library
                                 nonVus.Add(prochainSommet);
                             }
                         }
+                        else
+                        {
+                            heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
+                            branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                            vus.Remove(prochainSommet);
+                            nonVus.Add(prochainSommet);
+                        }
+                    }
+                    else
+                    {
+                        branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                        vus.Remove(prochainSommet);
+                        nonVus.Add(prochainSommet);
                     }
                 }
             }
