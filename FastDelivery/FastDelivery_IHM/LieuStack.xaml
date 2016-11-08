@@ -230,10 +230,10 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="typeBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                      Grid.Column="0" Margin="0,0,0,-2"/>
-            <TextBox x:Name="addressBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
-                                     Grid.Column="1" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
-            <TextBox x:Name="dureeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch"
-                                     Grid.Column="2" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
+            <TextBlock x:Name="addressBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
+                                     Grid.Column="1" TextAlignment="Center" Margin="0,0,0,-2"/>
+            <TextBlock x:Name="dureeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch"
+                                     Grid.Column="2" TextAlignment="Center" Margin="0,0,0,-2"/>
             
             <Grid x:Name="add" Grid.Column="1">
                 <Border Background="WhiteSmoke" x:Name="borderAdd" Visibility="Collapsed">
@@ -249,6 +249,7 @@
                     </Button>
                 </Border>
             </Grid>
+            
         </Grid>
     </ToggleButton>
 </UserControl>

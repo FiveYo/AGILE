@@ -75,12 +75,12 @@
                                 <ColumnDefinition Width="153*"/>
                                 <ColumnDefinition Width="117*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="typeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Type" VerticalAlignment="Stretch"
-                                     Grid.Column="0" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
-                            <TextBox x:Name="addressTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
-                                     Grid.Column="1" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
-                            <TextBox x:Name="dureeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Durée" VerticalAlignment="Stretch"
-                                     Grid.Column="2" BorderThickness="0" TextAlignment="Center" Margin="0,0,0,-2"/>
+                            <TextBlock x:Name="typeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Type" VerticalAlignment="Stretch"
+                                     Grid.Column="0" TextAlignment="Center" Margin="0,0,0,-2"/>
+                            <TextBlock x:Name="addressTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
+                                     Grid.Column="1" TextAlignment="Center" Margin="0,0,0,-2"/>
+                            <TextBlock x:Name="dureeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Durée" VerticalAlignment="Stretch"
+                                     Grid.Column="2" TextAlignment="Center" Margin="0,0,0,-2"/>
                         </Grid>
                         <ScrollViewer Grid.Row="2" Height="Auto" Background="White">
                             <StackPanel x:Name="listDeliveries" KeyDown="listDeliveries_KeyDown">
