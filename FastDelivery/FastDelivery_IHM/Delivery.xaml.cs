@@ -63,11 +63,9 @@ namespace FastDelivery_IHM
 
             lieu = liv;
             displayCheck = false;
-
-            addBtn.Click += AddBtn_Click;
         }
 
-        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        private void addBtn_Click(object sender, RoutedEventArgs e)
         {
             AddLivraison?.Invoke(this, e);
         }
@@ -121,7 +119,7 @@ namespace FastDelivery_IHM
 
         private void chgBtn_Click(object sender, RoutedEventArgs e)
         {
-            ChgPlage?.Invoke(this, e);
+            ChangePlage?.Invoke(this, e);
         }
     }
 }

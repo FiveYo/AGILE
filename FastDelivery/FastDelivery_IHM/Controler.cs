@@ -173,18 +173,55 @@ namespace FastDelivery_IHM
             }
         }
 
-        /*public static Tuple<int, Delivery> ChangePlage(Lieu lieu, DeliveryPop livraison, Map map)
+        public static Tuple<int, Delivery> ChangePlage(Lieu lieu, ChangePlagePop livraison, Map map)
         {
             if (etatActuel == etat.tourneeCalculee)
             {
-                if (d.lieu is Livraison)
-                {
+                Livraison toAdd = null;
+                /*int index;
 
-                    tournee.DelLivraison(carte, d.lieu as Livraison);
-                    map.LoadWay(tournee);
+                if (lieu is Livraison)
+                {
+                    index = tournee.livraisons.IndexOf(lieu as Livraison);
                 }
+                else
+                {
+                    index = -1;
+                }
+
+                Point ptLiv;
+                int idPt = 0;
+                int dureeLiv = 0;
+
+                int idLiv = 0;
+
+                if (int.TryParse(livraison.idPointLiv, out idPt) && int.TryParse(livraison.dureeLiv, out dureeLiv))
+                {
+                    if (carte.points.TryGetValue(idPt, out ptLiv))
+                    {
+                        toAdd = new Livraison(
+                            ptLiv, dureeLiv
+                        );
+
+                        int.TryParse(livraison.idLiv, out idLiv);
+
+                        tournee.AddLivraison(carte, toAdd, index);
+
+                        map.DisplayDelivery(toAdd);
+
+                    }
+
+                }
+
+
+                map.LoadWay(tournee);*/
+                return new Tuple<int, Delivery>(0, new Delivery(toAdd));
             }
-        }*/
+            else
+            {
+                throw new Exception("toto");
+            }
+        }
     }
 
     public enum etat

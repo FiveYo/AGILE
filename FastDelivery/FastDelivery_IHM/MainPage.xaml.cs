@@ -153,7 +153,7 @@ namespace FastDelivery_IHM
 
             if (popup.continu)
             {
-                //Tuple<int, Delivery> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
+                Tuple<int, Delivery> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
                 /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
                 toAdd.Item2.Select += Livraison_Select;
                 toAdd.Item2.AddLivraison += Livraison_AddLivraison;
