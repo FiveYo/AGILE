@@ -101,6 +101,7 @@ namespace FastDelivery_IHM
                     livraison.Select += Livraison_Select;
                     livraison.AddLivraison += Livraison_AddLivraison;
                     livraison.RemoveLivraison += Livraison_RemoveLivraison;
+                    livraison.ChangePlage += Livraison_ChangePlage;
                 }
                 feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 animFeedback.Begin();
@@ -154,11 +155,7 @@ namespace FastDelivery_IHM
             if (popup.continu)
             {
                 Tuple<int, Delivery> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
-                /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-                toAdd.Item2.Select += Livraison_Select;
-                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
-                toAdd.Item2.SetSelect(true);*/
+
             }
             
         }
@@ -175,6 +172,7 @@ namespace FastDelivery_IHM
                 toAdd.Item2.Select += Livraison_Select;
                 toAdd.Item2.AddLivraison += Livraison_AddLivraison;
                 toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
+                toAdd.Item2.ChangePlage += Livraison_ChangePlage;
                 toAdd.Item2.SetSelect(true);
             }
             
@@ -214,6 +212,7 @@ namespace FastDelivery_IHM
                     item.AddLivraison += Livraison_AddLivraison;
                     item.Select += Livraison_Select;
                     item.RemoveLivraison += Livraison_RemoveLivraison;
+                    item.ChangePlage += Livraison_ChangePlage;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();

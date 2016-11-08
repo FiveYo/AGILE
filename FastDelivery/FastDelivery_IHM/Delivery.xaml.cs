@@ -27,7 +27,7 @@ namespace FastDelivery_IHM
 
         public event RoutedEventHandler RemoveLivraison;
 
-        public event RoutedEventHandler ChgPlage;
+        public event RoutedEventHandler ChangePlage;
 
         public string description
         {
