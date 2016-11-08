@@ -27,23 +27,16 @@ namespace FastDelivery_IHM
 
         public static void loadMap(Stream file, Map map)
         {
-            try
-            {
-                carte = Outils.ParserXml_Plan(file);
-                map.LoadMap(carte);
-                etatActuel = etat.carteCharge;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            carte = Outils.ParserXml_Plan(file);
+            map.LoadMap(carte);
+            etatActuel = etat.carteCharge;
         }
 
         public static Tuple<List<Delivery>,Delivery> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
             List<Delivery> livraisons = new List<Delivery>();
-            if(etatActuel >= etat.carteCharge)
-            {   
+            if (etatActuel >= etat.carteCharge)
+            {
                 demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
                 mapCanvas.LoadDeliveries(demandeLivraisons);
 
