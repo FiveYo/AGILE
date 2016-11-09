@@ -146,6 +146,8 @@ namespace FastDelivery_IHM
                     Tuple<List<LieuStack>, List<LieuMap>> info = Controler.loadDeliveries(streamFile, mapCanvas);
                     this.navbar.IsPaneOpen = false;
 
+                    listDeliveries.Children.Clear();
+
                     foreach (var lieu in info.Item1)
                     {
                         listDeliveries.Children.Add(lieu);
