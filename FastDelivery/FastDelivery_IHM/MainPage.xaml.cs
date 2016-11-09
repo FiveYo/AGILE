@@ -272,7 +272,7 @@ namespace FastDelivery_IHM
             {
                 if (item is LieuStack)
                 {
-                    ((LieuStack)item).displayAddButton();
+                    //((LieuStack)item).displayAddButton();
                 }
             }
         }
@@ -306,7 +306,7 @@ namespace FastDelivery_IHM
             {
                 if (item is LieuStack)
                 {
-                    ((LieuStack)item).displayRemoveButton();
+                    //((LieuStack)item).displayRemoveButton();
                 }
             }
         }
@@ -317,7 +317,7 @@ namespace FastDelivery_IHM
             {
                 if (item is LieuStack)
                 {
-                    ((LieuStack)item).displayChgPlageButton();
+                    //((LieuStack)item).displayChgPlageButton();
                 }
             }
         }

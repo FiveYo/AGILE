@@ -63,6 +63,13 @@ namespace FastDelivery_IHM
                 dureeBox.Text = (liv as Livraison).duree.ToString();
                 Image img = (Image)Resources["livraison"];
                 typeBox.Source = img.Source;
+                if ((liv as Livraison).planifier)
+                {
+                    //heureArriveeBox.Text = (liv as Livraison).HeureDePassage.ToString();
+                    plageHoraireBox.Text = String.Format("De {0} à {1}",
+                          (liv as Livraison).debutPlage.ToString(), (liv as Livraison).finPlage.ToString());
+                }
+                
             }
             else
             {
@@ -76,8 +83,6 @@ namespace FastDelivery_IHM
 
 
             displayCheck = false;
-
-            addBtn.Click += AddBtn_Click;
         }
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
@@ -89,13 +94,6 @@ namespace FastDelivery_IHM
         {
             displayCheck = !displayCheck;
             NotifyPropertyChanged("displayCheck");
-        }
-
-        internal void displayAddButton()
-        {
-            borderAdd.Visibility = Visibility.Visible;
-            borderRm.Visibility = Visibility.Collapsed;
-            borderChg.Visibility = Visibility.Collapsed;
         }
 
         public void SetSelect(bool b)
@@ -111,20 +109,6 @@ namespace FastDelivery_IHM
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             Select?.Invoke(this, e);
-        }
-
-        internal void displayRemoveButton()
-        {
-            borderRm.Visibility = Visibility.Visible;
-            borderAdd.Visibility = Visibility.Collapsed;
-            borderChg.Visibility = Visibility.Collapsed;
-        }
-
-        internal void displayChgPlageButton()
-        {
-            borderChg.Visibility = Visibility.Visible;
-            borderAdd.Visibility = Visibility.Collapsed;
-            borderRm.Visibility = Visibility.Collapsed;
         }
 
         private void rmBtn_Click(object sender, RoutedEventArgs e)

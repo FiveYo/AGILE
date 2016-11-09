@@ -8,8 +8,7 @@
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
     x:Class="FastDelivery_IHM.LieuStack"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400" d:DesignHeight="281">
     <UserControl.Resources>
         <Image x:Key="livraison" Source="/Assets/pointeur_livraison.png"/>
         <Image x:Key="entrepot" Source="/Assets/pointeur_entrepot.png"/>
@@ -222,34 +221,31 @@
     </UserControl.Resources>
 
     <ToggleButton x:Name="select" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Style="{StaticResource ToggleButtonStyle1}" Background="Transparent" Checked="ToggleButton_Checked">
-        <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Bottom" Padding="0">
+        <Grid HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Center" Padding="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="64*"/>
-                <ColumnDefinition Width="153*"/>
-                <ColumnDefinition Width="117*"/>
+                <ColumnDefinition Width="0.1*" MaxWidth="50"/>
+                <ColumnDefinition Width="0.9*"/>
             </Grid.ColumnDefinitions>
-            <Image x:Name="typeBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                     Grid.Column="0" Margin="0,0,0,-2"/>
-            <TextBlock x:Name="addressBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
-                                     Grid.Column="1" TextAlignment="Center" Margin="0,0,0,-2"/>
-            <TextBlock x:Name="dureeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch"
-                                     Grid.Column="2" TextAlignment="Center" Margin="0,0,0,-2"/>
-            
-            <Grid x:Name="add" Grid.Column="1">
-                <Border Background="WhiteSmoke" x:Name="borderAdd" Visibility="Collapsed">
-                    <Button x:Name="addBtn" Content="Ajouter une livraison après celle ci" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13">
-                    </Button>
-                </Border>
-                <Border Background="WhiteSmoke" x:Name="borderRm" Visibility="Collapsed">
-                    <Button x:Name="rmBtn" Content="Supprimer cette livraison" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13" Click="rmBtn_Click">
-                    </Button>
-                </Border>
-                <Border Background="WhiteSmoke" x:Name="borderChg" Visibility="Collapsed">
-                    <Button x:Name="chgBtn" Content="Changer plage horaire" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{x:Null}" FontSize="13" Click="chgBtn_Click">
-                    </Button>
-                </Border>
+            <Image x:Name="typeBox" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                     Grid.Column="0"/>
+            <Grid HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Center" Padding="0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.5*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="addressBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                     Grid.Column="0" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                <TextBlock x:Name="plageHoraireBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                     Grid.Column="0" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0"/>
+                <TextBlock x:Name="dureeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                     Grid.Column="1" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                <TextBlock x:Name="heureArriveeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
+                                     Grid.Column="1" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0"/>
             </Grid>
-            
         </Grid>
     </ToggleButton>
 </UserControl>
