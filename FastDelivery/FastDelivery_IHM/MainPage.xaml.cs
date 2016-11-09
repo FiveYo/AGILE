@@ -116,6 +116,7 @@ namespace FastDelivery_IHM
                         lieu.Select += LieuStack_Selected;
                         lieu.AddLivraison += LieuStack_AddLiv;
                         lieu.RemoveLivraison += LieuStack_RmLiv;
+                        lieu.ChgPlage += Livraison_ChangePlage;
                     }
 
                     foreach (var lieu in info.Item2)
@@ -197,16 +198,15 @@ namespace FastDelivery_IHM
             ChangePlagePop popup = new ChangePlagePop();
             await popup.ShowAsync();
 
+            //conintu = validé
             if (popup.continu)
             {
-                //Tuple<int, LieuStack> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
-                /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-                toAdd.Item2.Select += Livraison_Select;
-                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
-                toAdd.Item2.SetSelect(true);*/
+                // Recupère les nouvelles plages
+                String debutPlage = (popup.debutPlage).ToString();
+                String finPlage = (popup.finPlage).ToString();            
+                Controler.ChangePlage(d.lieu,debutPlage,finPlage);
             }
-            
+
         }
 
         private async void LieuStack_AddLiv(object sender, RoutedEventArgs e)
@@ -221,6 +221,7 @@ namespace FastDelivery_IHM
                 toAdd.Item2.Select += LieuStack_Selected;
                 toAdd.Item2.AddLivraison += LieuStack_AddLiv;
                 toAdd.Item2.RemoveLivraison += LieuStack_RmLiv;
+                toAdd.Item2.ChgPlage += Livraison_ChangePlage;
                 toAdd.Item2.SetSelect(true);
             }
             
@@ -264,6 +265,7 @@ namespace FastDelivery_IHM
                     item.AddLivraison += LieuStack_AddLiv;
                     item.Select += LieuStack_Selected;
                     item.RemoveLivraison += LieuStack_RmLiv;
+                    item.ChgPlage += Livraison_ChangePlage;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();

@@ -188,18 +188,25 @@ namespace FastDelivery_IHM
             }
         }
 
-        /*public static Tuple<int, LieuStack> ChangePlage(Lieu lieu, LieuStackPop livraison, Map map)
+        public static void ChangePlage(Lieu d, String debutPlage, String finPlage)
         {
-            if (etatActuel == etat.tourneeCalculee)
+            foreach (var livraison in tournee.livraisons)
             {
-                if (d.lieu is Livraison)
-                {
-
-                    tournee.DelLivraison(carte, d.lieu as Livraison);
-                    map.LoadWay(tournee);
-                }
             }
-        }*/
+
+            Livraison livraisonNewPlage = d as Livraison;
+            livraisonNewPlage.SetPlage(debutPlage, finPlage);
+
+            foreach (var livraison in tournee.livraisons)
+            {
+            }
+
+            tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
+
+            foreach (var livraison in tournee.livraisons)
+            {
+            }
+        }
     }
 
     public enum etat

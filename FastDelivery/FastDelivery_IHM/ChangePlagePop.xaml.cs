@@ -25,6 +25,24 @@ namespace FastDelivery_IHM
             get; set;
         }
 
+        public TimeSpan debutPlage
+        {
+            get
+            {
+                return startPlage.Time;
+            }
+
+        }
+
+        public TimeSpan finPlage
+        {
+            get
+            {
+                return endPlage.Time;
+
+            }
+        }
+
         public ChangePlagePop()
         {
             this.InitializeComponent();
@@ -37,21 +55,33 @@ namespace FastDelivery_IHM
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            continu = true;
+            if(errorPlage.Visibility == Visibility.Visible)
+            {
+
+            }
+            else
+            {
+                continu = true;
+            }
+            
         }
+
+
 
 
         private void TimePicker_TimeChanged(object sender, TimePickerValueChangedEventArgs e)
         {
-            /*TimePicker d = sender as TimePicker;
-            if (d.Time < startPlage.Time)
+            TimePicker d = sender as TimePicker;
+            if (endPlage.Time < startPlage.Time)
             {
                 errorPlage.Visibility = Visibility.Visible;
+                IsSecondaryButtonEnabled = false;
             }
             else
             {
-                error.Visibility = Visibility.Collapsed;
-            }*/
+                errorPlage.Visibility = Visibility.Collapsed;
+                IsSecondaryButtonEnabled = true;
+            }
         }
     }
 

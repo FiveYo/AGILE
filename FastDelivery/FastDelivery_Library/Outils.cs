@@ -248,6 +248,8 @@ namespace FastDelivery_Library
                     if (autrespoints.Value.adresse.id != adresse.id)
                     {
                         linked = d.getPath(autrespoints.Value.adresse);
+                        double coute = calculcout(linked);
+                        int crout = (int)calculcout(linked);
                         matrice[i, j] = (int)calculcout(linked);
                         
                     }
