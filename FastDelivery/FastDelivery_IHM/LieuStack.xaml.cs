@@ -67,12 +67,11 @@ namespace FastDelivery_IHM
                 {
                     if ((liv as Livraison).HeureDePassage != null)
                     {
-                        heureArriveeBox.Text = String.Format("{0}:{1}",
-                            (liv as Livraison).HeureDePassage.Hour.ToString(),
-                            (liv as Livraison).HeureDePassage.Minute.ToString());
+                        heureArriveeBox.Text = String.Format("{0:t}",
+                            (liv as Livraison).HeureDePassage);
                     }
-                    plageHoraireBox.Text = String.Format("{0} à {1}",
-                          (liv as Livraison).debutPlage.ToString(), (liv as Livraison).finPlage.ToString());
+                    plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
+                          (liv as Livraison).debutPlage, (liv as Livraison).finPlage);
                 }
                 
             }
