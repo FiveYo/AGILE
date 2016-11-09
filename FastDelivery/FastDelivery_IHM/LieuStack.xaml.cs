@@ -9,6 +9,8 @@ using FastDelivery_Library;
 using Windows.UI.Xaml;
 using System.ComponentModel;
 using FastDelivery_Library.Modele;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -72,6 +74,10 @@ namespace FastDelivery_IHM
                 {
                     plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
                           (liv as Livraison).debutPlage, (liv as Livraison).finPlage);
+                    if ((liv as Livraison).HeureDePassage > (liv as Livraison).finPlage)
+                    {
+                        heureArriveeBox.Foreground = new SolidColorBrush(Colors.Red);
+                    }
                 }
                 
             }

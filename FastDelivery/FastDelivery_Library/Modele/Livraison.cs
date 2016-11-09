@@ -14,7 +14,8 @@ namespace FastDelivery_Library.Modele
     {
         public int duree;
 
-        public string debutPlage, finPlage;
+        public DateTime debutPlage { get; set; }
+        public DateTime finPlage { get; set; }
         public bool planifier { get; set; }
         public Point adresse { get; set; }
 
@@ -26,7 +27,7 @@ namespace FastDelivery_Library.Modele
             this.duree = duree;
         }
         
-        public void SetPlage(string debut, string fin)
+        public void SetPlage(DateTime debut, DateTime fin)
         {
             debutPlage = debut;
             finPlage = fin;
