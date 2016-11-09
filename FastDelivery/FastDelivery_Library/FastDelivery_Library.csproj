@@ -38,6 +38,7 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Modele\Carte.cs" />
     <Compile Include="Modele\Lieu.cs" />
+    <Compile Include="UndoRedo\Actions.cs" />
     <Compile Include="UndoRedo\ModifyTournee.cs" />
     <Compile Include="Modele\Tournee.cs" />
     <Compile Include="TSP\InteratorSeq.cs" />

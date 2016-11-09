@@ -36,7 +36,7 @@ namespace FastDelivery_Library.PatternUndoRedo
                 else if (UndoStruct.action==ActionType.modifier)
                 {
                     //TODO
-                    // add RedoPushUndoModify
+                    // add RedoPushUnDoModify
                 }
 
             }
@@ -66,11 +66,9 @@ namespace FastDelivery_Library.PatternUndoRedo
                 else if (RedoStruct.action == ActionType.modifier)
                 {
                     //TODO
-                    // add RedoPushUndoModify
+                    // add RedoPushUnDoModify
                 }
-
             }
-
         }
 
         public ModifyTournee MakeChangeObjectForAdd(Modele.Carte carte, Livraison livraison, int index)
@@ -91,10 +89,9 @@ namespace FastDelivery_Library.PatternUndoRedo
         }
         public ModifyTournee MakeChangeObjectForModify(Modele.Carte carte, Livraison livraison, int index)
         {
-            //TODO
             ModifyTournee UndoStruct = new ModifyTournee();
+            //TODO
             return UndoStruct;
-            
         }
         public void RedoPushInUnDoForAdd(Modele.Carte carte, Livraison livraison, int index)
         {
