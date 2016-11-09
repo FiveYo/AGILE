@@ -19,6 +19,7 @@ namespace FastDelivery_IHM.UndoRedo
         }
         public object Do()
         {
+            return null;
         }
 
         public object Undo()

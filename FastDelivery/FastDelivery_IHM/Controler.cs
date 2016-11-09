@@ -25,8 +25,8 @@ namespace FastDelivery_IHM
 
         public static etat etatActuel { get; set; }
         private static Tournee tournee;
-        private static Stack<Actions> undoStack;
-        private static Stack<Actions> redoStack;
+        private static Stack<Actions> undoStack = new Stack<Actions>();
+        private static Stack<Actions> redoStack = new Stack<Actions>();
 
         public static void loadMap(Stream file, Map map)
         {

@@ -26,7 +26,7 @@ namespace FastDelivery_IHM.UndoRedo
             this.carte = carte;
             this.demandeLivraisons = demandeLivraisons;
         }
-        object Actions.Do()
+        public object Do()
         {
             LieuMap lieuMap;
             Livraison toAdd = null;
