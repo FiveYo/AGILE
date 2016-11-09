@@ -8,7 +8,7 @@ namespace FastDelivery_Library.UndoRedo
 {
     interface Actions
     {
-        object Do();
+        object Do(Lieu lieu, DeliveryPop livraison, Map map);
         object Undo();
     }
 }
