@@ -31,11 +31,6 @@ namespace FastDelivery_IHM
             {
                 return _isChecked;
             }
-            set
-            {
-                SetSelect(value);
-                _isChecked = value;
-            }
         }
 
         public Lieu lieu { get; set; }
@@ -66,7 +61,6 @@ namespace FastDelivery_IHM
 
         private void Image_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            isChecked = !isChecked;
             EventMap em = new EventMap();
             em.lieu = lieu;
             Checked?.Invoke(this, e);
@@ -76,30 +70,38 @@ namespace FastDelivery_IHM
         {
             if (b)
             {
-                if(lieu is Livraison)
+                if (b != _isChecked)
                 {
-                    Image img = (Image)Resources["livraisonShadow"];
-                    image.Source = img.Source;
-                }
-                else
-                {
-                    Image img = (Image)Resources["entrepotShadow"];
-                    image.Source = img.Source;
+                    if (lieu is Livraison)
+                    {
+                        Image img = (Image)Resources["livraisonShadow"];
+                        image.Source = img.Source;
+                    }
+                    else
+                    {
+                        Image img = (Image)Resources["entrepotShadow"];
+                        image.Source = img.Source;
+                    }
                 }
             }
             else
             {
-                if(lieu is Livraison)
+                if (b != _isChecked)
                 {
-                    Image img = (Image)Resources["livraison"];
-                    image.Source = img.Source;
-                }
-                else
-                {
-                    Image img = (Image)Resources["entrepot"];
-                    image.Source = img.Source;
+                    if (lieu is Livraison)
+                    {
+                        Image img = (Image)Resources["livraison"];
+                        image.Source = img.Source;
+                    }
+                    else
+                    {
+                        Image img = (Image)Resources["entrepot"];
+                        image.Source = img.Source;
+                    }
                 }
             }
+
+            _isChecked = b;
         }
     }
 }

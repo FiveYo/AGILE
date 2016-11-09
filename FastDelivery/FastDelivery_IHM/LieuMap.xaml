@@ -11,11 +11,11 @@
 
     <UserControl.Resources>
         <Image x:Key="livraison" Source="/Assets/pointeur_livraison.png"/>
-        <Image x:Key="livraisonShadow"/>
+        <Image x:Key="livraisonShadow" Source="/Assets/pointeur_livraison_shadow.png"/>
         <Image x:Key="entrepot" Source="/Assets/pointeur_entrepot.png"/>
-        <Image x:Key="entrepotShadow" />
+        <Image x:Key="entrepotShadow" Source="/Assets/pointeur_entrepot_shadow.png"/>
     </UserControl.Resources>
 
-    <Image x:Name="image" Width="33" Height="59">
+    <Image x:Name="image" Width="50" Height="68">
     </Image>
 </UserControl>

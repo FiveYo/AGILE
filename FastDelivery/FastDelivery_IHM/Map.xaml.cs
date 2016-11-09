@@ -70,21 +70,25 @@ namespace FastDelivery_IHM
             DisplayMap(plan);
         }
 
-        public void LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
+        public List<LieuMap> LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
         {
             livraisonUI.Children.Clear();
             cheminUI.Children.Clear();
 
-            DisplayLieu(demandeLivraisons.entrepot);
+            List<LieuMap> list = new List<LieuMap>();
+
+            list.Add(DisplayLieu(demandeLivraisons.entrepot));
             foreach (var livraison in demandeLivraisons.livraisons.Values)
             {
-                DisplayLieu(livraison);
+                list.Add(DisplayLieu(livraison));
             }
+
+            return list;
         }
 
-        public void AddDelivery(Livraison l)
+        public LieuMap AddDelivery(Livraison l)
         {
-            DisplayLieu(l);
+            return DisplayLieu(l);
         }
 
         public async void LoadWay(Tournee t)
@@ -209,22 +213,23 @@ namespace FastDelivery_IHM
 
         private void CircleToAim_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            Flyout f = new Flyout();
-            Button b = new Button();
-            b.Content = "Créer une livraison ici";
-            f.Content = b;
-            b.Click += Ellipse_Click;
+            if (Controler.etatActuel < etat.livraisonCharge)
+                return;
 
-            b.SetValue(PointService.infoPoint, (sender as FrameworkElement).GetValue(PointService.infoPoint));
+            MenuFlyout f = new MenuFlyout();
+            MenuFlyoutItem mf = new MenuFlyoutItem();
+            mf.Text = "Créer une livraison ici";
+            mf.Click += CreerLiv_Click;
 
-            Debug.WriteLine((sender as FrameworkElement).GetValue(PointService.infoPoint).ToString());
-            Debug.WriteLine(b.GetValue(PointService.infoPoint).ToString());
+            f.Items.Add(mf);
 
+            mf.SetValue(PointService.infoPoint, (sender as FrameworkElement).GetValue(PointService.infoPoint));
 
             f.ShowAt((FrameworkElement)sender);
+
         }
 
-        private void Ellipse_Click(object sender, RoutedEventArgs e)
+        private void CreerLiv_Click(object sender, RoutedEventArgs e)
         {
             Point p = (sender as FrameworkElement).GetValue(PointService.infoPoint) as Point;
             EventMap em = new EventMap();
@@ -257,7 +262,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void DisplayLieu(Lieu l)
+        private LieuMap DisplayLieu(Lieu l)
         {
             LieuMap lieu = new LieuMap(l);
             double top = getY(l.adresse.y, minY, rY);
@@ -270,6 +275,23 @@ namespace FastDelivery_IHM
 
             Canvas.SetTop(lieu, top - lieu.ActualHeight);
             Canvas.SetLeft(lieu, left - lieu.ActualWidth / 2);
+
+            return lieu;
+        }
+
+        internal void SetSelect(Lieu lieu)
+        {
+            foreach (var l in livraisonUI.Children)
+            {
+                if((l as LieuMap).lieu == lieu)
+                {
+                    (l as LieuMap).SetSelect(true);
+                }
+                else
+                {
+                    (l as LieuMap).SetSelect(false);
+                }
+            }
         }
 
         #region gestion du mouse over sur les éléments

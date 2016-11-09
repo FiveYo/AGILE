@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     Title="Créer une livraison"
     PrimaryButtonText="Annuler"
-    SecondaryButtonText="Créer"
+    SecondaryButtonText="Séléctionner la livraison"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
@@ -22,7 +22,7 @@
                 <Style TargetType="TextBox">
                     <Setter Property="Margin" Value="10"/>
                     <Setter Property="Height" Value="Auto"/>
-                    <Setter Property="Width" Value="200"/>
+                    <Setter Property="Width" Value="100"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>
                 <Style TargetType="Button">
@@ -31,18 +31,17 @@
                     <Setter Property="VerticalAlignment" Value="Bottom"/>
                 </Style>
             </StackPanel.Resources>
-            <TextBox x:Name="duree" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="800" InputScope="Number" 
+            <TextBox x:Name="infoPoint" IsReadOnly="True" Header="Coordonnée"/>
+            <TextBox x:Name="dureeLiv" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="800" InputScope="Number" 
                      Header="Durée (s)" TextChanged="duree_TextChanged"/>
-            <StackPanel Orientation="Horizontal" Visibility="Visible">
-                <TextBox x:Name="idLivPrec" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" PlaceholderText="12" InputScope="Number" 
-                         Header="Livraison précédente" TextChanged="id_TextChanged"/>
-                <Button FontFamily="Segoe MDL2 Assets" Content="&#xE718;" ToolTipService.ToolTip="Choisir sur la carte" Height="30" Click="Button_Click"/>
-            </StackPanel>
+            <TextBlock x:Name="errorDuree" Text="Entrer une valeur ici" Foreground="Red" Visibility="Collapsed"/>
         </StackPanel>
         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10" Padding="20">
+            <CheckBox x:Name="planifierUI" Content="Planifier" IsChecked="True" Click="planifierUI_Click"/>
             <TimePicker x:Name="start" HorizontalAlignment="Center" VerticalAlignment="Top" Header="Début plage"/>
-            <TimePicker HorizontalAlignment="Center" VerticalAlignment="Top" Header="Fin plage" TimeChanged="TimePicker_TimeChanged"/>
-            <TextBlock x:Name="error" Text="Veuillez entrer une heure supérieure à celle de départ" Padding="10" Foreground="Red" TextWrapping="Wrap" Width="250" Visibility="Collapsed"/>
+            <TimePicker x:Name="end" HorizontalAlignment="Center" VerticalAlignment="Top" Header="Fin plage" TimeChanged="TimePicker_TimeChanged"/>
+            <TextBlock x:Name="error" Text="Veuillez entrer une heure supérieure à celle de départ" Padding="10" Foreground="Red" 
+                       TextWrapping="Wrap" Width="250" Visibility="Collapsed"/>
         </StackPanel>
     </Grid>
 </ContentDialog>
