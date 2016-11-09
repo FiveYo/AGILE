@@ -93,17 +93,20 @@ namespace FastDelivery_IHM
                     lieu.Modifier += LieuMap_Modifier;
                     lieu.Supprimer += LieuMap_Supprimer;
                 }
-            }
-            
 
-            listDeliveries.Children.Remove(
-                listDeliveries.Children.Where((node) =>
-                {
-                    if ((node as LieuStack).lieu == d.lieu)
-                        return true;
-                    return false;
-                }
-            ).First());
+                listDeliveries.Children.Remove(
+                    listDeliveries.Children.Where((node) =>
+                    {
+                        if ((node as LieuStack).lieu == d.lieu)
+                            return true;
+                        return false;
+                    }
+                ).First());
+            }
+            else
+            {
+                feedBack.Text = "Vous ne pouvez pas avoir de tournée sans livraison";
+            }
         }
 
         private async void LieuMap_Modifier(object sender, RoutedEventArgs e)
@@ -151,6 +154,7 @@ namespace FastDelivery_IHM
                 Stream streamFile = await file.OpenStreamForReadAsync();
                 try
                 {
+                    listDeliveries.Children.Clear();
                     Controler.loadMap(streamFile, mapCanvas);
                     feedBack.Text = "Votre plan a été chargé avec succès. Vous pouvez dès maintenant charger une demande de livraison, ou un nouveau plan.";
                 }

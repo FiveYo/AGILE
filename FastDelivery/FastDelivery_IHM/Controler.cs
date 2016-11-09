@@ -75,7 +75,7 @@ namespace FastDelivery_IHM
             Livraison liv = new Livraison(popup.adresse, popup.duree);
             if(popup.planifier)
             {
-
+                liv.SetPlage(popup.startDate, popup.endDate);
             }
             demandeLivraisons.livraisons.Add(id, liv);
 
@@ -178,39 +178,42 @@ namespace FastDelivery_IHM
         internal static List<LieuMap> RemoveLivraison(Lieu lieu, Map map)
         {
             List<LieuMap> l = null;
-            if (etatActuel == etat.tourneeCalculee)
+            if (demandeLivraisons.livraisons.Count > 1)
             {
-                if (lieu is Livraison)
+                if (etatActuel == etat.tourneeCalculee)
                 {
-                    demandeLivraisons.livraisons.Remove(
-                        demandeLivraisons.livraisons.Where((node) =>
-                        {
-                            if (node.Value == lieu as Livraison)
-                                return true;
-                            else
-                                return false;
-                        }).First().Key
-                    );
-                    tournee.DelLivraison(carte, lieu as Livraison);
-                    l = map.LoadDeliveries(demandeLivraisons);
-                    map.LoadWay(tournee);
+                    if (lieu is Livraison)
+                    {
+                        demandeLivraisons.livraisons.Remove(
+                            demandeLivraisons.livraisons.Where((node) =>
+                            {
+                                if (node.Value == lieu as Livraison)
+                                    return true;
+                                else
+                                    return false;
+                            }).First().Key
+                        );
+                        tournee.DelLivraison(carte, lieu as Livraison);
+                        l = map.LoadDeliveries(demandeLivraisons);
+                        map.LoadWay(tournee);
+                    }
                 }
-            }
-            else
-            {
-                //etatActuel == etat.livraisonCharge
-                if (lieu is Livraison)
+                else
                 {
-                    demandeLivraisons.livraisons.Remove(
-                        demandeLivraisons.livraisons.Where((node) =>
-                        {
-                            if (node.Value == lieu as Livraison)
-                                return true;
-                            else
-                                return false;
-                        }).First().Key
-                    );
-                    l = map.LoadDeliveries(demandeLivraisons);
+                    //etatActuel == etat.livraisonCharge
+                    if (lieu is Livraison)
+                    {
+                        demandeLivraisons.livraisons.Remove(
+                            demandeLivraisons.livraisons.Where((node) =>
+                            {
+                                if (node.Value == lieu as Livraison)
+                                    return true;
+                                else
+                                    return false;
+                            }).First().Key
+                        );
+                        l = map.LoadDeliveries(demandeLivraisons);
+                    }
                 }
             }
             return l;

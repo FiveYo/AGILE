@@ -38,13 +38,8 @@ namespace FastDelivery_Library.Modele
             Dictionary<Livraison, DateTime> HashLivraison = new Dictionary<Livraison, DateTime>();
             Chemin chemin;
             // On initialise le temps du départ avec l'heure départ de l'entrepot
-            DateTime Livtime;
-
-
-            if (DateTime.TryParse(entrepot.heureDepart, out Livtime) == false)
-            {
-                throw new Exception("Parsing Error");
-            }
+            DateTime Livtime = entrepot.heureDepart;
+            
             foreach (var livraison in livraisons)
             {
                 if (Hashchemin.TryGetValue(livraison, out chemin))

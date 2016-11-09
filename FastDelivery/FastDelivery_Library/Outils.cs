@@ -179,12 +179,20 @@ namespace FastDelivery_Library
             } 
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
             {
-                Entrepot entrepot_temp = new Entrepot(
-                1,
-                AdressePointEntrepot,
-                EntrepotXML.Attribute("heureDepart").Value
-                );
-                entrepot = entrepot_temp;
+                var nodeHeure = EntrepotXML.Attribute("heureDepart");
+                DateTime heure;
+                if(nodeHeure != null && DateTime.TryParse(nodeHeure.Value, out heure))
+                {
+                    entrepot = new Entrepot(
+                    1,
+                    AdressePointEntrepot,
+                    heure
+                    );
+                }
+                else
+                {
+                    throw new Exception_XML("Heure de l'entrepôt mal formaté");
+                }
             }
             
 
@@ -227,6 +235,10 @@ namespace FastDelivery_Library
                     LivHash.Add(ID, liv);
 
                     ID++;
+                }
+                else
+                {
+                    throw new Exception_XML("Le point avec l'id " + id.ToString() + " n'existe pas");
                 }
             }
             demandeLivaisons = new DemandeDeLivraisons(LivHash, entrepot);

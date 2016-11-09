@@ -55,6 +55,22 @@ namespace FastDelivery_IHM
             }
         }
 
+        internal DateTime startDate
+        {
+            get
+            {
+                return new DateTime(start.Time.Ticks);
+            }
+        }
+
+        internal DateTime endDate
+        {
+            get
+            {
+                return new DateTime(end.Time.Ticks);
+            }
+        }
+
         /// <summary>
         /// Informe si l'utilisateur a annulé l'ajout de la livraison ou non
         /// </summary>
