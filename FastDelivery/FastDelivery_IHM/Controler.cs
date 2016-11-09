@@ -78,7 +78,7 @@ namespace FastDelivery_IHM
             Livraison liv = new Livraison(popup.adresse, popup.duree);
             if(popup.planifier)
             {
-
+                liv.SetPlage(popup.startDate, popup.endDate);
             }
             demandeLivraisons.livraisons.Add(id, liv);
 
@@ -157,32 +157,59 @@ namespace FastDelivery_IHM
             }
         }
 
-        internal static void RmLivTournee(LieuStack d, Map map)
+        internal static List<LieuMap> RemoveLivraison(Lieu lieu, Map map)
         {
-            if (etatActuel == etat.tourneeCalculee)
+            List<LieuMap> l = null;
+            if (demandeLivraisons.livraisons.Count > 1)
             {
-                if (d.lieu is Livraison)
+                if (etatActuel == etat.tourneeCalculee)
                 {
-
-                    tournee.DelLivraison(carte, d.lieu as Livraison);
-                    map.LoadWay(tournee);
-                    //map.ReloadLieuStack(tournee);
+                    if (lieu is Livraison)
+                    {
+                        demandeLivraisons.livraisons.Remove(
+                            demandeLivraisons.livraisons.Where((node) =>
+                            {
+                                if (node.Value == lieu as Livraison)
+                                    return true;
+                                else
+                                    return false;
+                            }).First().Key
+                        );
+                        tournee.DelLivraison(carte, lieu as Livraison);
+                        l = map.LoadDeliveries(demandeLivraisons);
+                        map.LoadWay(tournee);
+                    }
+                }
+                else
+                {
+                    //etatActuel == etat.livraisonCharge
+                    if (lieu is Livraison)
+                    {
+                        demandeLivraisons.livraisons.Remove(
+                            demandeLivraisons.livraisons.Where((node) =>
+                            {
+                                if (node.Value == lieu as Livraison)
+                                    return true;
+                                else
+                                    return false;
+                            }).First().Key
+                        );
+                        l = map.LoadDeliveries(demandeLivraisons);
+                    }
                 }
             }
+            return l;
         }
 
-        /*public static Tuple<int, LieuStack> ChangePlage(Lieu lieu, LieuStackPop livraison, Map map)
+        public static void ChangePlage(Lieu d, DateTime debutPlage, DateTime finPlage)
         {
-            if (etatActuel == etat.tourneeCalculee)
+            if(etatActuel == etat.tourneeCalculee)
             {
-                if (d.lieu is Livraison)
-                {
-
-                    tournee.DelLivraison(carte, d.lieu as Livraison);
-                    map.LoadWay(tournee);
-                }
+                Livraison livraisonNewPlage = d as Livraison;
+                livraisonNewPlage.SetPlage(debutPlage, finPlage);
+                tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
             }
-        }*/
+        }
     }
 
     public enum etat

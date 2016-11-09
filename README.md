@@ -52,3 +52,8 @@ TODO :
 
     Zoom + map resizable
 
+    Supprimer
+    deplacer
+    undo Redo
+    
+

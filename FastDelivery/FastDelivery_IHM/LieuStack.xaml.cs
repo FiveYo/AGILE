@@ -79,12 +79,13 @@ namespace FastDelivery_IHM
                         heureArriveeBox.Foreground = new SolidColorBrush(Colors.Red);
                     }
                 }
-                
             }
             else
             {
                 Image img = (Image)Resources["entrepot"];
                 typeBox.Source = img.Source;
+
+                heureArriveeBox.Text = String.Format("{0:t}", (liv as Entrepot).heureDepart);
             }
             
             lieu = liv;

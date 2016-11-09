@@ -14,9 +14,9 @@ namespace FastDelivery_Library.Modele
     {
         public int id;
         public Point adresse { get; set; }
-        public string heureDepart;
+        public DateTime heureDepart;
 
-        public Entrepot(int id, Point adresse, string heureDepart)
+        public Entrepot(int id, Point adresse, DateTime heureDepart)
         {
             this.id = id;
             this.adresse = adresse;

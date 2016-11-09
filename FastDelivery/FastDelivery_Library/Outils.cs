@@ -42,10 +42,10 @@ namespace FastDelivery_Library
             int xmax, xmin, ymax, ymin, Id, x, y, id_dest, id_origin,longueur,vitesse;
             string nomRue;
             //variable calcul xmax ymax xmin ymin
-            xmin = 0;
-            ymin = 0;
-            xmax = 0;
-            ymax = 0;
+            xmin = int.MaxValue;
+            ymin = int.MaxValue;
+            xmax = int.MinValue;
+            ymax = int.MinValue;
             //On génère les Points depuis le fichier XML en paramètre
             foreach (var node in nodes)
             {
@@ -60,8 +60,7 @@ namespace FastDelivery_Library
                     throw new Exception_XML("Fichier mal formaté", ex);
                 }
                 Point pt = new Point(Id, x, y);
-                ymax = y;
-                xmax = x;
+
                 if (xmax < x)
                 {
                     xmax = x;
@@ -180,12 +179,20 @@ namespace FastDelivery_Library
             } 
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
             {
-                Entrepot entrepot_temp = new Entrepot(
-                1,
-                AdressePointEntrepot,
-                EntrepotXML.Attribute("heureDepart").Value
-                );
-                entrepot = entrepot_temp;
+                var nodeHeure = EntrepotXML.Attribute("heureDepart");
+                DateTime heure;
+                if(nodeHeure != null && DateTime.TryParse(nodeHeure.Value, out heure))
+                {
+                    entrepot = new Entrepot(
+                    1,
+                    AdressePointEntrepot,
+                    heure
+                    );
+                }
+                else
+                {
+                    throw new Exception_XML("Heure de l'entrepôt mal formaté");
+                }
             }
             
 
@@ -228,6 +235,10 @@ namespace FastDelivery_Library
                     LivHash.Add(ID, liv);
 
                     ID++;
+                }
+                else
+                {
+                    throw new Exception_XML("Le point avec l'id " + id.ToString() + " n'existe pas");
                 }
             }
             demandeLivaisons = new DemandeDeLivraisons(LivHash, entrepot);

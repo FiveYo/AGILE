@@ -8,11 +8,11 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    <Grid Background="WhiteSmoke">
-        <Grid x:Name="map" Margin="50">
-            <Canvas x:Name="carteUI" Canvas.ZIndex="0"/>
-            <Canvas x:Name="cheminUI" Canvas.ZIndex="1"/>
-            <Canvas x:Name="livraisonUI" Canvas.ZIndex="2"/>
+    <Grid Background="WhiteSmoke" Padding="70 70 70 30">
+        <Grid x:Name="map" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Canvas x:Name="carteUI" Canvas.ZIndex="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Canvas x:Name="cheminUI" Canvas.ZIndex="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Canvas x:Name="livraisonUI" Canvas.ZIndex="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
     </Grid>
 </UserControl>
