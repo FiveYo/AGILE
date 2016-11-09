@@ -22,7 +22,7 @@ namespace FastDelivery_IHM
         private static Carte carte { get; set; }
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
-        private static etat etatActuel { get; set; }
+        public static etat etatActuel { get; set; }
         private static Tournee tournee;
 
         public static void loadMap(Stream file, Map map)
@@ -69,8 +69,25 @@ namespace FastDelivery_IHM
             return new Tuple<List<LieuStack>, List<LieuMap>>(lieuStack, lieuMap);
         }
 
-        public static Tuple<int, LieuStack> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
+        internal static Tuple<LieuStack, LieuMap> AddLivDemande(DeliveryPop popup, Map map)
         {
+            int id = demandeLivraisons.livraisons.Keys.Max() + 1;
+            Livraison liv = new Livraison(popup.adresse, popup.duree);
+            if(popup.planifier)
+            {
+
+            }
+            demandeLivraisons.livraisons.Add(id, liv);
+
+            LieuMap lieuMap = map.AddDelivery(liv);
+            LieuStack lieuStack = new LieuStack(liv);
+
+            return new Tuple<LieuStack, LieuMap>(lieuStack, lieuMap);
+        }
+
+        public static Tuple<int, LieuStack, LieuMap> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
+        {
+            LieuMap lieuMap;
             if (etatActuel == etat.tourneeCalculee)
             {
                 Livraison toAdd = null;
@@ -85,33 +102,17 @@ namespace FastDelivery_IHM
                     index = -1;
                 }
 
-                Point ptLiv;
-                int idPt = 0;
-                int dureeLiv = 0;
+                toAdd = new Livraison(
+                    livraison.adresse, livraison.duree
+                );
 
-                int idLiv = 0;
-
-                if (int.TryParse(livraison.idPointLiv, out idPt) && int.TryParse(livraison.dureeLiv, out dureeLiv))
-                {
-                    if (carte.points.TryGetValue(idPt, out ptLiv))
-                    {
-                        toAdd = new Livraison(
-                            ptLiv, dureeLiv
-                        );
-
-                        int.TryParse(livraison.idPointLiv, out idLiv);
-
-                        tournee.AddLivraison(carte, toAdd, index);
-
-                        map.AddDelivery(toAdd);
-
-                    }
-
-                }
-
-
+                tournee.AddLivraison(carte, toAdd, index);
+                int id = demandeLivraisons.livraisons.Keys.Max() + 1;
+                demandeLivraisons.livraisons.Add(id, toAdd);
+                lieuMap = map.AddDelivery(toAdd);
                 map.LoadWay(tournee);
-                return new Tuple<int, LieuStack>(index, new LieuStack(toAdd));
+
+                return new Tuple<int, LieuStack, LieuMap>(index, new LieuStack(toAdd), lieuMap);
             }
             else
             {

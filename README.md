@@ -37,3 +37,18 @@ L'application ne doit pas crasher par tous les moyens
 - Zoom sur la carte + déplacement
 - Optimisation performance
     - Déplacer Livraison, 
+
+
+TODO :
+    Bullshit
+    JAVA DOC BERK!
+    TSP
+    Gestion des erreurs quand modification de la tournée
+    
+
+    Bug : Ajout d'une livraison + calcul de la tournée, la livraison est pas ajouté (modifié demande de livraison quand on ajoute une livraison)
+
+    Test unitaire + coverage
+
+    Zoom + map resizable
+

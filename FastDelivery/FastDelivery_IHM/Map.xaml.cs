@@ -86,9 +86,9 @@ namespace FastDelivery_IHM
             return list;
         }
 
-        public void AddDelivery(Livraison l)
+        public LieuMap AddDelivery(Livraison l)
         {
-            DisplayLieu(l);
+            return DisplayLieu(l);
         }
 
         public async void LoadWay(Tournee t)
@@ -213,22 +213,23 @@ namespace FastDelivery_IHM
 
         private void CircleToAim_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            Flyout f = new Flyout();
-            Button b = new Button();
-            b.Content = "Créer une livraison ici";
-            f.Content = b;
-            b.Click += Ellipse_Click;
+            if (Controler.etatActuel < etat.livraisonCharge)
+                return;
 
-            b.SetValue(PointService.infoPoint, (sender as FrameworkElement).GetValue(PointService.infoPoint));
+            MenuFlyout f = new MenuFlyout();
+            MenuFlyoutItem mf = new MenuFlyoutItem();
+            mf.Text = "Créer une livraison ici";
+            mf.Click += CreerLiv_Click;
 
-            Debug.WriteLine((sender as FrameworkElement).GetValue(PointService.infoPoint).ToString());
-            Debug.WriteLine(b.GetValue(PointService.infoPoint).ToString());
+            f.Items.Add(mf);
 
+            mf.SetValue(PointService.infoPoint, (sender as FrameworkElement).GetValue(PointService.infoPoint));
 
             f.ShowAt((FrameworkElement)sender);
+
         }
 
-        private void Ellipse_Click(object sender, RoutedEventArgs e)
+        private void CreerLiv_Click(object sender, RoutedEventArgs e)
         {
             Point p = (sender as FrameworkElement).GetValue(PointService.infoPoint) as Point;
             EventMap em = new EventMap();
