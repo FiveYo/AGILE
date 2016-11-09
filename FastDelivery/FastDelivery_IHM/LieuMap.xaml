@@ -14,8 +14,22 @@
         <Image x:Key="livraisonShadow" Source="/Assets/pointeur_livraison_shadow.png"/>
         <Image x:Key="entrepot" Source="/Assets/pointeur_entrepot.png"/>
         <Image x:Key="entrepotShadow" Source="/Assets/pointeur_entrepot_shadow.png"/>
+        <Storyboard x:Name="animationPointeur">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="image">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.05" Value="-15"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="-15"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="-15"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-15"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+
+        </Storyboard>
     </UserControl.Resources>
 
-    <Image x:Name="image" Width="50" Height="68">
+    <Image x:Name="image" Width="50" Height="68" RenderTransformOrigin="0.5,0.5">
+        <Image.RenderTransform>
+            <CompositeTransform/>
+        </Image.RenderTransform>
     </Image>
 </UserControl>
