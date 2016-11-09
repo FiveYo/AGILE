@@ -63,13 +63,13 @@ namespace FastDelivery_IHM
                 dureeBox.Text = (liv as Livraison).duree.ToString();
                 Image img = (Image)Resources["livraison"];
                 typeBox.Source = img.Source;
+                if ((liv as Livraison).HeureDePassage != null)
+                {
+                    heureArriveeBox.Text = String.Format("{0:t}",
+                        (liv as Livraison).HeureDePassage);
+                }
                 if ((liv as Livraison).planifier)
                 {
-                    if ((liv as Livraison).HeureDePassage != null)
-                    {
-                        heureArriveeBox.Text = String.Format("{0:t}",
-                            (liv as Livraison).HeureDePassage);
-                    }
                     plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
                           (liv as Livraison).debutPlage, (liv as Livraison).finPlage);
                 }
