@@ -87,7 +87,7 @@ namespace FastDelivery_Library
 	     */
         void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite)
         {
-            int idLivraison = sommetCrt -1;
+            int idLivraison = sommetCrt;
             if (sommetCrt == 0)
             {
                 var currentLivraison = demande.entrepot;
@@ -163,7 +163,8 @@ namespace FastDelivery_Library
                             }
                             else
                             {
-                                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+
+                                vus.Remove(prochainSommet);
                                 nonVus.Add(prochainSommet);
 
                             }

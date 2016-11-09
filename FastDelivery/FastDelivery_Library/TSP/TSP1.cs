@@ -37,8 +37,6 @@ namespace FastDelivery_Library
         //    List<int> listeCout = new List<int>();
         //    TimeSpan t = new TimeSpan(0, 0, cout[0, sommetCourant]);
         //    int i = 0;
-
-
         //    foreach (int s in nonVus)
         //    {
         //        if (i != sommetCourant)
