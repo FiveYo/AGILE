@@ -105,8 +105,9 @@ namespace FastDelivery_Library
                 int prochainSommet=it.Current; 
                 vus.Add(prochainSommet);
                 nonVus.Remove(prochainSommet);
-                //there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
-                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt,prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                    {//there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
+                        branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                    }
                 vus.Remove(prochainSommet); 
                 nonVus.Add(prochainSommet);
             }
