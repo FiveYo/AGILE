@@ -162,8 +162,8 @@ namespace FastDelivery_Library
             //On initialise des élements testés dans le Try Entrepot 
             int idAdresseEntrepot = 0;
             XElement EntrepotXML = null;
-            string PlageDebut;
-            string PlageFin;
+            DateTime PlageDebut;
+            DateTime PlageFin;
             int duree;
             int id;
 
@@ -208,13 +208,22 @@ namespace FastDelivery_Library
                         duree
                         );
 
-                    PlageDebut = node.Attribute("debutPlage") != null ? node.Attribute("debutPlage").Value : "False";
-                    PlageFin = node.Attribute("finPlage") != null ? node.Attribute("finPlage").Value : "False";
-
-                    if (PlageDebut != "False")
+                    try
                     {
-                        liv.SetPlage(PlageDebut, PlageFin);
+                        var debut = node.Attribute("debutPlage");
+                        var fin = node.Attribute("finPlage");
+                        if (debut != null && fin != null)
+                        {
+                            PlageDebut = DateTime.Parse(debut.Value);
+                            PlageFin = DateTime.Parse(fin.Value);
+                            liv.SetPlage(PlageDebut, PlageFin);
+                        }
                     }
+                    
+                    catch (ArgumentNullException)
+                    {}
+                    catch (FormatException)
+                    {}
 
                     LivHash.Add(ID, liv);
 

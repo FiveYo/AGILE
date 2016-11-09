@@ -256,8 +256,8 @@ namespace FastDelivery_Library.Modele
                 {
                     if (livraison.planifier)
                     {
-                        DebutPlage = DateTime.Parse(livraison.debutPlage);
-                        FinPlage = DateTime.Parse(livraison.finPlage);
+                        DebutPlage = livraison.debutPlage;
+                        FinPlage = livraison.finPlage;
 
                         if (DateTime.Compare(DebutPlage, Heurepassage) > 0)
                         {
@@ -294,8 +294,8 @@ namespace FastDelivery_Library.Modele
         public Dictionary<Livraison, Error> ModifPlage(Livraison livraisonNewPlage)
         {
             // Récupérer l'heure de livraison de la livraison à modif
-            DateTime DebutNewPlage = DateTime.Parse(livraisonNewPlage.debutPlage);
-            DateTime FinNewPlage = DateTime.Parse(livraisonNewPlage.finPlage);
+            DateTime DebutNewPlage = livraisonNewPlage.debutPlage;
+            DateTime FinNewPlage = livraisonNewPlage.finPlage;
             DateTime heurePassage;
 
             //Copie la liste de livraisons dans une nouvelle liste
@@ -330,7 +330,7 @@ namespace FastDelivery_Library.Modele
                         Lieu pointArrivee = livraison2;
 
                         //Plages de la nouvelle livraison
-                        DateTime finPlageLivraison2 = DateTime.Parse(livraison2.finPlage);
+                        DateTime finPlageLivraison2 = livraison2.finPlage;
 
                         //Calcule l'heure d'arrivée minimale à la prochaine livraison
                         TimeSpan trajetALivraison2 = TimeSpan.FromMinutes((double)livraison1.duree + Hashchemin[pointArrivee].cout);
@@ -381,7 +381,7 @@ namespace FastDelivery_Library.Modele
                         Lieu pointArrivee = livraison2;
 
                         //Plages de la nouvelle livraison
-                        DateTime finPlageLivraison2 = DateTime.Parse(livraison2.finPlage);
+                        DateTime finPlageLivraison2 = livraison2.finPlage;
 
                         //Calcule l'heure d'arrivée minimale à la prochaine livraison
                         TimeSpan trajetALivraison2 = TimeSpan.FromMinutes((double)livraison1.duree + Hashchemin[pointArrivee].cout);

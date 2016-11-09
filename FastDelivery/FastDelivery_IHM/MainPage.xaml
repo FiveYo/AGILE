@@ -51,7 +51,7 @@
                     <Grid HorizontalAlignment="Stretch" Margin="0" Height="Auto">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
-                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="40"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
@@ -69,23 +69,37 @@
                                     HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="3" Click="chgPlageButton_Click"/>
 
                         </Grid>
-                        <Grid HorizontalAlignment="Stretch" Height="30" Margin="0" VerticalAlignment="Bottom" Grid.Row="1">
+                        <Grid HorizontalAlignment="Stretch" Height="40" Margin="0" VerticalAlignment="Bottom" Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.3*"/>
-                                <ColumnDefinition Width="0.35*"/>
-                                <ColumnDefinition Width="0.35*"/>
+                                <ColumnDefinition Width="0.3*" MaxWidth="50"/>
+                                <ColumnDefinition Width="0.7*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="typeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Type" VerticalAlignment="Stretch"
-                                     Grid.Column="0" BorderThickness="0" TextAlignment="Center"/>
-                            <TextBox x:Name="addressTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
-                                     Grid.Column="1" BorderThickness="0" TextAlignment="Center"/>
-                            <TextBox x:Name="dureeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Durée" VerticalAlignment="Stretch"
-                                     Grid.Column="2" BorderThickness="0" TextAlignment="Center"/>
+                            <TextBlock x:Name="typeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Type" VerticalAlignment="Center"
+                                     Grid.Column="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="0.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="addressTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Adresse" VerticalAlignment="Stretch"
+                                     Grid.Column="0" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                                <TextBlock x:Name="plageTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Plage horaire" VerticalAlignment="Stretch"
+                                     Grid.Column="0" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0"/>
+                                <TextBlock x:Name="dureeTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Durée" VerticalAlignment="Stretch"
+                                     Grid.Column="1" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                                <TextBlock x:Name="heureLivraisonTitleBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="Heure de livraison" VerticalAlignment="Stretch"
+                                     Grid.Column="1" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0"/>
+                            </Grid>
+                            
                         </Grid>
                         <ScrollViewer Grid.Row="2" Height="Auto" Background="White">
                             <StackPanel x:Name="listDeliveries" KeyDown="listDeliveries_KeyDown">
                             </StackPanel>
-                            
+
                         </ScrollViewer>
                     </Grid>
                 </SplitView.Content>

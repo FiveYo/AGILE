@@ -9,6 +9,8 @@ using FastDelivery_Library;
 using Windows.UI.Xaml;
 using System.ComponentModel;
 using FastDelivery_Library.Modele;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -18,6 +20,9 @@ namespace FastDelivery_IHM
     {
         public bool displayCheck { get; set; }
         public Lieu lieu { get; set; }
+
+        public string address;
+        public string duree;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -49,22 +54,45 @@ namespace FastDelivery_IHM
         public LieuStack()
         {
             this.InitializeComponent();
-            // Permet de binder correctement les propriétés (magie)
-            (this.Content as FrameworkElement).DataContext = this;
         }
 
 
         public LieuStack(Lieu liv)
         {
             this.InitializeComponent();
-            // Permet de binder correctement les propriétés (magie)
-            (this.Content as FrameworkElement).DataContext = this;
-
-
+            if (liv is Livraison)
+            {
+                dureeBox.Text = (liv as Livraison).duree.ToString();
+                Image img = (Image)Resources["livraison"];
+                typeBox.Source = img.Source;
+                if ((liv as Livraison).HeureDePassage != null)
+                {
+                    heureArriveeBox.Text = String.Format("{0:t}",
+                        (liv as Livraison).HeureDePassage);
+                }
+                if ((liv as Livraison).planifier)
+                {
+                    plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
+                          (liv as Livraison).debutPlage, (liv as Livraison).finPlage);
+                    if ((liv as Livraison).HeureDePassage > (liv as Livraison).finPlage)
+                    {
+                        heureArriveeBox.Foreground = new SolidColorBrush(Colors.Red);
+                    }
+                }
+                
+            }
+            else
+            {
+                Image img = (Image)Resources["entrepot"];
+                typeBox.Source = img.Source;
+            }
+            
             lieu = liv;
-            displayCheck = false;
 
-            addBtn.Click += AddBtn_Click;
+            addressBox.Text = String.Format("({0}, {1})", lieu.adresse.x, lieu.adresse.y);
+
+
+            displayCheck = false;
         }
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
@@ -76,13 +104,6 @@ namespace FastDelivery_IHM
         {
             displayCheck = !displayCheck;
             NotifyPropertyChanged("displayCheck");
-        }
-
-        internal void displayAddButton()
-        {
-            borderAdd.Visibility = Visibility.Visible;
-            borderRm.Visibility = Visibility.Collapsed;
-            borderChg.Visibility = Visibility.Collapsed;
         }
 
         public void SetSelect(bool b)
@@ -98,20 +119,6 @@ namespace FastDelivery_IHM
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             Select?.Invoke(this, e);
-        }
-
-        internal void displayRemoveButton()
-        {
-            borderRm.Visibility = Visibility.Visible;
-            borderAdd.Visibility = Visibility.Collapsed;
-            borderChg.Visibility = Visibility.Collapsed;
-        }
-
-        internal void displayChgPlageButton()
-        {
-            borderChg.Visibility = Visibility.Visible;
-            borderAdd.Visibility = Visibility.Collapsed;
-            borderRm.Visibility = Visibility.Collapsed;
         }
 
         private void rmBtn_Click(object sender, RoutedEventArgs e)
