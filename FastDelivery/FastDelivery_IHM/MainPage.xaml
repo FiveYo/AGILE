@@ -56,12 +56,14 @@
                         </Grid.RowDefinitions>
                         <Grid HorizontalAlignment="Stretch" Height="50" Margin="0" VerticalAlignment="Top" Grid.Row="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="31*"/>
-                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="35*"/>
                                 <ColumnDefinition Width="10*"/>
                                 <ColumnDefinition Width="10*"/>
                             </Grid.ColumnDefinitions>
-
+                            <Button x:Name="undoButton" FontFamily="Segoe MDL2 Assets" Content="&#xE7A7;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="1"/>
+                            <Button x:Name="redoButton" FontFamily="Segoe MDL2 Assets" Content="&#59302;" Background="Transparent" 
+                                    HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Stretch" Grid.Column="2"/>
                         </Grid>
                         <Grid HorizontalAlignment="Stretch" Height="40" Margin="0" VerticalAlignment="Bottom" Grid.Row="1">
                             <Grid.ColumnDefinitions>
