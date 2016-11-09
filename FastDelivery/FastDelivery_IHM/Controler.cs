@@ -14,6 +14,7 @@ using System.IO;
 
 using Windows.UI.Xaml.Controls;
 using FastDelivery_Library;
+using FastDelivery_IHM.UndoRedo;
 
 namespace FastDelivery_IHM
 {
@@ -24,6 +25,8 @@ namespace FastDelivery_IHM
 
         public static etat etatActuel { get; set; }
         private static Tournee tournee;
+        private static Stack<Actions> UndoStack;
+        private static Stack<Actions> RedoStack;
 
         public static void loadMap(Stream file, Map map)
         {
