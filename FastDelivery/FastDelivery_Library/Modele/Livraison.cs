@@ -15,17 +15,19 @@ namespace FastDelivery_Library.Modele
     public class Livraison : Lieu, INotifyPropertyChanged
     {
         public int duree;
+        private DateTime _debutPlage;
+        private DateTime _finPlage;
 
         public DateTime debutPlage {
             get
             {
-                return this.debutPlage;
+                return _debutPlage;
             }
             set
             {
                 if (value != this.debutPlage)
                 {
-                    this.debutPlage = value;
+                    _debutPlage = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -34,13 +36,13 @@ namespace FastDelivery_Library.Modele
         {
             get
             {
-                return this.finPlage;
+                return _finPlage;
             }
             set
             {
                 if (value != this.finPlage)
                 {
-                    this.finPlage = value;
+                    _finPlage = value;
                     NotifyPropertyChanged();
                 }
             }
