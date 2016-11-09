@@ -87,7 +87,7 @@ namespace FastDelivery_Library
 	     */
         void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite)
         {
-            int idLivraison = sommetCrt;
+            int idLivraison = sommetCrt -1;
             if (sommetCrt == 0)
             {
                 var currentLivraison = demande.entrepot;
@@ -111,7 +111,7 @@ namespace FastDelivery_Library
                     if (currentLivraison.planifier)
                     {
                         DateTime DebutPlage = DateTime.Parse(currentLivraison.debutPlage);
-                        if (heurePassage.CompareTo(DebutPlage) < 0)
+                        if (heurePassage.CompareTo(DebutPlage) <= 0)
                         {
                             coutVus += cout[sommetCrt, 0]+((TimeSpan)DebutPlage.Subtract(heurePassage)).Seconds;
                         }
@@ -153,10 +153,11 @@ namespace FastDelivery_Library
                         {
                             DateTime FinPlage = DateTime.Parse(currentLivraison.finPlage);
                             DateTime heureprevu = heurePassage + new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[prochainSommet]);
-                            if (heureprevu.CompareTo(FinPlage) < 0)
+                            if (heureprevu.CompareTo(FinPlage) <= 0)
                             {
-                                heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
+                                
                                 branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                                heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
                                 vus.Remove(prochainSommet);
                                 nonVus.Add(prochainSommet);
                             }
@@ -164,20 +165,23 @@ namespace FastDelivery_Library
                             {
                                 branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
                                 nonVus.Add(prochainSommet);
+
                             }
                         }
                         else
                         {
-                            heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
+                            
                             branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                            heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
                             vus.Remove(prochainSommet);
                             nonVus.Add(prochainSommet);
                         }
                     }
                     else
                     {
-                        heurePassage += new TimeSpan(0, 0, coutVus);
+                        
                         branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+                        heurePassage += new TimeSpan(0, 0, coutVus);
                         vus.Remove(prochainSommet);
                         nonVus.Add(prochainSommet);
                     }
