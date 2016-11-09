@@ -200,18 +200,18 @@ namespace FastDelivery_Library.Modele
 
             Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
 
-            foreach (Livraison livraison in result.Keys)
-            {
-                if (result[livraison][0] == 1)
-                {
-                    ErrorLivraison.Add(livraison, Error.After);
-                }
-                else if (result[livraison][0] == -1)
-                {
+            //foreach (Livraison livraison in result.Keys)
+            //{
+            //    if (result[livraison][0] == 1)
+            //    {
+            //        ErrorLivraison.Add(livraison, Error.After);
+            //    }
+            //    else if (result[livraison][0] == -1)
+            //    {
 
-                    ErrorLivraison.Add(livraison, Error.Before);
-                }
-            }
+            //        ErrorLivraison.Add(livraison, Error.Before);
+            //    }
+            //}
 
             return ErrorLivraison;
         }
@@ -291,8 +291,10 @@ namespace FastDelivery_Library.Modele
         /*
          ** T0D0 : check si la plage horaire n'existe pas
          */
-        public Dictionary<Livraison, Error> ModifPlage(Livraison livraisonNewPlage)
+        public void ModifPlage(Livraison livraisonNewPlage, DemandeDeLivraisons LivStruct, Carte carte)
         {
+            foreach (var livraison in livraisons) { }
+
             // Récupérer l'heure de livraison de la livraison à modif
             DateTime DebutNewPlage = livraisonNewPlage.debutPlage;
             DateTime FinNewPlage = livraisonNewPlage.finPlage;
@@ -333,33 +335,38 @@ namespace FastDelivery_Library.Modele
                         DateTime finPlageLivraison2 = livraison2.finPlage;
 
                         //Calcule l'heure d'arrivée minimale à la prochaine livraison
-                        TimeSpan trajetALivraison2 = TimeSpan.FromMinutes((double)livraison1.duree + Hashchemin[pointArrivee].cout);
+                        TimeSpan trajetALivraison2 = TimeSpan.FromSeconds((double)livraison1.duree + Hashchemin[pointArrivee].cout);
                         DateTime heureArrivMinLivr1 = HeuredePassage[livraison2].Subtract(trajetALivraison2); // heure minimum pour arriver à la livraison
 
 
                         if (heureArrivMinLivr1.CompareTo(FinNewPlage) > 0)
                         {
                             HeuredePassage[livraisonNewPlage] = FinNewPlage;
+                            livraisonNewPlage.SetHeureDePassage(FinNewPlage);
                         }
                         else if (heureArrivMinLivr1.CompareTo(DebutNewPlage) < 0)
                         {
                             HeuredePassage[livraisonNewPlage] = DebutNewPlage;
+                            livraisonNewPlage.SetHeureDePassage(DebutNewPlage);
                         }
                         else
                         {
                             HeuredePassage[livraisonNewPlage] = heureArrivMinLivr1;
+                            livraisonNewPlage.SetHeureDePassage(heureArrivMinLivr1);
                         }
 
                         foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
                         {
                             pointArrivee = livraison;
 
-                            trajetALivraison2 = TimeSpan.FromMinutes(Hashchemin[pointArrivee].cout);
+                            trajetALivraison2 = TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout);
 
                             // Teste si l'heure de passage actuel de livraison2 est humainement faisable
                             if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
                             {
-                                HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                HeuredePassage[livraison] = nouvelleHeurePassage;
+                                livraison.SetHeureDePassage(nouvelleHeurePassage);
 
                             }
                             else
@@ -371,7 +378,7 @@ namespace FastDelivery_Library.Modele
                     }
 
                     // le livreur arrive plus tard que prévu
-                    // livraison2 est initialisée à livraisonNewPlage
+                    // livraison1 est initialisée à livraisonNewPlage
                     else if (DebutNewPlage.CompareTo(heurePassage) > 0)
                     {
 
@@ -384,21 +391,28 @@ namespace FastDelivery_Library.Modele
                         DateTime finPlageLivraison2 = livraison2.finPlage;
 
                         //Calcule l'heure d'arrivée minimale à la prochaine livraison
-                        TimeSpan trajetALivraison2 = TimeSpan.FromMinutes((double)livraison1.duree + Hashchemin[pointArrivee].cout);
+                        TimeSpan duree = TimeSpan.FromSeconds((double)livraison1.duree);
+                        TimeSpan trajet = TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout); 
+                        foreach(var cout in Hashchemin)
+                        { }
+                        TimeSpan trajetALivraison2 = TimeSpan.FromSeconds((double)livraison1.duree + Hashchemin[pointArrivee].cout);
                         DateTime heureArrivMinLivr1 = HeuredePassage[livraison2].Subtract(trajetALivraison2); // heure minimum pour arriver à la livraison
 
 
                         if (heureArrivMinLivr1.CompareTo(FinNewPlage) > 0)
                         {
                             HeuredePassage[livraisonNewPlage] = FinNewPlage;
+                            livraisonNewPlage.SetHeureDePassage(FinNewPlage);
                         }
                         else if (heureArrivMinLivr1.CompareTo(DebutNewPlage) < 0)
                         {
                             HeuredePassage[livraisonNewPlage] = DebutNewPlage;
+                            livraisonNewPlage.SetHeureDePassage(DebutNewPlage);
                         }
                         else
                         {
                             HeuredePassage[livraisonNewPlage] = heureArrivMinLivr1;
+                            livraisonNewPlage.SetHeureDePassage(heureArrivMinLivr1);
                         }
 
 
@@ -406,12 +420,14 @@ namespace FastDelivery_Library.Modele
                         {
                             pointArrivee = livraison;
 
-                            trajetALivraison2 = TimeSpan.FromMinutes(Hashchemin[pointArrivee].cout);
+                            trajetALivraison2 = TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout);
 
                             // Teste si l'heure de passage actuel de livraison2 est humainement faisable
                             if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
                             {
+                                DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
                                 HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                livraison.SetHeureDePassage(nouvelleHeurePassage);
 
                             }
                             else
@@ -428,7 +444,7 @@ namespace FastDelivery_Library.Modele
                 
             }
             //on check si tout va bien
-            Dictionary<Livraison, List<double>> result = Check();
+            /*Dictionary<Livraison, List<double>> result = Check();
 
             Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
 
@@ -444,7 +460,10 @@ namespace FastDelivery_Library.Modele
                     ErrorLivraison.Add(livraisonCheck, Error.Before);
                 }
             }
-            return ErrorLivraison;
+            return ErrorLivraison;*/
+            //return;
+            foreach (var lol in Hashchemin) { }
+            foreach (var livraison in livraisons) { }
         }
     }
 }

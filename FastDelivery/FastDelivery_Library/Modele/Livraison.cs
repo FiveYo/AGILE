@@ -33,5 +33,10 @@ namespace FastDelivery_Library.Modele
             finPlage = fin;
             planifier = true;
         }
+
+        public void SetHeureDePassage(DateTime heurePassage)
+        {
+            HeureDePassage = heurePassage;
+        }
     }
 }

@@ -72,12 +72,17 @@ namespace FastDelivery_IHM
                 mfi.Text = "Supprimer";
                 mfi.Click += SupprimmerClick;
 
-                MenuFlyoutItem mfi2 = new MenuFlyoutItem();
-                mfi2.Text = "Modifier plage horaire";
-                mfi2.Click += ModifierClick;
-
                 mf.Items.Add(mfi);
-                mf.Items.Add(mfi2);
+
+
+                if (Controler.etatActuel == etat.tourneeCalculee)
+                {
+                    MenuFlyoutItem mfi2 = new MenuFlyoutItem();
+                    mfi2.Text = "Modifier plage horaire";
+                    mfi2.Click += ModifierClick;
+
+                    mf.Items.Add(mfi2);
+                }
 
                 mf.ShowAt(image);
             }

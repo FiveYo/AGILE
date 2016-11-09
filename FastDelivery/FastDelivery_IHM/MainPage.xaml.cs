@@ -106,9 +106,25 @@ namespace FastDelivery_IHM
             ).First());
         }
 
-        private void LieuMap_Modifier(object sender, RoutedEventArgs e)
+        private async void LieuMap_Modifier(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (waitevent)
+            {
+                if (await showCancel())
+                    return;
+            }
+            LieuMap d = sender as LieuMap;
+            ChangePlagePop popup = new ChangePlagePop();
+            await popup.ShowAsync();
+
+            //conintu = validé
+            if (popup.continu)
+            {
+                // Recupère les nouvelles plages
+                DateTime debutPlage = new DateTime(popup.debutPlage.Ticks);
+                DateTime finPlage = new DateTime(popup.finPlage.Ticks);
+                Controler.ChangePlage(d.lieu, debutPlage, finPlage);
+            }
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -273,28 +289,6 @@ namespace FastDelivery_IHM
                 var messageDialog = new MessageDialog("La feuille de route n'a pas été générée");
                 await messageDialog.ShowAsync();
             }
-        }
-        private async void Livraison_ChangePlage(object sender, RoutedEventArgs e)
-        {
-            if (waitevent)
-            {
-                if (await showCancel())
-                    return;
-            }
-            LieuStack d = sender as LieuStack;
-            ChangePlagePop popup = new ChangePlagePop();
-            await popup.ShowAsync();
-
-            if (popup.continu)
-            {
-                //Tuple<int, LieuStack> toAdd = Controler.ChangePlage(d.lieu, popup, mapCanvas);
-                /*listDeliveries.Children.Insert(toAdd.Item1 != -1 ? toAdd.Item1 + 1 : 1, toAdd.Item2);
-                toAdd.Item2.Select += Livraison_Select;
-                toAdd.Item2.AddLivraison += Livraison_AddLivraison;
-                toAdd.Item2.RemoveLivraison += Livraison_RemoveLivraison;
-                toAdd.Item2.SetSelect(true);*/
-            }
-            
         }
         
         private async void LieuStack_Selected(object sender, RoutedEventArgs e)

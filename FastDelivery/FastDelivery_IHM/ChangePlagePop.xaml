@@ -18,8 +18,8 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10" Padding="20">
-            <TimePicker x:Name="startPlage" HorizontalAlignment="Center" VerticalAlignment="Top" Header="Début plage"/>
-            <TimePicker HorizontalAlignment="Center" VerticalAlignment="Top" Header="Fin plage" TimeChanged="TimePicker_TimeChanged"/>
+            <TimePicker x:Name="startPlage" HorizontalAlignment="Center" VerticalAlignment="Top" Header="Début plage" TimeChanged="TimePicker_TimeChanged"/>
+            <TimePicker x:Name="endPlage" HorizontalAlignment="Center" VerticalAlignment="Top" Header="Fin plage" TimeChanged="TimePicker_TimeChanged"/>
             <TextBlock x:Name="errorPlage" Text="Veuillez entrer une heure supérieure à celle de départ" Padding="10" Foreground="Red" TextWrapping="Wrap" Width="250" Visibility="Collapsed"/>
         </StackPanel>
     </Grid>
