@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FastDelivery_IHM.UndoRedo
 {
-    class SupprimerTournee : Action
-    {
-    }
+    //class SupprimerTournee : Action
+    //{
+    //}
 }

@@ -247,6 +247,7 @@ namespace FastDelivery_IHM
                 toAdd.Item3.Supprimer += LieuMap_Supprimer;
 
                 listDeliveries.Children.Insert(toAdd.Item1 + 2, toAdd.Item2);
+                feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 return;
             }
             mapCanvas.SetSelect((sender as LieuMap).lieu);
