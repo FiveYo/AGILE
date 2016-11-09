@@ -9,13 +9,16 @@ namespace FastDelivery_IHM.UndoRedo
 {
     class AjouterLivraison : Actions
     {
-        public AjouterLivraison (Lieu lieu, DeliveryPop livraison, Map map)
-        {
+        private DeliveryPop popup;
+        private Map map;
 
+        public AjouterLivraison(DeliveryPop popup, Map map)
+        {
+            this.popup = popup;
+            this.map = map;
         }
         public object Do()
         {
-            throw new NotImplementedException();
         }
 
         public object Undo()

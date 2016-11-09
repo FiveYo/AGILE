@@ -25,8 +25,8 @@ namespace FastDelivery_IHM
 
         public static etat etatActuel { get; set; }
         private static Tournee tournee;
-        private static Stack<Actions> UndoStack;
-        private static Stack<Actions> RedoStack;
+        private static Stack<Actions> undoStack;
+        private static Stack<Actions> redoStack;
 
         public static void loadMap(Stream file, Map map)
         {
@@ -90,32 +90,11 @@ namespace FastDelivery_IHM
 
         public static Tuple<int, LieuStack, LieuMap> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
-            LieuMap lieuMap;
             if (etatActuel == etat.tourneeCalculee)
             {
-                Livraison toAdd = null;
-                int index;
-
-                if (lieu is Livraison)
-                {
-                    index = tournee.livraisons.IndexOf(lieu as Livraison);
-                }
-                else
-                {
-                    index = -1;
-                }
-
-                toAdd = new Livraison(
-                    livraison.adresse, livraison.duree
-                );
-
-                tournee.AddLivraison(carte, toAdd, index);
-                int id = demandeLivraisons.livraisons.Keys.Max() + 1;
-                demandeLivraisons.livraisons.Add(id, toAdd);
-                lieuMap = map.AddDelivery(toAdd);
-                map.LoadWay(tournee);
-
-                return new Tuple<int, LieuStack, LieuMap>(index, new LieuStack(toAdd), lieuMap);
+                AjouterTournee addTournee = new AjouterTournee(lieu, livraison, map, tournee, carte, demandeLivraisons);
+                undoStack.Push(addTournee);
+                return (addTournee.Do() as Tuple<int, LieuStack, LieuMap>);
             }
             else
             {
