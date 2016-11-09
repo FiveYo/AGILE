@@ -175,18 +175,45 @@ namespace FastDelivery_IHM
             }
         }
 
-        internal static void RmLivTournee(LieuStack d, Map map)
+        internal static List<LieuMap> RemoveLivraison(Lieu lieu, Map map)
         {
+            List<LieuMap> l = null;
             if (etatActuel == etat.tourneeCalculee)
             {
-                if (d.lieu is Livraison)
+                if (lieu is Livraison)
                 {
-
-                    tournee.DelLivraison(carte, d.lieu as Livraison);
+                    demandeLivraisons.livraisons.Remove(
+                        demandeLivraisons.livraisons.Where((node) =>
+                        {
+                            if (node.Value == lieu as Livraison)
+                                return true;
+                            else
+                                return false;
+                        }).First().Key
+                    );
+                    tournee.DelLivraison(carte, lieu as Livraison);
+                    l = map.LoadDeliveries(demandeLivraisons);
                     map.LoadWay(tournee);
-                    //map.ReloadLieuStack(tournee);
                 }
             }
+            else
+            {
+                //etatActuel == etat.livraisonCharge
+                if (lieu is Livraison)
+                {
+                    demandeLivraisons.livraisons.Remove(
+                        demandeLivraisons.livraisons.Where((node) =>
+                        {
+                            if (node.Value == lieu as Livraison)
+                                return true;
+                            else
+                                return false;
+                        }).First().Key
+                    );
+                    l = map.LoadDeliveries(demandeLivraisons);
+                }
+            }
+            return l;
         }
 
         /*public static Tuple<int, LieuStack> ChangePlage(Lieu lieu, LieuStackPop livraison, Map map)

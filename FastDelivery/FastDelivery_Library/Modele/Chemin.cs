@@ -13,7 +13,8 @@ namespace FastDelivery_Library.Modele
         public double cout;
         public Chemin(List<Troncon> troncons)
         {
-            this.tronconList = troncons;
+            tronconList = troncons;
+            calculCoutChemin();
         }
         public List<Troncon> getTronconList()
         {

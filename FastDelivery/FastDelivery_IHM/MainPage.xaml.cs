@@ -66,17 +66,49 @@ namespace FastDelivery_IHM
                 {
                     Tuple<LieuStack, LieuMap> lieuUI = Controler.AddLivDemande(popup, mapCanvas);
                     lieuUI.Item1.Select += LieuStack_Selected;
-                    lieuUI.Item1.RemoveLivraison += LieuStack_RmLiv;
-                    lieuUI.Item2.Checked += LieuMap_Checked;
+                    lieuUI.Item2.Clicked += LieuMap_Clicked;
+                    lieuUI.Item2.Modifier += LieuMap_Modifier;
+                    lieuUI.Item2.Supprimer += LieuMap_Supprimer;
                     listDeliveries.Children.Add(lieuUI.Item1);
                 }
             }
         }
 
-        private async void timeOut()
+        private async void LieuMap_Supprimer(object sender, RoutedEventArgs e)
         {
-            await Task.Delay(TIMERESET);
-            waitevent = false;
+            if (waitevent)
+            {
+                if (await showCancel())
+                    return;
+            }
+            LieuMap d = sender as LieuMap;
+
+            List<LieuMap> lieuMap = Controler.RemoveLivraison(d.lieu, mapCanvas);
+
+            if(lieuMap != null)
+            {
+                foreach (var lieu in lieuMap)
+                {
+                    lieu.Clicked += LieuMap_Clicked;
+                    lieu.Modifier += LieuMap_Modifier;
+                    lieu.Supprimer += LieuMap_Supprimer;
+                }
+            }
+            
+
+            listDeliveries.Children.Remove(
+                listDeliveries.Children.Where((node) =>
+                {
+                    if ((node as LieuStack).lieu == d.lieu)
+                        return true;
+                    return false;
+                }
+            ).First());
+        }
+
+        private void LieuMap_Modifier(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
@@ -152,12 +184,13 @@ namespace FastDelivery_IHM
                     {
                         listDeliveries.Children.Add(lieu);
                         lieu.Select += LieuStack_Selected;
-                        lieu.RemoveLivraison += LieuStack_RmLiv;
                     }
 
                     foreach (var lieu in info.Item2)
                     {
-                        lieu.Checked += LieuMap_Checked;
+                        lieu.Clicked += LieuMap_Clicked;
+                        lieu.Modifier += LieuMap_Modifier;
+                        lieu.Supprimer += LieuMap_Supprimer;
                     }
                     feedBack.Text = "Votre demande de livraison a été chargée avec succès. Vous pouvez désormais calculer une tournée, ou charger un nouveau plan.";
                 }
@@ -181,7 +214,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void LieuMap_Checked(object sender, RoutedEventArgs e)
+        private void LieuMap_Clicked(object sender, RoutedEventArgs e)
         {
             if(waitevent)
             {
@@ -189,8 +222,9 @@ namespace FastDelivery_IHM
                 waitevent = false;
                 Tuple<int, LieuStack, LieuMap> toAdd = Controler.AddLivTournee(lieuClicked.lieu, popup, mapCanvas);
                 toAdd.Item2.Select += LieuStack_Selected;
-                toAdd.Item2.RemoveLivraison += LieuStack_RmLiv;
-                toAdd.Item3.Checked += LieuMap_Checked;
+                toAdd.Item3.Clicked += LieuMap_Clicked;
+                toAdd.Item3.Modifier += LieuMap_Modifier;
+                toAdd.Item3.Supprimer += LieuMap_Supprimer;
 
                 listDeliveries.Children.Insert(toAdd.Item1 + 2, toAdd.Item2);
                 return;
@@ -240,19 +274,6 @@ namespace FastDelivery_IHM
                 await messageDialog.ShowAsync();
             }
         }
-
-        private async void LieuStack_RmLiv(object sender, RoutedEventArgs e)
-        {
-            if (waitevent)
-            {
-                if (await showCancel())
-                    return;
-            }
-            LieuStack d = sender as LieuStack;
-            Controler.RmLivTournee(d, mapCanvas);
-            listDeliveries.Children.Remove(d);
-        }
-
         private async void Livraison_ChangePlage(object sender, RoutedEventArgs e)
         {
             if (waitevent)
@@ -322,7 +343,6 @@ namespace FastDelivery_IHM
                 {
                     listDeliveries.Children.Add(item);
                     item.Select += LieuStack_Selected;
-                    item.RemoveLivraison += LieuStack_RmLiv;
                 } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
@@ -339,20 +359,14 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void addButton_Click(object sender, RoutedEventArgs e)
+        private async void listDeliveries_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            // Gérer le cas ou on appuie sur + et il n'y a pas de tournée créé
-            foreach (var item in listDeliveries.Children)
+            if (waitevent)
             {
-                if (item is LieuStack)
-                {
-                    //((LieuStack)item).displayAddButton();
-                }
+                if (await showCancel())
+                    return;
             }
-        }
 
-        private void listDeliveries_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
             int offset;
 
             if (e.Key == Windows.System.VirtualKey.Up) { offset = -1; }
@@ -371,28 +385,6 @@ namespace FastDelivery_IHM
             else if (listDeliveries.Children.Count > 0)
             {
                 (listDeliveries.Children.First() as LieuStack).SetSelect(true);
-            }
-        }
-
-        private void removeButton_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in listDeliveries.Children)
-            {
-                if (item is LieuStack)
-                {
-                    //((LieuStack)item).displayRemoveButton();
-                }
-            }
-        }
-
-        private void chgPlageButton_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in listDeliveries.Children)
-            {
-                if (item is LieuStack)
-                {
-                    //((LieuStack)item).displayChgPlageButton();
-                }
             }
         }
 

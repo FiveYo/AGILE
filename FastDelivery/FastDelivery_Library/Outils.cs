@@ -42,10 +42,10 @@ namespace FastDelivery_Library
             int xmax, xmin, ymax, ymin, Id, x, y, id_dest, id_origin,longueur,vitesse;
             string nomRue;
             //variable calcul xmax ymax xmin ymin
-            xmin = 0;
-            ymin = 0;
-            xmax = 0;
-            ymax = 0;
+            xmin = int.MaxValue;
+            ymin = int.MaxValue;
+            xmax = int.MinValue;
+            ymax = int.MinValue;
             //On génère les Points depuis le fichier XML en paramètre
             foreach (var node in nodes)
             {
@@ -60,8 +60,7 @@ namespace FastDelivery_Library
                     throw new Exception_XML("Fichier mal formaté", ex);
                 }
                 Point pt = new Point(Id, x, y);
-                ymax = y;
-                xmax = x;
+
                 if (xmax < x)
                 {
                     xmax = x;

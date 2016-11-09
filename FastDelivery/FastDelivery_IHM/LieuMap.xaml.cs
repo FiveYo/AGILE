@@ -22,7 +22,9 @@ namespace FastDelivery_IHM
 {
     public sealed partial class LieuMap : UserControl
     {
-        public event RoutedEventHandler Checked;
+        public event RoutedEventHandler Clicked;
+        public event RoutedEventHandler Supprimer;
+        public event RoutedEventHandler Modifier;
 
         private bool _isChecked;
 
@@ -47,6 +49,8 @@ namespace FastDelivery_IHM
 
             image.Tapped += Image_Tapped;
 
+            image.RightTapped += Image_RightTapped;
+
             if(lieu is Livraison)
             {
                 Image img = (Image)Resources["livraison"];
@@ -59,11 +63,39 @@ namespace FastDelivery_IHM
             }
         }
 
+        private void Image_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            if(lieu is Livraison)
+            {
+                MenuFlyout mf = new MenuFlyout();
+                MenuFlyoutItem mfi = new MenuFlyoutItem();
+                mfi.Text = "Supprimer";
+                mfi.Click += SupprimmerClick;
+
+                MenuFlyoutItem mfi2 = new MenuFlyoutItem();
+                mfi2.Text = "Modifier plage horaire";
+                mfi2.Click += ModifierClick;
+
+                mf.Items.Add(mfi);
+                mf.Items.Add(mfi2);
+
+                mf.ShowAt(image);
+            }
+        }
+
+        private void ModifierClick(object sender, RoutedEventArgs e)
+        {
+            Modifier?.Invoke(this, e);
+        }
+
+        private void SupprimmerClick(object sender, RoutedEventArgs e)
+        {
+            Supprimer?.Invoke(this, e);
+        }
+
         private void Image_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            EventMap em = new EventMap();
-            em.lieu = lieu;
-            Checked?.Invoke(this, e);
+            Clicked?.Invoke(this, e);
         }
 
         public void SetSelect(bool b)
