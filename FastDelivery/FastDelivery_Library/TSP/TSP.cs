@@ -26,17 +26,37 @@ namespace FastDelivery_Library
          * @param cout : cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets
          * @param duree : duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets
          */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tpsLimite" description"limite (en millisecondes) sur le temps d'execution de chercheSolution"></param>
+        /// <param name="nbSommets" description="nombre de sommets du graphe"></param>
+        /// <param name="cout" description="cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
+        /// <param name="duree" description="duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
+        /// <param name="demandeLiv" description="Objet regroupant les livraisons souhaitée"></param>
         void chercheSolution(TimeSpan tpsLimite, int nbSommets, int[,] cout, int[] duree, DemandeDeLivraisons demandeLiv);
 
-        /**
-         * @param i
-         * @return le sommet visite en i-eme position dans la solution calculee par chercheSolution
-         */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i" description="index"></param>
+        /// <return>Renvoie le sommet visité en i-ème position dans la solution calculée par chercheSolution</return>
         int getMeilleureSolution(int i);
 
-        /** 
-         * @return la duree de la solution calculee par chercheSolution
-         */
-        int getCoutMeilleureSolution();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i" description="index du meilleur horaire"></param>
+        /// <returns>Renvoie l'horaire visité en i-ème position dans la solution calculée par chercheSolution</returns>
+        DateTime? getMeilleurHoraire(int i);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i" description="index du meilleur temps d'attente"></param>
+        /// <returns>Renvoie le temps d'attenteen i-ème position dans la solution calculée par chercheSolution</returns>
+        TimeSpan? getmeilleurtempsattente(int i)
+
+
     }
 }

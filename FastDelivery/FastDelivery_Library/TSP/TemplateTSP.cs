@@ -25,9 +25,9 @@ namespace FastDelivery_Library
         public List<TimeSpan> meilleurtempsattente;
 
         /// <summary>
-        /// Renvoie le booleen qui servira a voir si on a dépasser la limite de temps
+        /// TODO
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Renvoie le booleen qui servira a voir si on a dépasser la limite de temps</returns>
         public Boolean getTempsLimiteAtteint()
         {
             return tempsLimiteAtteint;
@@ -61,32 +61,18 @@ namespace FastDelivery_Library
             tempsattentes.Add(new TimeSpan(0, 0, 0));
             branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite, horaires, tempsattentes, heureDepart);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i" description="index de la meilleur solution"></param>
-        /// <returns>Renvoie le sommet d'index i de la liste des meilleures solutions</returns>
+        
         public int? getMeilleureSolution(int i)
         {
             if ((meilleureSolution == null) || (i < 0) || (i >= meilleureSolution.Length))
                 return null;
             return meilleureSolution[i];
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i" description="index du meilleur horaire"></param>
-        /// <returns>Renvoie l'horaire d'index i de la liste des meilleurs horaires</returns>
         public DateTime? getMeilleurHoraire(int i)
         {
             if ((meilleurshoraires == null) || (i < 0) || (i >= meilleurshoraires.Count)) return null;
             return meilleurshoraires[i];
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i" description="index du meilleur temps d'attente"></param>
-        /// <returns>Renvoie le temps d'attente d'index i de la liste des meilleurs temps d'attente</returns>
         public TimeSpan? getmeilleurtempsattente(int i)
         {
             if ((meilleurtempsattente == null) || (i < 0) || (i >= meilleurtempsattente.Count)) return null;
@@ -107,7 +93,7 @@ namespace FastDelivery_Library
         /// <param name="duree" description="duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
         /// <param name="demande"></param>
         /// <param name="heuredepassage"></param>
-        /// <returns>Renvoie une borne inferieure du cout des permutations commencant par sommetCourant, 
+        /// <returns>Renvoies une borne inferieure du cout des permutations commencant par sommetCourant, 
 	    /// contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0</returns>
         protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande, DateTime heuredepassage);
 
@@ -300,11 +286,7 @@ namespace FastDelivery_Library
                 }
             }
         }
-
-        int TSP.getMeilleureSolution(int i)
-        {
-            throw new NotImplementedException();
-        }
+        
 
 
 
