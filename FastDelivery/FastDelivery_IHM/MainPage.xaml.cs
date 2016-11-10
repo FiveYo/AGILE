@@ -130,8 +130,9 @@ namespace FastDelivery_IHM
             if (popup.continu)
             {
                 // Recupère les nouvelles plages
-                DateTime debutPlage = new DateTime(popup.debutPlage.Ticks);
-                DateTime finPlage = new DateTime(popup.finPlage.Ticks);
+                
+                DateTime debutPlage = Convert.ToDateTime(popup.debutPlage.ToString());
+                DateTime finPlage = Convert.ToDateTime(popup.finPlage.ToString());
                 Controler.ChangePlage(d.lieu, debutPlage, finPlage);
             }
         }
