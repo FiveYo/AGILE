@@ -303,15 +303,38 @@ namespace FastDelivery_IHM
                 {
                     if (lieu is Livraison)
                     {
+                        int key = int.MaxValue;
+
                         demandeLivraisons.livraisons.Remove(
                             demandeLivraisons.livraisons.Where((node) =>
                             {
                                 if (node.Value == lieu as Livraison)
+                                {
+                                    key = node.Key;
                                     return true;
+                                }
                                 else
                                     return false;
                             }).First().Key
                         );
+
+                        Dictionary<int, Livraison> livtmp = new Dictionary<int, Livraison>();
+
+                        foreach (var liv in demandeLivraisons.livraisons)
+                        {
+                            if (liv.Key > key)
+                            {
+                                livtmp.Add(liv.Key - 1, liv.Value);
+                            }
+                            else
+                            {
+                                livtmp.Add(liv.Key, liv.Value);
+                            }
+                        }
+
+                        demandeLivraisons.livraisons = livtmp;
+
+
                         tournee.DelLivraison(carte, lieu as Livraison);
                         l = map.LoadDeliveries(demandeLivraisons);
                         map.LoadWay(tournee);
@@ -322,15 +345,36 @@ namespace FastDelivery_IHM
                     //etatActuel == etat.livraisonCharge
                     if (lieu is Livraison)
                     {
+                        int key = int.MaxValue;
+
                         demandeLivraisons.livraisons.Remove(
                             demandeLivraisons.livraisons.Where((node) =>
                             {
                                 if (node.Value == lieu as Livraison)
+                                {
+                                    key = node.Key;
                                     return true;
+                                }
                                 else
                                     return false;
                             }).First().Key
                         );
+
+                        Dictionary<int, Livraison> livtmp = new Dictionary<int, Livraison>();
+
+                        foreach (var liv in demandeLivraisons.livraisons)
+                        {
+                            if (liv.Key > key)
+                            {
+                                livtmp.Add(liv.Key - 1, liv.Value);
+                            }
+                            else
+                            {
+                                livtmp.Add(liv.Key, liv.Value);
+                            }
+                        }
+
+                        demandeLivraisons.livraisons = livtmp;
                         l = map.LoadDeliveries(demandeLivraisons);
                     }
                 }

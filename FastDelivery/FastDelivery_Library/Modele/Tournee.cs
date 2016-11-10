@@ -201,19 +201,19 @@ namespace FastDelivery_Library
 
             Dictionary<Livraison, Error> ErrorLivraison = new Dictionary<Livraison, Error>();
 
-            foreach (Livraison livraison in result.Keys)
-            {
-                if (result[livraison][0] == 1)
-                {
-                    ErrorLivraison.Add(livraison, Error.After);
-                }
-                else if (result[livraison][0] == -1)
-                {
+            //foreach (Livraison livraison in result.Keys)
+            //{
+            //    if (result[livraison][0] == 1)
+            //    {
+            //        ErrorLivraison.Add(livraison, Error.After);
+            //    }
+            //    else if (result[livraison][0] == -1)
+            //    {
 
-                    ErrorLivraison.Add(livraison, Error.Before);
-                }
-            }
-
+            //        ErrorLivraison.Add(livraison, Error.Before);
+            //    }
+            //}
+            UpdateHeurePassage();
             return ErrorLivraison;
         }
 
