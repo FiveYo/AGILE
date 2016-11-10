@@ -137,20 +137,27 @@ namespace FastDelivery_IHM
             if (file != null)
             {
                 Windows.Storage.CachedFileManager.DeferUpdates(file);
-                // write to file
+                int i = 0;
+                string intro = "Bonjour cher livreur,\r\nVous trouverez ci-après la liste des livraisons que vous devez effectuer et le parcours que vous allez emprunter.\r\nFastDelivery vous souhaite un bon voyage.\r\n \r\n";
+                for(int j=0; j< tournee.livraisons.Count; j++)
+                {
+                    intro += "Livraison n°" +(++i)+" :\r\n   Coordonnées : (" + tournee.livraisons[j].adresse.x + ","+ tournee.livraisons[j].adresse.y + ") \r\n   Heure d'arrivée : " + tournee.livraisons[j].HeureDePassage + "\r\n   Heure de départ : " + tournee.livraisons[j].HeureDePassage + "\r\n   Itinéraire à suivre pour rejoindre cette livraison : ";
+                    foreach(var troncon in tournee.Hashchemin[tournee.livraisons[j]].getTronconList())
+                    {
+                        intro += troncon.rue + ",";
+                    }
+                    intro = intro.Substring(0, intro.Length - 1);
+                    if(j==0)
+                    {
+                        intro += ".\r\n   Depuis l'entrepot. \r\n \r\n";
+                    }
+                    else
+                    {
+                        intro += ".\r\n   Depuis l'adresse : (" + tournee.livraisons[j-1].adresse.x + "," + tournee.livraisons[j-1].adresse.y + ") \r\n \r\n";
+                    }
+                }
 
-
-                //System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                //iTextSharp.text.Document doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 30f, 30f, 30f, 30f);
-                //iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, ms);
-                //doc.Open();
-                //doc.Add(new iTextSharp.text.Chunk("hello world"));
-                //doc.Close();
-                //byte[] Result = ms.ToArray();
-
-
-
-                await Windows.Storage.FileIO.WriteTextAsync(file, "bonjour \r\n salut");
+                await Windows.Storage.FileIO.WriteTextAsync(file, intro);
                 // Let Windows know that we're finished changing the file so
                 // the other app can update the remote version of the file.
                 // Completing updates may require Windows to ask for user input.
