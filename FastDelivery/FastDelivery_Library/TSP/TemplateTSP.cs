@@ -253,7 +253,7 @@ namespace FastDelivery_Library
                         tempsattente.Add(tempsdattente);
                         branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet], cout, duree, tpsDebut, tpsLimite, horaires, tempsattente, newheurepassage);
                         horaires.Remove(newheurepassage);
-                        horaires.Remove(newheurepassage);
+                        tempsattente.Remove(tempsdattente);
                     }
                     vus.Remove(prochainSommet);
                     nonVus.Add(prochainSommet);
