@@ -137,7 +137,7 @@ namespace FastDelivery_Library
             //        ErrorLivraison.Add(livraison, Error.Before);
             //    }
             //}
-
+            UpdateHeurePassage();
             return ErrorLivraison;
 
         }
