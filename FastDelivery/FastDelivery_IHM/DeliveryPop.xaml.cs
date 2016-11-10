@@ -96,7 +96,7 @@ namespace FastDelivery_IHM
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if(dureeLiv.Text == "")
+            if (dureeLiv.Text == "")
             {
                 args.Cancel = true;
                 errorDuree.Visibility = Visibility.Visible;

@@ -14,7 +14,7 @@ namespace FastDelivery_Library
         /// <summary>
         /// flag determinant si le calcul doit être stoppé ou pas
         /// </summary>
-        public bool stop=false;
+        public bool stop = false;
 
         /// <summary>
         /// Heure de Depart de la tournée ( initialisée à celle de l'entrepot)
@@ -59,7 +59,7 @@ namespace FastDelivery_Library
         {
             return tempsLimiteAtteint;
         }
-        
+
         /// <summary>
         /// Méthode principale de la classe qui cherchera automatiquement le meilleur coût via l'appel de la fonction brancAndBound
         /// </summary>
@@ -88,7 +88,7 @@ namespace FastDelivery_Library
             tempsattentes.Add(new TimeSpan(0, 0, 0));
             branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite, horaires, tempsattentes, heureDepart);
         }
-        
+
         public int? getMeilleureSolution(int i)
         {
             if ((meilleureSolution == null) || (i < 0) || (i >= meilleureSolution.Length))
@@ -110,7 +110,7 @@ namespace FastDelivery_Library
             return coutMeilleureSolution;
         }
 
-       
+
         /// <summary>
         /// 
         /// </summary>
@@ -121,10 +121,10 @@ namespace FastDelivery_Library
         /// <param name="demande"></param>
         /// <param name="heuredepassage"></param>
         /// <returns>Renvoies une borne inferieure du cout des permutations commencant par sommetCourant, 
-	    /// contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0</returns>
+        /// contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0</returns>
         protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande, DateTime heuredepassage);
 
-        
+
         /// <summary>
         /// Creer un itérateur pour naviguer entre les sommets.
         /// </summary>
@@ -153,7 +153,7 @@ namespace FastDelivery_Library
         void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite, List<DateTime> horaires, List<TimeSpan> tempsattente, DateTime heure)
         {
 
-            if(stop)
+            if (stop)
             {
                 throw new TimeoutException();
             }
@@ -313,7 +313,7 @@ namespace FastDelivery_Library
                 }
             }
         }
-        
+
 
 
 

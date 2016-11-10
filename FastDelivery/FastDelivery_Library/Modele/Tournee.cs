@@ -47,18 +47,18 @@ namespace FastDelivery_Library
         /// </summary>
         public void UpdateHeurePassage()
         {
-            DateTime tA=entrepot.heureDepart;
+            DateTime tA = entrepot.heureDepart;
             DateTime tD = entrepot.heureDepart;
             Chemin chemintemp;
             Livraison livtemp;
-            for(int i=0; i<livraisons.Count;i++)
+            for (int i = 0; i < livraisons.Count; i++)
             {
                 livtemp = livraisons[i];
                 chemintemp = Hashchemin[livtemp];
                 tA = tD + new TimeSpan(0, 0, (int)chemintemp.cout);
-                if ( i<livraisons.Count-1 && livraisons[i+1].planifier )
+                if (i < livraisons.Count - 1 && livraisons[i + 1].planifier)
                 {
-                    tD = tA + new TimeSpan(0, 0, livtemp.duree)+livraisons[i+1].tempsAttente;
+                    tD = tA + new TimeSpan(0, 0, livtemp.duree) + livraisons[i + 1].tempsAttente;
                 }
                 else
                 {
@@ -67,8 +67,8 @@ namespace FastDelivery_Library
                 livtemp.heureArrivee = tA;
                 livtemp.heureArrivee = tD;
             }
-            var result=Check();
-            if (result.Count!=0)
+            var result = Check();
+            if (result.Count != 0)
             {
                 throw new Exception();
             }
@@ -268,7 +268,7 @@ namespace FastDelivery_Library
 
             Dictionary<Livraison, List<double>> listlivraisonout = new Dictionary<Livraison, List<double>>();
 
-           
+
             DateTime FinPlage;
             DateTime HeureArrive;
 
@@ -282,7 +282,7 @@ namespace FastDelivery_Library
                 {
                     if (livraison.planifier)
                     {
-                        
+
                         FinPlage = livraison.finPlage;
                         if (DateTime.Compare(FinPlage, HeureArrive) < 0)
                         {
@@ -410,7 +410,7 @@ namespace FastDelivery_Library
                     // livraison1 est initialisée à livraisonNewPlage
                     else if (DebutNewPlage.CompareTo(heurePassage) > 0)
                     {
-                        if ((livraisons.Count()) != indexLivraisonNewPlage+1)
+                        if ((livraisons.Count()) != indexLivraisonNewPlage + 1)
                         {
                             // Calcul de l'heure d'arrivee pour la livraison dont on a modif la plage horaire
                             Livraison livraison2 = livraisons[indexLivraisonNewPlage + 1];
@@ -454,9 +454,9 @@ namespace FastDelivery_Library
                                 trajetALivraison2 = TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout);
 
                                 // Teste si l'heure de passage actuel de livraison2 est humainement faisable
-                                
-                                    if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
-                                    {
+
+                                if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
+                                {
                                     if (livraison != livraison1)
                                     {
                                         DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
@@ -465,8 +465,8 @@ namespace FastDelivery_Library
                                         livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
                                     }
 
-                                    }
-                                
+                                }
+
                                 else
                                 {
                                     break;
@@ -516,25 +516,25 @@ namespace FastDelivery_Library
         public int CompareTo(object objet)
         {
             Tournee obj = objet as Tournee;
-            if(obj == null)
+            if (obj == null)
             {
                 return 1;
             }
             bool equals = true;
-            for(int i=0; i<livraisons.Count; i++)
-            { 
-                if(livraisons[i].adresse.id != obj.livraisons[i].adresse.id)
+            for (int i = 0; i < livraisons.Count; i++)
+            {
+                if (livraisons[i].adresse.id != obj.livraisons[i].adresse.id)
                 {
                     equals = false;
                 }
             }
-            if(!equals)
+            if (!equals)
             {
                 return 0;
             }
             else
             {
-                return (int)((TimeSpan)(livraisons[livraisons.Count-1].heureDepart.Subtract(obj.livraisons[obj.livraisons.Count-1].heureDepart))).TotalSeconds;
+                return (int)((TimeSpan)(livraisons[livraisons.Count - 1].heureDepart.Subtract(obj.livraisons[obj.livraisons.Count - 1].heureDepart))).TotalSeconds;
             }
         }
     }

@@ -37,7 +37,7 @@ namespace FastDelivery_Library.Modele
         /// </summary>
         public void calculCoutChemin()
         {
-            double couttmp=0;
+            double couttmp = 0;
             foreach (Troncon troncon in tronconList)
             {
                 couttmp += troncon.cout;

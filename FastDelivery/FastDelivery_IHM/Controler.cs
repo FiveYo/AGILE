@@ -77,18 +77,18 @@ namespace FastDelivery_IHM
         /// <param name="streamFile">Stream du fichier à parser</param>
         /// <param name="mapCanvas">Map (carte dans l'IHM)</param>
         /// <returns></returns>
-        public static Tuple<List<LieuStack>,List<LieuMap>> loadDeliveries(Stream streamFile, Map mapCanvas)
+        public static Tuple<List<LieuStack>, List<LieuMap>> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
             if (etatActuel == etat.enCoursDeCalcul)
             {
                 Outils.StopTsp();
                 etatActuel = etat.enCoursDArret;
-                
+
             }
             List<LieuStack> lieuStack = new List<LieuStack>();
             List<LieuMap> lieuMap;
-            if(etatActuel >= etat.carteCharge)
-            {   
+            if (etatActuel >= etat.carteCharge)
+            {
                 try
                 {
                     demandeLivraisons = Outils.ParserXml_Livraison(streamFile, carte.points);
@@ -128,7 +128,7 @@ namespace FastDelivery_IHM
             }
             int id = demandeLivraisons.livraisons.Keys.Max() + 1;
             Livraison liv = new Livraison(popup.adresse, popup.duree);
-            if(popup.planifier)
+            if (popup.planifier)
             {
                 liv.SetPlage(popup.startDate, popup.endDate);
             }
@@ -188,7 +188,7 @@ namespace FastDelivery_IHM
                 {
                     chargeTsp = Outils.startTsp(demandeLivraisons, carte);
                     tournee = null;
-                    
+
                     loadWay(mapCanvas, listDelivery, eventLieuStack, chargeTsp);
                     etatActuel = etat.enCoursDeCalcul;
                 }
@@ -214,9 +214,9 @@ namespace FastDelivery_IHM
         {
             Tournee tourneeTmp = null;
             await Task.Delay(1000);
-            while(!chargeTsp.IsCompleted)
+            while (!chargeTsp.IsCompleted)
             {
-                
+
                 if (etatActuel == etat.enCoursDArret)
                 {
                     return;
@@ -275,7 +275,7 @@ namespace FastDelivery_IHM
             if (etatActuel == etat.enCoursDArret)
                 return;
             Tournee final = Outils.getResultActual(demandeLivraisons, carte);
-            if(final != null)
+            if (final != null)
             {
                 tournee = final;
 
@@ -314,7 +314,7 @@ namespace FastDelivery_IHM
                 string intro = "Bonjour cher livreur,\r\nVous trouverez ci-après la liste des livraisons que vous devez effectuer et le parcours que vous allez emprunter.\r\nFastDelivery vous souhaite un bon voyage.\r\n \r\n";
                 for (int j = 0; j < tournee.livraisons.Count; j++)
                 {
-                    intro += "Livraison n°" + (++i) + " :\r\n   Coordonnées : (" + tournee.livraisons[j].adresse.x + "," + tournee.livraisons[j].adresse.y + ") \r\n   Heure d'arrivée : " + tournee.livraisons[j].heureArrivee+ "\r\n   Heure de départ : " + tournee.livraisons[j].heureDepart + "\r\n   Itinéraire à suivre pour rejoindre cette livraison : ";
+                    intro += "Livraison n°" + (++i) + " :\r\n   Coordonnées : (" + tournee.livraisons[j].adresse.x + "," + tournee.livraisons[j].adresse.y + ") \r\n   Heure d'arrivée : " + tournee.livraisons[j].heureArrivee + "\r\n   Heure de départ : " + tournee.livraisons[j].heureDepart + "\r\n   Itinéraire à suivre pour rejoindre cette livraison : ";
                     foreach (var troncon in tournee.Hashchemin[tournee.livraisons[j]].getTronconList())
                     {
                         intro += troncon.rue + ",";
@@ -442,7 +442,7 @@ namespace FastDelivery_IHM
         /// <param name="finPlage">nouvelle valeur pour fin</param>
         public static void ChangePlage(Lieu d, DateTime debutPlage, DateTime finPlage)
         {
-            if(etatActuel == etat.tourneeCalculee)
+            if (etatActuel == etat.tourneeCalculee)
             {
                 Livraison livraisonNewPlage = d as Livraison;
                 livraisonNewPlage.planifier = true;

@@ -20,7 +20,7 @@ namespace FastDelivery_Library.Modele
         /// </summary>
         /// <param name="livraisons">Dictionnaire des livraisons composant la DemandeDeLivraisons avec les id des livraisons en clé</param>
         /// <param name="entrepot">Entrepôt de départ de la demande de livraison</param>
-        public DemandeDeLivraisons(Dictionary<int,Livraison> livraisons, Entrepot entrepot)
+        public DemandeDeLivraisons(Dictionary<int, Livraison> livraisons, Entrepot entrepot)
         {
             this.livraisons = livraisons;
             this.entrepot = entrepot;

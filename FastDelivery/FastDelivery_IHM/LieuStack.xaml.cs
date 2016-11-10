@@ -70,7 +70,7 @@ namespace FastDelivery_IHM
 
                 heureArriveeBox.Text = String.Format("{0:t}", (liv as Entrepot).heureDepart);
             }
-            
+
             lieu = liv;
 
             addressBox.Text = String.Format("({0}, {1})", lieu.adresse.x, lieu.adresse.y);

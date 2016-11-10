@@ -41,7 +41,7 @@ namespace FastDelivery_Library
 
 
             //Initialisation variables 
-            int xmax, xmin, ymax, ymin, Id, x, y, id_dest, id_origin,longueur,vitesse;
+            int xmax, xmin, ymax, ymin, Id, x, y, id_dest, id_origin, longueur, vitesse;
             string nomRue;
             //variable calcul xmax ymax xmin ymin
             xmin = int.MaxValue;
@@ -104,7 +104,7 @@ namespace FastDelivery_Library
                 // on crée les Points pour le constructeur
                 Point Dest_Point;
                 Point Origin_Point;
-                
+
                 //On cherche les objets Point dans la PointHash
                 if ((PointHash.TryGetValue(id_dest, out Dest_Point)) && (PointHash.TryGetValue(id_origin, out Origin_Point)))
                 {
@@ -189,12 +189,12 @@ namespace FastDelivery_Library
             {
                 throw new Exception_XML("Fichier mal formaté", ex);
 
-            } 
+            }
             if (HashPoint.TryGetValue(idAdresseEntrepot, out AdressePointEntrepot))
             {
                 var nodeHeure = EntrepotXML.Attribute("heureDepart");
                 DateTime heure;
-                if(nodeHeure != null && DateTime.TryParse(nodeHeure.Value, out heure))
+                if (nodeHeure != null && DateTime.TryParse(nodeHeure.Value, out heure))
                 {
                     entrepot = new Entrepot(
                     1,
@@ -207,7 +207,7 @@ namespace FastDelivery_Library
                     throw new Exception_XML("Heure de l'entrepôt mal formaté");
                 }
             }
-            
+
 
             //On récupère les infos sur les livraisons, leurs adresses seront des objets Point
             foreach (var node in MyData.Descendants("livraison"))
@@ -239,11 +239,11 @@ namespace FastDelivery_Library
                             liv.SetPlage(PlageDebut, PlageFin);
                         }
                     }
-                    
+
                     catch (ArgumentNullException)
-                    {}
+                    { }
                     catch (FormatException)
-                    {}
+                    { }
 
                     LivHash.Add(ID, liv);
 
@@ -282,7 +282,7 @@ namespace FastDelivery_Library
                     {
                         linked = d.getPath(autrespoints.Value.adresse);
                         matrice[i, j] = (int)calculcout(linked);
-                        
+
                     }
                     j++;
                 }
@@ -376,7 +376,7 @@ namespace FastDelivery_Library
                     tsp.chercheSolution(new TimeSpan(0, 1, 0, 0), LivStruct.livraisons.Count + 1, cost,
                 duree, LivStruct);
                 }
-                catch(TimeoutException)
+                catch (TimeoutException)
                 {
 
                 }
@@ -408,7 +408,7 @@ namespace FastDelivery_Library
                 {
                     resultatDate.Add(horaire);
                 }
-                foreach(var temp in tsp.meilleurtempsattente.Skip(1))
+                foreach (var temp in tsp.meilleurtempsattente.Skip(1))
                 {
                     resultatTemp.Add(temp);
                 }
@@ -450,17 +450,17 @@ namespace FastDelivery_Library
         public static List<Troncon> PathToTroncon(LinkedList<Point> points)
         {
             List<Troncon> troncons = new List<Troncon>();
-            if(points == null)
+            if (points == null)
             {
                 return troncons;
             }
             Point start = points.First();
 
-            foreach(var point in points.Skip(1))
+            foreach (var point in points.Skip(1))
             {
                 foreach (var voisin in start.voisins)
                 {
-                    if(voisin.destination == point)
+                    if (voisin.destination == point)
                     {
                         troncons.Add(voisin);
                         break;

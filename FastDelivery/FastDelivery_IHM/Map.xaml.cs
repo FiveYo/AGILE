@@ -118,7 +118,7 @@ namespace FastDelivery_IHM
             Stopwatch sw = new Stopwatch();
             sw.Start();
             // Parallel.ForEach(
-            foreach(var troncon in plan.troncons)
+            foreach (var troncon in plan.troncons)
             {
                 Line line = new Line();
                 Line lineToAim = new Line();
@@ -206,7 +206,7 @@ namespace FastDelivery_IHM
 
         #region gestion du clic sur un point
 
-        
+
 
         private void CircleToAim_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
@@ -280,7 +280,7 @@ namespace FastDelivery_IHM
         {
             foreach (var l in livraisonUI.Children)
             {
-                if((l as LieuMap).lieu == lieu)
+                if ((l as LieuMap).lieu == lieu)
                 {
                     (l as LieuMap).SetSelect(true);
                 }

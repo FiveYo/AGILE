@@ -188,11 +188,11 @@ namespace FastDelivery_Library
             }
         }
 
-         /// <summary>
-         /// Permet d'obtenir le chemin parcouru d'un point source à un point visé (plus court chemin entre deux points)
-         /// </summary>
-         /// <param name="target">point de destination</param>
-         /// <returns>null si ce chemin n'existe pas, Liste ordonnée de Points s'il existe</returns>
+        /// <summary>
+        /// Permet d'obtenir le chemin parcouru d'un point source à un point visé (plus court chemin entre deux points)
+        /// </summary>
+        /// <param name="target">point de destination</param>
+        /// <returns>null si ce chemin n'existe pas, Liste ordonnée de Points s'il existe</returns>
         public LinkedList<Point> getPath(Point target)
         {
             LinkedList<Point> path = new LinkedList<Point>();

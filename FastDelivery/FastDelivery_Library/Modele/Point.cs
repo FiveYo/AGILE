@@ -15,15 +15,15 @@ namespace FastDelivery_Library.Modele
         /// Paramètre de base du point récupéré dans le XML
         /// </summary>
         public int id { get; set; }
-        public int x {get; set;}
-        public int y {get; set;}
+        public int x { get; set; }
+        public int y { get; set; }
 
         /// <summary>
         /// List de troncon repertoriant les troncon voisins au point
         /// </summary>
         public List<Troncon> voisins { get; private set; }
 
-        public Point(int ID , int X, int Y)
+        public Point(int ID, int X, int Y)
         {
             id = ID;
             x = X;

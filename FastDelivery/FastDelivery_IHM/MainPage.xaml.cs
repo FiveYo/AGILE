@@ -89,7 +89,7 @@ namespace FastDelivery_IHM
 
             List<LieuMap> lieuMap = Controler.RemoveLivraison(d.lieu, mapCanvas);
 
-            if(lieuMap != null)
+            if (lieuMap != null)
             {
                 foreach (var lieu in lieuMap)
                 {
@@ -134,7 +134,7 @@ namespace FastDelivery_IHM
             if (popup.continu)
             {
                 // Recupère les nouvelles plages
-                
+
                 DateTime debutPlage = Convert.ToDateTime(popup.debutPlage.ToString());
                 DateTime finPlage = Convert.ToDateTime(popup.finPlage.ToString());
                 Controler.ChangePlage(d.lieu, debutPlage, finPlage);
@@ -195,9 +195,9 @@ namespace FastDelivery_IHM
             {
                 feedBack.Text = "Échec du chargement : aucun fichier fourni.";
             }
-            
+
         }
-        
+
         /// <summary>
         /// Evènement levé lorsque l'on clique sur 'Charger les livraisons'
         /// </summary>
@@ -362,7 +362,7 @@ namespace FastDelivery_IHM
                 selected = sender as LieuStack;
                 foreach (var LieuStack in listDeliveries.Children)
                 {
-                    if(LieuStack != sender)
+                    if (LieuStack != sender)
                     {
                         (LieuStack as LieuStack).SetSelect(false);
                     }
@@ -374,7 +374,7 @@ namespace FastDelivery_IHM
             {
                 selected = null;
             }
-            
+
         }
 
         /// <summary>
@@ -395,7 +395,7 @@ namespace FastDelivery_IHM
             {
                 feedBack.Text = "Chargement en cours de la tournée...";
                 Controler.GetWay(mapCanvas, listDeliveries, LieuStack_Selected);
-                
+
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan, charger un nouveau plan, ou générer votre feuille de route";
                 animFeedback.Begin();
             }
@@ -430,7 +430,7 @@ namespace FastDelivery_IHM
             else if (e.Key == Windows.System.VirtualKey.Down) { offset = 1; }
             else { return; }
 
-            if(selected != null)
+            if (selected != null)
             {
                 int index = listDeliveries.Children.IndexOf(selected) + offset;
                 if (index >= 0 && index < listDeliveries.Children.Count)
@@ -461,7 +461,7 @@ namespace FastDelivery_IHM
 
             var result = await m.ShowAsync();
 
-            if(result.Id as int? == 1)
+            if (result.Id as int? == 1)
             {
                 waitevent = false;
             }
@@ -479,6 +479,6 @@ namespace FastDelivery_IHM
             Outils.StopTsp();
             feedBack.Text = "Vous avez stoppé la recherche de solutions plus optimale.";
         }
-        
+
     }
 }

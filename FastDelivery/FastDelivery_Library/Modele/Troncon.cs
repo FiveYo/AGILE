@@ -18,7 +18,7 @@
             get { return (double)longueur / (double)(vitesse / 3.6); }
         }
 
-        public Troncon(Point destination, int longueur, Point origine, int vitesse, string nomRue, int ID )
+        public Troncon(Point destination, int longueur, Point origine, int vitesse, string nomRue, int ID)
         {
             this.destination = destination;
             this.origine = origine;

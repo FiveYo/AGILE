@@ -28,7 +28,7 @@ namespace FastDelivery_Library.Modele
         /// <param name="xmax">valeur maximale de x</param>
         /// <param name="ymin">valeur minimale de y</param>
         /// <param name="ymax">valeur maximale de y</param>
-        public Carte(Dictionary<int,Point> dicoPoints, Dictionary<int, Troncon> dicoTroncons, int xmin, int xmax, int ymin, int ymax)
+        public Carte(Dictionary<int, Point> dicoPoints, Dictionary<int, Troncon> dicoTroncons, int xmin, int xmax, int ymin, int ymax)
         {
             points = dicoPoints;
             troncons = dicoTroncons;

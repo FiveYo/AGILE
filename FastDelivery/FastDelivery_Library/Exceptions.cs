@@ -8,11 +8,11 @@ namespace FastDelivery_Library
     /// <summary>
     /// Classe d'exception liée aux erreurs de stream (Utilisée pour charger un fichier XML)
     /// </summary>
-    public class Exception_Stream : Exception 
+    public class Exception_Stream : Exception
     {
         public Exception_Stream() : base() { }
         public Exception_Stream(string message) : base(message) { }
-        public Exception_Stream(string message, System.Exception inner) : base (message, inner) { }
+        public Exception_Stream(string message, System.Exception inner) : base(message, inner) { }
     }
     /// <summary>
     /// Classe d'exception liée aux erreurs de parsage XML
@@ -21,7 +21,7 @@ namespace FastDelivery_Library
     {
         public Exception_XML() : base() { }
         public Exception_XML(string message) : base(message) { }
-        public Exception_XML(string message, System.Exception inner) : base (message, inner) { }
+        public Exception_XML(string message, System.Exception inner) : base(message, inner) { }
     }
 
     /// <summary>
@@ -29,9 +29,9 @@ namespace FastDelivery_Library
     /// </summary>
     public class Exception_STOP : Exception
     {
-        public Exception_STOP()  : base(){ }
+        public Exception_STOP() : base() { }
         public Exception_STOP(string message) : base(message) { }
-        public Exception_STOP(string message, System.Exception inner) : base(message,inner) { }
+        public Exception_STOP(string message, System.Exception inner) : base(message, inner) { }
     }
 
 }

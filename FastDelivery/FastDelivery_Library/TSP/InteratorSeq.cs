@@ -78,7 +78,7 @@ namespace FastDelivery_Library
                 candidats[test--] = nonVus.ElementAt(listeCouts.IndexOf(listeCoutsTri[nbCandidats++]));
             }
         }
-        
+
         /// <summary>
         /// Fait avancer l'itérateur
         /// </summary>

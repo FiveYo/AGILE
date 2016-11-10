@@ -1,9 +1,5 @@
 ﻿using FastDelivery_Library.Modele;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastDelivery_Library
 {
@@ -14,7 +10,7 @@ namespace FastDelivery_Library
     public interface TSP
     {
 
-        
+
         /// <summary>
         /// méthode pour stopper le calcul si le temps de calcul devient trop grand
         /// </summary>

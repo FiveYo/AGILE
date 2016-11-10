@@ -18,7 +18,8 @@ namespace FastDelivery_IHM
 
         private bool _isChecked;
 
-        public bool isChecked {
+        public bool isChecked
+        {
             get
             {
                 return _isChecked;
@@ -41,7 +42,7 @@ namespace FastDelivery_IHM
 
             image.RightTapped += Image_RightTapped;
 
-            if(lieu is Livraison)
+            if (lieu is Livraison)
             {
                 Image img = (Image)Resources["livraison"];
                 image.Source = img.Source;
@@ -55,7 +56,7 @@ namespace FastDelivery_IHM
 
         private void Image_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            if(lieu is Livraison)
+            if (lieu is Livraison)
             {
                 MenuFlyout mf = new MenuFlyout();
                 MenuFlyoutItem mfi = new MenuFlyoutItem();

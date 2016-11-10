@@ -17,7 +17,8 @@ namespace FastDelivery_Library.Modele
         private DateTime _finPlage;
         public Point adresse { get; set; }
 
-        public DateTime debutPlage {
+        public DateTime debutPlage
+        {
             get
             {
                 return _debutPlage;
@@ -109,13 +110,13 @@ namespace FastDelivery_Library.Modele
             }
         }
 
-        public Livraison(Point adresse , int duree)
+        public Livraison(Point adresse, int duree)
         {
             planifier = false;
             this.adresse = adresse;
             this.duree = duree;
         }
-        
+
         public void SetPlage(DateTime debut, DateTime fin)
         {
             debutPlage = debut;
