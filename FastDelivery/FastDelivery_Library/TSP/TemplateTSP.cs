@@ -13,12 +13,14 @@ namespace FastDelivery_Library
     public abstract class TemplateTSP : TSP
     {
 
-        public DateTime heurePassage;
         public DateTime heureDepart;
         public int[] meilleureSolution;
         private int coutMeilleureSolution = 0;
         private Boolean tempsLimiteAtteint;
         private DemandeDeLivraisons demande;
+        public  List<DateTime> meilleurshoraires;
+        public List<TimeSpan> meilleurtempsattente;
+        
 
         public Boolean getTempsLimiteAtteint()
         {
@@ -31,14 +33,18 @@ namespace FastDelivery_Library
             tempsLimiteAtteint = false;
             demande = demandeLiv;
             heureDepart = DateTime.Parse(demande.entrepot.heureDepart);
-            heurePassage = heureDepart;
             coutMeilleureSolution = int.MaxValue;
             meilleureSolution = new int [nbSommets];
             List<int> nonVus = new List<int>();
             for (int i = 1; i < nbSommets; i++) nonVus.Add(i);
             List<int> vus = new List<int>(nbSommets);
+            List<DateTime> horaires = new List<DateTime>(nbSommets);
+            List<TimeSpan> tempsattentes = new List<TimeSpan>(nbSommets);
+            meilleurshoraires = new List<DateTime>(nbSommets);
+            meilleurtempsattente = new List<TimeSpan>(nbSommets);
             vus.Add(0); // le premier sommet visite est 0
-            branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite);
+            horaires.Add(heureDepart);
+            branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite,horaires, tempsattentes,heureDepart);
         }
 
         public int? getMeilleureSolution(int i)
@@ -47,7 +53,16 @@ namespace FastDelivery_Library
                 return null  ;
             return meilleureSolution[i];
         }
-
+        public DateTime? getMeilleurHoraire(int i)
+        {
+            if ((meilleurshoraires == null) || (i < 0) || (i >= meilleurshoraires.Count)) return null;
+            return meilleurshoraires[i];
+        }
+        public TimeSpan? getMeilleurTempsAttente(int i)
+        {
+            if ((meilleurtempsattente == null) || (i < 0) || (i >= meilleurtempsattente.Count)) return null;
+            return meilleurtempsattente[i];
+        }
         public int getCoutMeilleureSolution()
         {
             return coutMeilleureSolution;
@@ -85,14 +100,19 @@ namespace FastDelivery_Library
 	     * @param tpsDebut : moment ou la resolution a commence
 	     * @param tpsLimite : limite de temps pour la resolution
 	     */
-        void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite)
+        void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite,List<DateTime> horaires,List<TimeSpan> tempsattente,DateTime heure)
         {
+            TimeSpan tempsdattente;
+            DateTime lastheuredepart = heure;
+           
             int idLivraison = sommetCrt;
             if (sommetCrt == 0)
             {
                 var currentLivraison = demande.entrepot;
+                lastheuredepart = heureDepart;
+               
             }
-            
+
             if (DateTime.Now - tpsDebut > tpsLimite)
             {
                 tempsLimiteAtteint = true;
@@ -101,9 +121,6 @@ namespace FastDelivery_Library
             if (nonVus.Count == 0)
             { // tous les sommets ont ete visites
                
-
-                //there test si on arrive avant la plage de debut, ajouter la diff entre temsp arrivee et plage debut
-                DateTime heuretemp = heurePassage + new TimeSpan(0, 0, coutVus);
                 if (sommetCrt!=0)
                 {
                     
@@ -111,81 +128,130 @@ namespace FastDelivery_Library
                     if (currentLivraison.planifier)
                     {
                         DateTime DebutPlage = DateTime.Parse(currentLivraison.debutPlage);
-                        if (heurePassage.CompareTo(DebutPlage) <= 0)
+                        if (lastheuredepart.CompareTo(DebutPlage) <= 0)
                         {
-                            coutVus += cout[sommetCrt, 0]+((TimeSpan)DebutPlage.Subtract(heurePassage)).Seconds;
+                            coutVus += cout[sommetCrt, 0]+(int)((TimeSpan)(DebutPlage.Subtract(lastheuredepart))).TotalSeconds+currentLivraison.duree;
                         }
                     }
                     else
                     {
-                        coutVus += cout[sommetCrt, 0];
+                        coutVus += cout[sommetCrt, 0] + currentLivraison.duree;
                     }
-                }
-                else
-                {
-                    coutVus += cout[sommetCrt, 0];
-                }
-                
-               
+                }             
 
                 if (coutVus < coutMeilleureSolution) 
                 { // on a trouve une solution meilleure que meilleureSolution
                     meilleureSolution = vus.ToArray<int>();
                     coutMeilleureSolution = coutVus;
-                    
-
+                    meilleurshoraires = new List<DateTime>(horaires);
+                    meilleurtempsattente = new List<TimeSpan>();
+                    lastheuredepart = heureDepart; //AVEC OU SANS
                 }
             }
-            else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande,heurePassage) < coutMeilleureSolution)
+            else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande, lastheuredepart) < coutMeilleureSolution)
             {
                 
                 IIterator<int> it = iterator(sommetCrt, nonVus, cout, duree);
                 while (it.MoveNext())
                 {
-                    int prochainSommet=it.Current; 
+                    DateTime newheurepassage;
+                    int prochainSommet=it.Current;
                     vus.Add(prochainSommet);
                     nonVus.Remove(prochainSommet);
-
-                    if (prochainSommet != 0)
+                    if (sommetCrt != 0)
                     {
-                        var currentLivraison = demande.livraisons[prochainSommet];
-                        if (currentLivraison.planifier)
+                        var currentLivraison = demande.livraisons[idLivraison];
+                        var nextLivraison = demande.livraisons[prochainSommet];
+                        
+                        if (nextLivraison.planifier && currentLivraison.planifier)
                         {
-                            DateTime FinPlage = DateTime.Parse(currentLivraison.finPlage);
-                            DateTime heureprevu = heurePassage + new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[prochainSommet]);
-                            if (heureprevu.CompareTo(FinPlage) <= 0)
+                            DateTime nextFinPlage = DateTime.Parse(nextLivraison.finPlage);
+                            DateTime nextDebutPlage = DateTime.Parse(nextLivraison.debutPlage);
+                            DateTime currentDebutPlage = DateTime.Parse(currentLivraison.debutPlage);
+                            DateTime heureprevu = lastheuredepart  +new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[sommetCrt]);
+                            //je crée mon temps d'attente!
+                            if (lastheuredepart <= currentDebutPlage)
                             {
-                                
-                                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
-                                heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
-                                vus.Remove(prochainSommet);
-                                nonVus.Add(prochainSommet);
+                                currentLivraison.tempsAttente = (TimeSpan)(currentDebutPlage.Subtract(lastheuredepart));
                             }
                             else
                             {
-
-                                vus.Remove(prochainSommet);
-                                nonVus.Add(prochainSommet);
-
+                                currentLivraison.tempsAttente = new TimeSpan(0, 0, 0);
                             }
+                            //c'est fait!
+                            if (((heureprevu + currentLivraison.tempsAttente)).CompareTo(nextFinPlage) <= 0)
+                            {
+                                tempsdattente = currentLivraison.tempsAttente;
+                                newheurepassage = heureprevu + currentLivraison.tempsAttente;
+                                horaires.Add(newheurepassage);
+                                tempsattente.Add(tempsdattente);
+                                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + (int)((TimeSpan)(currentDebutPlage.Subtract(lastheuredepart))).TotalSeconds + currentLivraison.duree, cout, duree, tpsDebut, tpsLimite, horaires, tempsattente, newheurepassage);
+                                horaires.Remove(newheurepassage);
+                                tempsattente.Remove(tempsdattente);
+                            }
+                            else
+                            {
+                            }
+                            
+                        }
+                        else if(nextLivraison.planifier && !currentLivraison.planifier)
+                        {
+                            DateTime heureprevu = lastheuredepart + new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[sommetCrt]);
+                            DateTime nextFinPlage = DateTime.Parse(nextLivraison.finPlage);
+                            if ((heureprevu).CompareTo(nextFinPlage) <= 0)
+                            {
+                                tempsdattente = currentLivraison.tempsAttente;
+                                newheurepassage = heureprevu;
+                                horaires.Add(newheurepassage);
+                                tempsattente.Add(tempsdattente);
+                                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + currentLivraison.duree, cout, duree, tpsDebut, tpsLimite, horaires, tempsattente,newheurepassage);
+                                horaires.Remove(newheurepassage);
+                                tempsattente.Remove(tempsdattente);
+                            }
+                        }
+                        else if(!nextLivraison.planifier && currentLivraison.planifier)
+                        {
+                            DateTime heureprevu = lastheuredepart + new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[sommetCrt]);
+                            DateTime currentDebutPlage = DateTime.Parse(currentLivraison.debutPlage);
+                            //je crée mon temps d'attente!
+                            if (lastheuredepart <= currentDebutPlage)
+                            {
+                                currentLivraison.tempsAttente = (TimeSpan)(currentDebutPlage.Subtract(lastheuredepart));
+                            }
+                            else
+                            {
+                                currentLivraison.tempsAttente = new TimeSpan(0, 0, 0);
+                            }
+                            //c'est fait!
+                            tempsdattente = currentLivraison.tempsAttente;
+                            newheurepassage = heureprevu + currentLivraison.tempsAttente;
+                            horaires.Add(newheurepassage);
+                            tempsattente.Add(tempsdattente);
+                            branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + (int)((TimeSpan)(currentDebutPlage.Subtract(lastheuredepart))).TotalSeconds + currentLivraison.duree, cout, duree, tpsDebut, tpsLimite, horaires, tempsattente,newheurepassage);
+                            horaires.Remove(newheurepassage);
+                            tempsattente.Remove(tempsdattente);
                         }
                         else
                         {
-                            
-                            branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
-                            heurePassage += new TimeSpan(0, 0, coutVus) + new TimeSpan(0, 0, currentLivraison.duree);
-                            vus.Remove(prochainSommet);
-                            nonVus.Add(prochainSommet);
+                            tempsdattente = currentLivraison.tempsAttente;
+                            DateTime heureprevu = lastheuredepart + new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[sommetCrt]);
+                            newheurepassage = lastheuredepart.Add(new TimeSpan(0, 0, cout[sommetCrt, prochainSommet] + duree[sommetCrt]));
+                            horaires.Add(newheurepassage);
+                            tempsattente.Add(tempsdattente);
+                            branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + currentLivraison.duree, cout, duree, tpsDebut, tpsLimite, horaires, tempsattente,newheurepassage);
+                            horaires.Remove(newheurepassage);
+                            tempsattente.Remove(tempsdattente);
                         }
                     }
                     else
                     {
-                        
-                        branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
-                        heurePassage += new TimeSpan(0, 0, coutVus);
-                        vus.Remove(prochainSommet);
-                        nonVus.Add(prochainSommet);
+                        newheurepassage = lastheuredepart.Add(new TimeSpan(0, 0, cout[sommetCrt, prochainSommet]));
+                        horaires.Add(newheurepassage);
+                        branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet], cout, duree, tpsDebut, tpsLimite, horaires, tempsattente,newheurepassage);
+                        horaires.Remove(newheurepassage);
                     }
+                    vus.Remove(prochainSommet);
+                    nonVus.Add(prochainSommet);
                 }
             }
         }

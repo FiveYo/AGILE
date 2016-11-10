@@ -307,7 +307,7 @@ namespace FastDelivery_Library
             return cout;
         }
 
-        public static List<Livraison> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
+        public static Tuple<List<Livraison>,List<DateTime>> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
             Livraison tmp;
             int[,] cost = CreateCostMatrice(LivStruct, carte);
@@ -328,8 +328,8 @@ namespace FastDelivery_Library
                 duree);
 #endif
 
-            List<Livraison> resultat = new List<Livraison>();
-
+            Tuple<List<Livraison>, List<DateTime>> resultat = new Tuple<List<Livraison>, List<DateTime>>(new List<Livraison>(),new List<DateTime>());
+            
             if(tsp.getTempsLimiteAtteint())
             {
                 throw new TimeoutException("try again");
@@ -337,7 +337,12 @@ namespace FastDelivery_Library
 
             foreach(var index in tsp.meilleureSolution.Skip(1))
             {
-                resultat.Add(LivStruct.livraisons.ElementAt(index - 1).Value);
+                resultat.Item1.Add((LivStruct.livraisons.ElementAt(index - 1).Value));
+
+            }
+            foreach (var horaire in tsp.meilleurshoraires.Skip(1))
+            {
+                resultat.Item2.Add(horaire);
             }
 
             return resultat;
@@ -346,10 +351,10 @@ namespace FastDelivery_Library
         public static Tournee creerTournee(DemandeDeLivraisons livraisons, Carte carte)
         {
             Tournee t;
-           
-            List<Livraison> livraisonsOrdonnee = startTsp(livraisons, carte);
+            var res = startTsp(livraisons, carte);
+            List<Livraison> livraisonsOrdonnee = new List<Livraison>(res.Item1);
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
-
+            List<DateTime> horaireList = new List<DateTime>(res.Item2);
             Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
 
             Point start = livraisons.entrepot.adresse;
@@ -360,13 +365,16 @@ namespace FastDelivery_Library
                 chemins.Add(livraison, new Chemin(PathToTroncon(dijkstra.getPath(livraison.adresse))));
                 start = livraison.adresse;
             }
-
             dijkstra.execute(livraisonsOrdonnee.Last().adresse);
             chemins.Add(
                 livraisons.entrepot,
                 new Chemin(PathToTroncon(dijkstra.getPath(livraisons.entrepot.adresse))));
             t = new Tournee(livraisons.entrepot, livraisonsOrdonnee, chemins);
-            t.CalculHeurePassage();
+            for (int i = 0; i < livraisonsOrdonnee.Count; i++)
+            {
+                t.HeuredePassage.Add(livraisonsOrdonnee[i], horaireList[i]);
+                livraisonsOrdonnee[i].HeureDePassage = horaireList[i];
+            }
             return t;
 
         }

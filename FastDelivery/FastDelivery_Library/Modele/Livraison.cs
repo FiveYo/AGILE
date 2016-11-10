@@ -19,6 +19,8 @@ namespace FastDelivery_Library
         public Point adresse { get; set; }
 
         public DateTime HeureDePassage;
+
+        public TimeSpan tempsAttente = new TimeSpan(0,0,0);
         public Livraison(Point adresse , int duree)
         {
             planifier = false;

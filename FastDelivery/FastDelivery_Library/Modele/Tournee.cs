@@ -20,8 +20,6 @@ namespace FastDelivery_Library
         // Si on veut connaitre le chemin pour aller à une livraisons on peut y accéder par sa clef
         public Dictionary<Lieu, Chemin> Hashchemin;
 
-        public DateTime heureArrivee;
-
         public enum Error { Before, After };
 
         public Dictionary<Livraison, DateTime> HeuredePassage = new Dictionary<Livraison, DateTime>();
@@ -52,7 +50,7 @@ namespace FastDelivery_Library
                     
                     foreach (var troncon in chemin.getTronconList())
                     {
-                        Livtime.Add(TimeSpan.FromSeconds(troncon.cout));
+                        Livtime=Livtime.Add(TimeSpan.FromSeconds(troncon.cout));
                     }
 
                     HashLivraison.Add(livraison, Livtime);
