@@ -103,7 +103,11 @@
             </SplitView>
         </Grid>
         <Grid Grid.Row="1">
-            <Border BorderThickness="0 1 0 0" BorderBrush="Black">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.95*"></ColumnDefinition>
+                <ColumnDefinition Width="0.05*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="0 1 0 0" BorderBrush="Black" Grid.Column="0">
                 <TextBlock x:Name="feedBack" HorizontalAlignment="Stretch" Padding="10 0"  TextWrapping="Wrap" FontSize="18"
                            Text="Bienvenue Utilisateur. Vous pouvez dès maintenant charger le plan de votre choix." VerticalAlignment="Center" >
                     <TextBlock.Triggers>
@@ -121,6 +125,7 @@
                     </TextBlock.Triggers>
                 </TextBlock>
             </Border>
+            <Button x:Name="stopTSP" Content="&#xE711;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Stretch" Margin="0" VerticalAlignment="Center" Grid.Column="1" Click="stopTSP_Click"/>
         </Grid>
     </Grid>
 </Page>

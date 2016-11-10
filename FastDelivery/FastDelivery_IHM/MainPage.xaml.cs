@@ -45,6 +45,8 @@ namespace FastDelivery_IHM
 
         private async void MapCanvas_PointClicked(object sender, EventMap e)
         {
+            Outils.StopTsp();
+            await Task.Delay(500);
             //Cette méthode ne peut être appelé que quand les livraisons sont chargés (géré dans Map)                
             popup = new DeliveryPop();
             popup.adresse = e.point;
@@ -76,6 +78,8 @@ namespace FastDelivery_IHM
 
         private async void LieuMap_Supprimer(object sender, RoutedEventArgs e)
         {
+            Outils.StopTsp();
+            await Task.Delay(500);
             if (waitevent)
             {
                 if (await showCancel())
@@ -111,6 +115,8 @@ namespace FastDelivery_IHM
 
         private async void LieuMap_Modifier(object sender, RoutedEventArgs e)
         {
+            Outils.StopTsp();
+            await Task.Delay(500);
             if (waitevent)
             {
                 if (await showCancel())
@@ -137,7 +143,9 @@ namespace FastDelivery_IHM
 
         private async void loadMap_Click(object sender, RoutedEventArgs e)
         {
-            if(waitevent)
+            Outils.StopTsp();
+            await Task.Delay(500);
+            if (waitevent)
             {
                 if (await showCancel())
                     return;
@@ -177,6 +185,8 @@ namespace FastDelivery_IHM
         
         private async void loadDeliveries_Click(object sender, RoutedEventArgs e)
         {
+            Outils.StopTsp();
+            await Task.Delay(500);
             if (waitevent)
             {
                 if (await showCancel())
@@ -234,9 +244,11 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void LieuMap_Clicked(object sender, RoutedEventArgs e)
+        private async void LieuMap_Clicked(object sender, RoutedEventArgs e)
         {
-            if(waitevent)
+            Outils.StopTsp();
+            await Task.Delay(500);
+            if (waitevent)
             {
                 LieuMap lieuClicked = sender as LieuMap;
                 waitevent = false;
@@ -267,6 +279,8 @@ namespace FastDelivery_IHM
 
         private async void getRoadMap_Click(object sender, RoutedEventArgs e)
         {
+            Outils.StopTsp();
+            await Task.Delay(500);
             if (waitevent)
             {
                 if (await showCancel())
@@ -325,6 +339,8 @@ namespace FastDelivery_IHM
 
         private async void loadCircuit_Click(object sender, RoutedEventArgs e)
         {
+            Outils.StopTsp();
+            await Task.Delay(500);
             if (waitevent)
             {
                 if (await showCancel())
@@ -344,7 +360,7 @@ namespace FastDelivery_IHM
             }
             catch (TimeoutException)
             {
-                feedBack.Text = "Calcul de la tournée annulée. Sélectionnez une nouvelle carte et une nouvelle livraison";
+                feedBack.Text = "Calcul de la tournée annulé. Sélectionnez une nouvelle carte et une nouvelle livraison";
                 var messageDialog = new MessageDialog("L'opération a été annulée car le calcul demande un temps trop important (plus de 1 minute).");
                 await messageDialog.ShowAsync();
             }
@@ -396,5 +412,12 @@ namespace FastDelivery_IHM
             }
             return waitevent;
         }
+
+        private void stopTSP_Click(object sender, RoutedEventArgs e)
+        {
+            Outils.StopTsp();
+            feedBack.Text = "Vous avez stoppé la recherche de solutions plus optimale.";
+        }
+
     }
 }

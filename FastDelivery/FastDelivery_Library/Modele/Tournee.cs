@@ -10,7 +10,7 @@ namespace FastDelivery_Library
     /// <summary>
     /// Contient la liste des livraisons ordonnées et des tronçons ainsi que l'entrepot
     /// </summary>
-    public class Tournee
+    public class Tournee : IComparable
     {
         public Entrepot entrepot;
 
@@ -456,6 +456,31 @@ namespace FastDelivery_Library
             //return;
             foreach (var lol in Hashchemin) { }
             foreach (var livraison in livraisons) { }
+        }
+
+        public int CompareTo(object objet)
+        {
+            Tournee obj = objet as Tournee;
+            if(obj == null)
+            {
+                return 1;
+            }
+            bool equals = true;
+            for(int i=0; i<livraisons.Count; i++)
+            { 
+                if(livraisons[i].adresse.id != obj.livraisons[i].adresse.id)
+                {
+                    equals = false;
+                }
+            }
+            if(!equals)
+            {
+                return 0;
+            }
+            else
+            {
+                return (int)((TimeSpan)(livraisons[livraisons.Count-1].heureDepart.Subtract(obj.livraisons[obj.livraisons.Count-1].heureDepart))).TotalSeconds;
+            }
         }
     }
 }

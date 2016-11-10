@@ -54,8 +54,9 @@ namespace FastDelivery_IHM
         {
             if (etatActuel == etat.enCoursDeCalcul)
             {
-                etatActuel = etat.enCoursDArret;
                 Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+                
             }
             List<LieuStack> lieuStack = new List<LieuStack>();
             List<LieuMap> lieuMap;
@@ -156,15 +157,26 @@ namespace FastDelivery_IHM
 
         private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack, Task chargeTsp)
         {
-            chargeTsp.ContinueWith((i) => { Debug.WriteLine("hello"); });
+            Tournee tourneeTmp = null;
             await Task.Delay(1000);
             while(!chargeTsp.IsCompleted)
             {
-                if(etatActuel == etat.enCoursDArret)
+                
+                if (etatActuel == etat.enCoursDArret)
                 {
                     return;
                 }
-                Tournee tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
+                });
                 if (tourneeTmp != null)
                 {
                     if (tournee == null)
@@ -190,7 +202,7 @@ namespace FastDelivery_IHM
                         }
 
                     }
-                    if (Enumerable.SequenceEqual(tourneeTmp.livraisons.OrderBy(t => t), tournee.livraisons.OrderBy(t => t)))
+                    if (tourneeTmp.CompareTo(tournee) != 0)
                     {
                         tournee = tourneeTmp;
                         mapCanvas.LoadWay(tournee);
@@ -217,7 +229,7 @@ namespace FastDelivery_IHM
             }
             if (etatActuel == etat.enCoursDArret)
                 return;
-            Tournee final = await Outils.getResultActual(demandeLivraisons, carte);
+            Tournee final = Outils.getResultActual(demandeLivraisons, carte);
             if(final != null)
             {
                 tournee = final;
