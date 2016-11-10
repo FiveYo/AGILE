@@ -51,8 +51,39 @@ namespace FastDelivery_Library.Modele
         public bool planifier { get; set; }
         public Point adresse { get; set; }
 
-        public DateTime heureArrivee;
-        public DateTime heureDepart;
+        private DateTime _heureArrivee;
+        private DateTime _heureDepart;
+
+        public DateTime heureArrivee
+        {
+            get
+            {
+                return _heureArrivee;
+            }
+            set
+            {
+                if (value != heureArrivee)
+                {
+                    _heureArrivee = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        public DateTime heureDepart
+        {
+            get
+            {
+                return _heureDepart;
+            }
+            set
+            {
+                if (value != heureDepart)
+                {
+                    _heureDepart = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public TimeSpan tempsAttente = new TimeSpan(0, 0, 0);
 

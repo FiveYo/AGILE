@@ -418,6 +418,6 @@ namespace FastDelivery_IHM
             Outils.StopTsp();
             feedBack.Text = "Vous avez stoppé la recherche de solutions plus optimale.";
         }
-
+        
     }
 }
