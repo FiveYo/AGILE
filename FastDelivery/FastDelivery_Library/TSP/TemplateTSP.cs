@@ -13,7 +13,7 @@ namespace FastDelivery_Library
 
     public abstract class TemplateTSP : TSP
     {
-        public bool stop;
+        public bool stop=false;
         public DateTime heureDepart;
         public int[] meilleureSolution;
         private int coutMeilleureSolution = 0;
@@ -104,6 +104,7 @@ namespace FastDelivery_Library
 	     */
         void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite, List<DateTime> horaires, List<TimeSpan> tempsattente, DateTime heure)
         {
+            
             TimeSpan tempsdattente;
             DateTime lastheuredepart = heure;
 
