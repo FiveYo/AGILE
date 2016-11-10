@@ -166,17 +166,17 @@ namespace FastDelivery_IHM
                 {
                     return;
                 }
-                await Task.Run(() =>
-                {
-                    try
-                    {
+                //await Task.Run(() =>
+                //{
+                //    try
+                //    {
                         tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
-                    }
-                    catch (Exception)
-                    {
-                        return;
-                    }
-                });
+                //    }
+                //    catch (Exception)
+                //    {
+                //        return;
+                //    }
+                //});
                 if (tourneeTmp != null)
                 {
                     if (tournee == null)
