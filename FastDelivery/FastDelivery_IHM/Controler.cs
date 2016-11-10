@@ -224,7 +224,7 @@ namespace FastDelivery_IHM
                 string intro = "Bonjour cher livreur,\r\nVous trouverez ci-après la liste des livraisons que vous devez effectuer et le parcours que vous allez emprunter.\r\nFastDelivery vous souhaite un bon voyage.\r\n \r\n";
                 for (int j = 0; j < tournee.livraisons.Count; j++)
                 {
-                    intro += "Livraison n°" + (++i) + " :\r\n   Coordonnées : (" + tournee.livraisons[j].adresse.x + "," + tournee.livraisons[j].adresse.y + ") \r\n   Heure d'arrivée : " + tournee.livraisons[j].HeureDePassage + "\r\n   Heure de départ : " + tournee.livraisons[j].HeureDePassage + "\r\n   Itinéraire à suivre pour rejoindre cette livraison : ";
+                    intro += "Livraison n°" + (++i) + " :\r\n   Coordonnées : (" + tournee.livraisons[j].adresse.x + "," + tournee.livraisons[j].adresse.y + ") \r\n   Heure d'arrivée : " + tournee.livraisons[j].heureArrivee+ "\r\n   Heure de départ : " + tournee.livraisons[j].heureDepart + "\r\n   Itinéraire à suivre pour rejoindre cette livraison : ";
                     foreach (var troncon in tournee.Hashchemin[tournee.livraisons[j]].getTronconList())
                     {
                         intro += troncon.rue + ",";

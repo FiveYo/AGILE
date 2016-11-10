@@ -65,18 +65,25 @@ namespace FastDelivery_IHM
                 dureeBox.Text = (liv as Livraison).duree.ToString();
                 Image img = (Image)Resources["livraison"];
                 typeBox.Source = img.Source;
-                if ((liv as Livraison).HeureDePassage != null)
+
+                if ((liv as Livraison).heureArrivee != DateTime.MinValue && (liv as Livraison).heureDepart != DateTime.MinValue)
                 {
-                    heureArriveeBox.Text = String.Format("{0:t}",
-                        (liv as Livraison).HeureDePassage);
+                    string toto = String.Format("{0:t} → {1:t}",
+                        (liv as Livraison).heureArrivee, (liv as Livraison).heureDepart);
+                    heureArriveeBox.Text = toto;
                 }
+
                 if ((liv as Livraison).planifier)
                 {
                     plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
                           (liv as Livraison).debutPlage, (liv as Livraison).finPlage);
-                    if ((liv as Livraison).HeureDePassage > (liv as Livraison).finPlage)
+                    if ((liv as Livraison).heureArrivee > (liv as Livraison).finPlage)
                     {
                         heureArriveeBox.Foreground = new SolidColorBrush(Colors.Red);
+                    }
+                    else if ((liv as Livraison).heureArrivee < (liv as Livraison).debutPlage)
+                    {
+                        heureArriveeBox.Foreground = new SolidColorBrush(Colors.Green);
                     }
                 }
             }

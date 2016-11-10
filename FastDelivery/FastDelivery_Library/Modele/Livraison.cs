@@ -51,7 +51,8 @@ namespace FastDelivery_Library.Modele
         public bool planifier { get; set; }
         public Point adresse { get; set; }
 
-        public DateTime HeureDePassage;
+        public DateTime heureArrivee;
+        public DateTime heureDepart;
 
         public TimeSpan tempsAttente = new TimeSpan(0, 0, 0);
 
@@ -84,7 +85,7 @@ namespace FastDelivery_Library.Modele
 
         public void SetHeureDePassage(DateTime heurePassage)
         {
-            HeureDePassage = heurePassage;
+            heureArrivee = heurePassage;
         }
     }
 }

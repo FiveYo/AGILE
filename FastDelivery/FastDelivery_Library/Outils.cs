@@ -367,6 +367,7 @@ namespace FastDelivery_Library
             await Task.Delay(100);
             List<Livraison> resultat = new List<Livraison>();
             List<DateTime> resultatDate = new List<DateTime>();
+            List<TimeSpan> resultatTemp = new List<TimeSpan>();
 
             // On vérifie qu'il existe déjà des solutions
             if (tsp.meilleureSolution.Where((i) => { return i == 0; }).Count() == 1)
@@ -379,6 +380,10 @@ namespace FastDelivery_Library
                 foreach (var horaire in tsp.meilleurshoraires.Skip(1))
                 {
                     resultatDate.Add(horaire);
+                }
+                foreach(var temp in tsp.meilleurtempsattente.Skip(1))
+                {
+                    resultatTemp.Add(temp);
                 }
 
                 DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
@@ -404,7 +409,8 @@ namespace FastDelivery_Library
                 for (int i = 0; i < resultat.Count; i++)
                 {
                     t2.HeuredePassage.Add(resultat[i], resultatDate[i]);
-                    resultat[i].HeureDePassage = resultatDate[i];
+                    resultat[i].heureArrivee = resultatDate[i];
+                    resultat[i].heureDepart = resultatDate[i] + resultatTemp[i] + new TimeSpan(0, 0, resultat[i].duree);
                 }
             }
             return t2;

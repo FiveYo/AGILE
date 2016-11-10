@@ -13,7 +13,7 @@ namespace FastDelivery_Library
 
     public abstract class TemplateTSP : TSP
     {
-
+        public bool stop;
         public DateTime heureDepart;
         public int[] meilleureSolution;
         private int coutMeilleureSolution = 0;
@@ -45,6 +45,7 @@ namespace FastDelivery_Library
             meilleurtempsattente = new List<TimeSpan>(nbSommets);
             vus.Add(0); // le premier sommet visite est 0
             horaires.Add(heureDepart);
+            tempsattentes.Add(new TimeSpan(0, 0, 0));
             branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite, horaires, tempsattentes, heureDepart);
         }
 
@@ -59,7 +60,7 @@ namespace FastDelivery_Library
             if ((meilleurshoraires == null) || (i < 0) || (i >= meilleurshoraires.Count)) return null;
             return meilleurshoraires[i];
         }
-        public TimeSpan? getMeilleurTempsAttente(int i)
+        public TimeSpan? getmeilleurtempsattente(int i)
         {
             if ((meilleurtempsattente == null) || (i < 0) || (i >= meilleurtempsattente.Count)) return null;
             return meilleurtempsattente[i];
@@ -145,7 +146,7 @@ namespace FastDelivery_Library
                     meilleureSolution = vus.ToArray<int>();
                     coutMeilleureSolution = coutVus;
                     meilleurshoraires = new List<DateTime>(horaires);
-                    meilleurtempsattente = new List<TimeSpan>();
+                    meilleurtempsattente = new List<TimeSpan>(tempsattente);
                     lastheuredepart = heureDepart; //AVEC OU SANS
                 }
             }
@@ -246,9 +247,12 @@ namespace FastDelivery_Library
                     }
                     else
                     {
+                        tempsdattente = new TimeSpan(0, 0, 0);
                         newheurepassage = lastheuredepart.Add(new TimeSpan(0, 0, cout[sommetCrt, prochainSommet]));
                         horaires.Add(newheurepassage);
+                        tempsattente.Add(tempsdattente);
                         branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet], cout, duree, tpsDebut, tpsLimite, horaires, tempsattente, newheurepassage);
+                        horaires.Remove(newheurepassage);
                         horaires.Remove(newheurepassage);
                     }
                     vus.Remove(prochainSommet);
@@ -261,7 +265,8 @@ namespace FastDelivery_Library
         {
             throw new NotImplementedException();
         }
+
+
+
     }
-
-
 }
