@@ -298,15 +298,10 @@ namespace FastDelivery_IHM
                 if (Controler.etatActuel == etat.tourneeCalculee)
                 {
                     var savePicker = new Windows.Storage.Pickers.FileSavePicker();
-                    savePicker.SuggestedStartLocation =
-                        Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
-                    // Dropdown of file types the user can save the file as
+                    savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
                     savePicker.FileTypeChoices.Add("Plain text", new List<string>() { ".txt" });
-                    // Default file name if the user does not type one in or select a file to replace
                     savePicker.SuggestedFileName = "Feuille De Route";
-
                     Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
-
                     feedBack.Text = "Génération de la feuille de route";
                     Controler.GetRoadMap(file);
                     feedBack.Text = "Votre feuille de route à bien été générée.";
