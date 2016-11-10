@@ -31,36 +31,6 @@ namespace FastDelivery_Library
             this.Hashchemin = minche;
         }
 
-        public void CalculHeurePassage()
-        {
-            Dictionary<Livraison, DateTime> HashLivraison = new Dictionary<Livraison, DateTime>();
-            Chemin chemin;
-            // On initialise le temps du départ avec l'heure départ de l'entrepot
-            DateTime Livtime;
-
-
-            if (DateTime.TryParse(entrepot.heureDepart, out Livtime) == false)
-            {
-                throw new Exception("Parsing Error");
-            }
-            foreach (var livraison in livraisons)
-            {
-                if (Hashchemin.TryGetValue(livraison, out chemin))
-                {
-                    
-                    foreach (var troncon in chemin.getTronconList())
-                    {
-                        Livtime=Livtime.Add(TimeSpan.FromSeconds(troncon.cout));
-                    }
-
-                    HashLivraison.Add(livraison, Livtime);
-                    livraison.HeureDePassage = Livtime;
-                    Livtime.Add(TimeSpan.FromSeconds(livraison.duree));
-                }
-
-            }
-            this.HeuredePassage = HashLivraison;
-        }
         public Dictionary<Livraison, Error> AddLivraison(Carte carte, Livraison newlivraison, int index)
         {
 
