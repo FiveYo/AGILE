@@ -20,6 +20,12 @@ namespace FastDelivery_Library
         public Exception_XML(string message, System.Exception inner) : base (message, inner) { }
     }
 
+    public class Exception_STOP : Exception
+    {
+        public Exception_STOP()  : base(){ }
+        public Exception_STOP(string message) : base(message) { }
+        public Exception_STOP(string message, System.Exception inner) : base(message,inner) { }
+    }
 
 }
 

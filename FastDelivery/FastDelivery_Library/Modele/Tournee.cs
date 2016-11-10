@@ -31,29 +31,36 @@ namespace FastDelivery_Library
             this.Hashchemin = minche;
         }
 
-        public void CalculHeurePassage()
+        public void UpdateHeurePassage()
         {
-            //Dictionary<Livraison, DateTime> HashLivraison = new Dictionary<Livraison, DateTime>();
-            //Chemin chemin;
-            //// On initialise le temps du départ avec l'heure départ de l'entrepot
-            //DateTime Livtime = entrepot.heureDepart;
-            //foreach (var livraison in livraisons)
-            //{
-            //    if (Hashchemin.TryGetValue(livraison, out chemin))
-            //    {
+            DateTime tA=entrepot.heureDepart;
+            DateTime tD = entrepot.heureDepart;
+            Chemin chemintemp;
+            Livraison livtemp;
+            for(int i=0; i<livraisons.Count;i++)
+            {
+                livtemp = livraisons[i];
+                chemintemp = Hashchemin[livtemp];
+                tA = tD + new TimeSpan(0, 0, (int)chemintemp.cout);
+                if ( i<livraisons.Count-1 && livraisons[i+1].planifier )
+                {
+                    tD = tA + new TimeSpan(0, 0, livtemp.duree)+livraisons[i+1].tempsAttente;
+                }
+                else
+                {
+                    tD = tA + new TimeSpan(0, 0, livtemp.duree);
+                }
+                livtemp.heureArrivee = tA;
+                livtemp.heureArrivee = tD;
+            }
+            var result=Check();
+            if (result.Count!=0)
+            {
+                throw new Exception();
+            }
 
-            //        foreach (var troncon in chemin.getTronconList())
-            //        {
-            //            Livtime = Livtime.Add(TimeSpan.FromSeconds(troncon.cout));
-            //        }
 
-            //        HashLivraison.Add(livraison, Livtime);
-            //        livraison.heureArrivee = Livtime;
-            //        Livtime.Add(TimeSpan.FromSeconds(livraison.duree));
-            //    }
 
-            //}
-            //this.HeuredePassage = HashLivraison;
         }
         public Dictionary<Livraison, Error> AddLivraison(Carte carte, Livraison newlivraison, int index)
         {
@@ -69,6 +76,7 @@ namespace FastDelivery_Library
 
             List<Troncon> tronconprecedent = new List<Troncon>();
             List<Troncon> tronconsuivant = new List<Troncon>();
+
 
 
             if (index == -1)
@@ -110,6 +118,7 @@ namespace FastDelivery_Library
 
             Hashchemin.Add(newlivraison, cheminprecedent);
             Hashchemin[lieusuivant] = cheminsuivant;
+            HeuredePassage.Add(newlivraison, new DateTime());
 
             //on check si tout va bien
             //Dictionary<Livraison, List<double>> result = Check();
@@ -234,9 +243,9 @@ namespace FastDelivery_Library
 
             Dictionary<Livraison, List<double>> listlivraisonout = new Dictionary<Livraison, List<double>>();
 
-            DateTime DebutPlage;
+           
             DateTime FinPlage;
-            DateTime Heurepassage;
+            DateTime HeureArrive;
 
             List<double> CostList = new List<double>();
             double costgap;
@@ -244,33 +253,20 @@ namespace FastDelivery_Library
 
             foreach (var livraison in livraisons)
             {
-                if (HeuredePassage.TryGetValue(livraison, out Heurepassage))
+                if (HeuredePassage.TryGetValue(livraison, out HeureArrive))
                 {
                     if (livraison.planifier)
                     {
-                        DebutPlage = livraison.debutPlage;
+                        
                         FinPlage = livraison.finPlage;
-
-                        if (DateTime.Compare(DebutPlage, Heurepassage) > 0)
-                        {
-                            danslintervalle = 1;
-                            costgap = ((TimeSpan)DebutPlage.Subtract(Heurepassage)).TotalSeconds;
-                        }
-                        else if (DateTime.Compare(FinPlage, Heurepassage) < 0)
+                        if (DateTime.Compare(FinPlage, HeureArrive) < 0)
                         {
                             danslintervalle = -1;
-                            costgap = -((TimeSpan)Heurepassage.Subtract(FinPlage)).TotalSeconds;
+                            costgap = -((TimeSpan)HeureArrive.Subtract(FinPlage)).TotalSeconds;
+                            CostList.Add(danslintervalle);
+                            CostList.Add(costgap);
+                            listlivraisonout.Add(livraison, CostList);
                         }
-                        else
-                        {
-                            danslintervalle = 0;
-                            costgap = 0;
-                        }
-
-                        CostList.Add(danslintervalle);
-                        CostList.Add(costgap);
-                        listlivraisonout.Add(livraison, CostList);
-
                         //on vide la liste
                         CostList.Clear();
                     }
