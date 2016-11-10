@@ -246,7 +246,7 @@ namespace FastDelivery_Library
                 }
                 else
                 {
-                    throw new Exception_XML("Le point avec l'id " + id.ToString() + " n'existe pas");
+                    throw new Exception_XML("");
                 }
             }
             demandeLivaisons = new DemandeDeLivraisons(LivHash, entrepot);
