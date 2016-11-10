@@ -3,7 +3,7 @@
 <entrepot adresse="16" heureDepart="8:0:0"/>
 <livraison adresse="12" duree="600"/>
 <livraison adresse="8" duree="300"/>
-<livraison adresse="21" duree="600"/>
+<livraison adresse="21" duree="-600"/>
 <livraison adresse="22" duree="300"/>
 <livraison adresse="20" duree="300"/>
 <livraison adresse="14" duree="900"/>

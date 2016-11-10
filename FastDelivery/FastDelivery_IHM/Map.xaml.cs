@@ -149,7 +149,7 @@ namespace FastDelivery_IHM
                 lineToAim.Y2 = Y2;
 
                 ToolTip tt = new ToolTip();
-                tt.Content = "Nom rue: " + troncon.Value.rue;
+                tt.Content = "Nom rue : " + troncon.Value.rue;
                 lineToAim.SetValue(ToolTipService.ToolTipProperty, tt);
 
                 line.Stroke = colorMap;

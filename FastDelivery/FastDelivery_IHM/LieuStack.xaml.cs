@@ -106,34 +106,23 @@ namespace FastDelivery_IHM
 
         private void LieuStack_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
+            if ((lieu as Livraison).planifier)
             {
-                case "debutPlage":
-                case "finPlage":
-                    if ((lieu as Livraison).planifier)
-                    {
-                        plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
-                              (lieu as Livraison).debutPlage, (lieu as Livraison).finPlage);
-                        if ((lieu as Livraison).heureArrivee > (lieu as Livraison).finPlage)
-                        {
-                            heureArriveeBox.Foreground = new SolidColorBrush(Colors.Red);
-                        }
-                        else if ((lieu as Livraison).heureArrivee < (lieu as Livraison).debutPlage)
-                        {
-                            heureArriveeBox.Foreground = new SolidColorBrush(Colors.Green);
-                        }
-                    }
-                    break;
-                case "heureArrivee":
-                case "heureDepart":
-                    if ((lieu as Livraison).heureArrivee != DateTime.MinValue && (lieu as Livraison).heureDepart != DateTime.MinValue)
-                    {
-                        heureArriveeBox.Text = String.Format("{0:t} → {1:t}",
-                            (lieu as Livraison).heureArrivee, (lieu as Livraison).heureDepart);
-                    }
-                    break;
-                default:
-                    break;
+                plageHoraireBox.Text = String.Format("{0:t} à {1:t}",
+                        (lieu as Livraison).debutPlage, (lieu as Livraison).finPlage);
+                if ((lieu as Livraison).heureArrivee > (lieu as Livraison).finPlage)
+                {
+                    heureArriveeBox.Foreground = new SolidColorBrush(Colors.Red);
+                }
+                else if ((lieu as Livraison).heureArrivee < (lieu as Livraison).debutPlage)
+                {
+                    heureArriveeBox.Foreground = new SolidColorBrush(Colors.Green);
+                }
+            }
+            if ((lieu as Livraison).heureArrivee != DateTime.MinValue && (lieu as Livraison).heureDepart != DateTime.MinValue)
+            {
+                heureArriveeBox.Text = String.Format("{0:t} → {1:t}",
+                    (lieu as Livraison).heureArrivee, (lieu as Livraison).heureDepart);
             }
         }
 

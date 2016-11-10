@@ -21,16 +21,43 @@ using System.Runtime.CompilerServices;
 
 namespace FastDelivery_IHM
 {
+    /// <summary>
+    /// Contrôleur de l'IHM
+    /// </summary>
     public static class Controler
     {
+        /// <summary>
+        /// Carte contenant les données (les points et les tronçons)
+        /// </summary>
         private static Carte carte { get; set; }
+
+        /// <summary>
+        /// Demande de livraison contenant les livraisons et l'entreport
+        /// </summary>
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
+        /// <summary>
+        /// Etat permettant de savoir ou on en est
+        /// </summary>
         public static etat etatActuel { get; set; }
+
+        /// <summary>
+        /// Tournee qui contient la liste des livraisons orientés, l'entrepot et les chemins entre les différentes livraisons
+        /// </summary>
         private static Tournee tournee;
+
+        /// <summary>
+        /// Stack d'action permettant le Undo Redo (pas implémenté dans cette version)
+        /// </summary>
         private static Stack<Actions> undoStack = new Stack<Actions>();
         private static Stack<Actions> redoStack = new Stack<Actions>();
 
+
+        /// <summary>
+        /// Parse le fichier xml et charge la map associé sur l'IHM
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="map"></param>
         public static void loadMap(Stream file, Map map)
         {
             if (etatActuel == etat.enCoursDeCalcul)
@@ -50,6 +77,12 @@ namespace FastDelivery_IHM
             etatActuel = etat.carteCharge;
         }
 
+        /// <summary>
+        /// Parse le fichier xml et charge les livraisons sur l'IHM
+        /// </summary>
+        /// <param name="streamFile"></param>
+        /// <param name="mapCanvas"></param>
+        /// <returns></returns>
         public static Tuple<List<LieuStack>,List<LieuMap>> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
             if (etatActuel == etat.enCoursDeCalcul)
@@ -387,6 +420,7 @@ namespace FastDelivery_IHM
             if(etatActuel == etat.tourneeCalculee)
             {
                 Livraison livraisonNewPlage = d as Livraison;
+                livraisonNewPlage.planifier = true;
                 livraisonNewPlage.SetPlage(debutPlage, finPlage);
                 tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
             }

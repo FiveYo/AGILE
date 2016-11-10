@@ -18,13 +18,22 @@ using Windows.UI.Xaml.Navigation;
 
 namespace FastDelivery_IHM
 {
+    /// <summary>
+    /// Pop-up utilisé pour redéfinir les plages horaires d'une livraison
+    /// </summary>
     public sealed partial class ChangePlagePop : ContentDialog
     {
+        /// <summary>
+        /// true si l'utilisateur click sur Valider
+        /// </summary>
         public bool continu
         {
             get; set;
         }
 
+        /// <summary>
+        /// Horaire de début de plage
+        /// </summary>
         public TimeSpan debutPlage
         {
             get
@@ -34,6 +43,9 @@ namespace FastDelivery_IHM
 
         }
 
+        /// <summary>
+        /// Horaire de fin de page
+        /// </summary>
         public TimeSpan finPlage
         {
             get
