@@ -18,38 +18,19 @@ namespace FastDelivery_IHM
 {
     public sealed partial class LieuStack : UserControl, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Classe correspondant à une livraison dans la liste déroulante de livraisons pour une tournée chargée.
+        /// </summary>
         public bool displayCheck { get; set; }
         public Lieu lieu { get; set; }
-
         public string address;
         public string duree;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         public event RoutedEventHandler AddLivraison;
-
         public event RoutedEventHandler Select;
-
         public event RoutedEventHandler RemoveLivraison;
-
         public event RoutedEventHandler ChgPlage;
-
-        public string description
-        {
-            get
-            {
-                if (lieu is Livraison)
-                {
-                    return String.Format("Adresse : ({0}, {1})\nDurée : {2}",
-                        lieu.adresse.x, lieu.adresse.y, (lieu as Livraison).duree);
-                }
-                else 
-                {
-                    return String.Format("Entrepot\nAdresse : ({0}, {1})",
-                        lieu.adresse.x, lieu.adresse.y);
-                }
-            }
-        }
 
         public LieuStack()
         {
@@ -126,40 +107,14 @@ namespace FastDelivery_IHM
             }
         }
 
-        private void AddBtn_Click(object sender, RoutedEventArgs e)
-        {
-            AddLivraison?.Invoke(this, e);
-        }
-
-        public void toggleSplit()
-        {
-            displayCheck = !displayCheck;
-            NotifyPropertyChanged("displayCheck");
-        }
-
         public void SetSelect(bool b)
         {
             select.IsChecked = b;
         }
 
-        private void NotifyPropertyChanged(string prop)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             Select?.Invoke(this, e);
-        }
-
-        private void rmBtn_Click(object sender, RoutedEventArgs e)
-        {
-            RemoveLivraison?.Invoke(this, e);
-        }
-
-        private void chgBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ChgPlage?.Invoke(this, e);
         }
     }
 }
