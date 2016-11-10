@@ -80,39 +80,54 @@ namespace FastDelivery_Library
 	 * @param tpsDebut : moment ou la resolution a commence
 	 * @param tpsLimite : limite de temps pour la resolution
 	 */
-    void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite)
-    {
-        if (DateTime.Now - tpsDebut > tpsLimite)
-        {
-            tempsLimiteAtteint = true;
-            return;
-        }
-        if (nonVus.Count == 0)
-        { // tous les sommets ont ete visites
-            coutVus += cout[sommetCrt,0];
-                //there test si on arrive avant la plage de debut, ajouter la diff entre temsp arrivee et plage debut
-            if (coutVus < coutMeilleureSolution)
-            { // on a trouve une solution meilleure que meilleureSolution
-                meilleureSolution = vus.ToArray<int>();
-                coutMeilleureSolution = coutVus;
-            }
-        }
-        else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande) < coutMeilleureSolution)
-        {
-            IIterator<int> it = iterator(sommetCrt, nonVus, cout, duree);
-            while (it.MoveNext())
-            {
-                int prochainSommet=it.Current; 
-                vus.Add(prochainSommet);
-                nonVus.Remove(prochainSommet);
-                    {//there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
-                        branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
-                    }
-                vus.Remove(prochainSommet); 
-                nonVus.Add(prochainSommet);
-            }
-        }
-    }
+//    void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite)
+//    {
+//        if (DateTime.Now - tpsDebut > tpsLimite)
+//        {
+//            tempsLimiteAtteint = true;
+//            return;
+//        }
+//        if (nonVus.Count == 0)
+//        { // tous les sommets ont ete visites
+//            coutVus += cout[sommetCrt,0];
+//                //there test si on arrive avant la plage de debut, ajouter la diff entre temsp arrivee et plage debut
+//                //TimeSpan couttime = new TimeSpan(0, 0, coutVus);
+//                //if(couttime+ TempsActuel <= PlageDebut)
+//                //{
+//                //    fairetruc
+//                //    difference = (TimeSpan)(DebutPlage).Substract(couttime + TempActuel);
+//                //}
+//            if (coutVus < coutMeilleureSolution)
+//            { // on a trouve une solution meilleure que meilleureSolution
+//                meilleureSolution = vus.ToArray<int>();
+//                coutMeilleureSolution = coutVus;
+//            }
+//        }
+//        else if (coutVus + bound(sommetCrt, nonVus, cout, duree, demande) < coutMeilleureSolution)
+//        {
+//            IIterator<int> it = iterator(sommetCrt, nonVus, cout, duree);
+//            while (it.MoveNext())
+//            {
+//                int prochainSommet=it.Current; 
+//                vus.Add(prochainSommet);
+//                nonVus.Remove(prochainSommet);
+//<<<<<<< HEAD
+//                    {//there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
+//                        branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt, prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+//                    }
+//=======
+//                //there tester si cout + duree permettra d'arriver avant la fin de la plage horaire
+//                //TimeSpan couttime = new TimeSpan(0, 0, cout[0,prochainSommet] + duree[prochainSommet]);
+//                //DateTime TempsDebut = DateTime.Now;
+//                //if (couttime+TempsActuel=<FinPlageHoraire)
+//                //    { Faire des trucs }
+//                branchAndBound(prochainSommet, nonVus, vus, coutVus + cout[sommetCrt,prochainSommet] + duree[prochainSommet], cout, duree, tpsDebut, tpsLimite);
+//>>>>>>> origin/JustinV3
+//                vus.Remove(prochainSommet); 
+//                nonVus.Add(prochainSommet);
+//            }
+//        }
+//    }
 
         int TSP.getMeilleureSolution(int i)
         {
