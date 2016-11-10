@@ -151,6 +151,7 @@ namespace FastDelivery_unitTest
 
         }
         [TestMethod]
+
         public void Test_getResultActual()
         {
             CarteGenerator();
@@ -182,6 +183,29 @@ namespace FastDelivery_unitTest
             tronconsAttendu = Outils.PathToTroncon(PointOrd);
             tronconsReturn.Add(tronconList[11]);
             Assert.AreEqual(tronconsReturn[0].id, tronconsAttendu[0].id);
+
+        public void Test_TSP()
+        {   
+            CarteGenerator();
+            entrepotTest = new Entrepot(0, c.points[1], Convert.ToDateTime(new TimeSpan(8,0,0).ToString()));
+            Livraison tmp;
+            LivGenerator();
+            DemandeDeLivraisons LivStruct = new DemandeDeLivraisons(demand.livraisons,entrepotTest);
+            int[,] cost = Outils.CreateCostMatrice(LivStruct, c);
+            TSP1 tsp = new TSP1();
+            int[] duree = new int[LivStruct.livraisons.Count + 1];
+            for (int i = 0; i < duree.Length; i++)
+            {
+                if (LivStruct.livraisons.TryGetValue(i, out tmp))
+                {
+                    duree[i] = tmp.duree;
+                }
+            }
+            tsp.chercheSolution(new TimeSpan(0, 1, 0, 0), LivStruct.livraisons.Count + 1, cost, duree, LivStruct);
+            int test = 0;
+            test = tsp.getCoutMeilleureSolution();
+            Assert.AreEqual(test, 241);
+>>>>>>> origin/IHM
         }
     }
 }

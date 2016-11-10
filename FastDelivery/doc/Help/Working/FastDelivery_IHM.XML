@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastDelivery_IHM</name>
+    </assembly>
+    <members>
+        <member name="T:FastDelivery_IHM.App">
+            <summary>
+            Fournit un comportement spécifique à l'application afin de compléter la classe Application par défaut.
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.App.#ctor">
+            <summary>
+            Initialise l'objet d'application de singleton.  Il s'agit de la première ligne du code créé
+            à être exécutée. Elle correspond donc à l'équivalent logique de main() ou WinMain().
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.App.OnLaunched(Windows.ApplicationModel.Activation.LaunchActivatedEventArgs)">
+            <summary>
+            Invoqué lorsque l'application est lancée normalement par l'utilisateur final.  D'autres points d'entrée
+            seront utilisés par exemple au moment du lancement de l'application pour l'ouverture d'un fichier spécifique.
+            </summary>
+            <param name="e">Détails concernant la requête et le processus de lancement.</param>
+        </member>
+        <member name="M:FastDelivery_IHM.App.OnNavigationFailed(System.Object,Windows.UI.Xaml.Navigation.NavigationFailedEventArgs)">
+            <summary>
+            Appelé lorsque la navigation vers une page donnée échoue
+            </summary>
+            <param name="sender">Frame à l'origine de l'échec de navigation.</param>
+            <param name="e">Détails relatifs à l'échec de navigation</param>
+        </member>
+        <member name="M:FastDelivery_IHM.App.OnSuspending(System.Object,Windows.ApplicationModel.SuspendingEventArgs)">
+            <summary>
+            Appelé lorsque l'exécution de l'application est suspendue.  L'état de l'application est enregistré
+            sans savoir si l'application pourra se fermer ou reprendre sans endommager
+            le contenu de la mémoire.
+            </summary>
+            <param name="sender">Source de la requête de suspension.</param>
+            <param name="e">Détails de la requête de suspension.</param>
+        </member>
+        <member name="M:FastDelivery_IHM.App.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.App.GetXamlType(System.Type)">
+            <summary>
+            GetXamlType(Type)
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.App.GetXamlType(System.String)">
+            <summary>
+            GetXamlType(String)
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.App.GetXmlnsDefinitions">
+            <summary>
+            GetXmlnsDefinitions()
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.ChangePlagePop">
+            <summary>
+            Pop-up utilisé pour redéfinir les plages horaires d'une livraison
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.ChangePlagePop.continu">
+            <summary>
+            true si l'utilisateur click sur Valider
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.ChangePlagePop.debutPlage">
+            <summary>
+            Horaire de début de plage
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.ChangePlagePop.finPlage">
+            <summary>
+            Horaire de fin de page
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.ChangePlagePop.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.ChangePlagePop.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.Controler">
+            <summary>
+            Contrôleur de l'IHM
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.Controler.carte">
+            <summary>
+            Carte contenant les données (les points et les tronçons)
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.Controler.demandeLivraisons">
+            <summary>
+            Demande de livraison contenant les livraisons et l'entreport
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.Controler.etatActuel">
+            <summary>
+            Etat permettant de savoir ou on en est
+            </summary>
+        </member>
+        <member name="F:FastDelivery_IHM.Controler.tournee">
+            <summary>
+            Tournee qui contient la liste des livraisons orientés, l'entrepot et les chemins entre les différentes livraisons
+            </summary>
+        </member>
+        <member name="F:FastDelivery_IHM.Controler.undoStack">
+            <summary>
+            Stack d'action permettant le Undo Redo (pas implémenté dans cette version)
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.loadMap(System.IO.Stream,FastDelivery_IHM.Map)">
+            <summary>
+            Parse le fichier xml et charge la map associé sur l'IHM
+            </summary>
+            <param name="file">Stream du fichier à parser</param>
+            <param name="map">Map (carte dans l'IHM)</param>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.loadDeliveries(System.IO.Stream,FastDelivery_IHM.Map)">
+            <summary>
+            Parse le fichier xml et charge les livraisons sur l'IHM
+            </summary>
+            <param name="streamFile">Stream du fichier à parser</param>
+            <param name="mapCanvas">Map (carte dans l'IHM)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.AddLivDemande(FastDelivery_IHM.DeliveryPop,FastDelivery_IHM.Map)">
+            <summary>
+            Ajoute une livraison à la demande de livraison et met à jour l'IHM
+            </summary>
+            <param name="popup">PopUp contenant les informations de création de la livraison</param>
+            <param name="map">Map (carte dans l'IHM)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.AddLivTournee(FastDelivery_Library.Modele.Lieu,FastDelivery_IHM.DeliveryPop,FastDelivery_IHM.Map)">
+            <summary>
+            Ajoute une livraison dans la tournée et l'affiche dans l'IHM
+            </summary>
+            <param name="lieu">Lieu précédent la nouvelle livraison</param>
+            <param name="livraison">PopUp contenant les informations pour la nouvelle livraison</param>
+            <param name="map">Map (carte dans l'IHM)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.GetWay(FastDelivery_IHM.Map,Windows.UI.Xaml.Controls.StackPanel,System.Action{System.Object,Windows.UI.Xaml.RoutedEventArgs})">
+            <summary>
+            Calcul le chemin entre les différentes livraisons, lance une Task asynchrone (comme un thread mais en mieux)
+            qui va mettre à jour l'IHM régulièrement
+            </summary>
+            <param name="mapCanvas">Map (carte dans l'IHM)</param>
+            <param name="listDelivery">StackPanel à mettre à jour dans l'IHM</param>
+            <param name="eventLieuStack">Handler de la méthode a appelé pour les évènements pour les items du StackPanel</param>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.loadWay(FastDelivery_IHM.Map,Windows.UI.Xaml.Controls.StackPanel,System.Action{System.Object,Windows.UI.Xaml.RoutedEventArgs},System.Threading.Tasks.Task)">
+            <summary>
+            Charge le chemin sur l'IHM et met à jour l'ordre des livraisons dans la liste régulièrement
+            </summary>
+            <param name="mapCanvas">Map (carte dans l'IHM)</param>
+            <param name="listDeliveries">StackPanel à mettre à jour dans l'IHM</param>
+            <param name="eventLieuStack">Handler de la méthode a appelé pour les évènements pour les items du StackPanel</param>
+            <param name="chargeTsp">Task permettant de savoir quand le TSP a fini de calculé</param>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.GetRoadMap(Windows.Storage.StorageFile)">
+            <summary>
+            Permet de demander à l'utilisateur de sélectionner un dossier local où générer une feuille de route
+            Génère ensuite la feuille de route dans le dossier spécifié, à l'aide des données de la tournée calculée
+            </summary>
+            <param name="file">Fichier où l'on va stocker la feuille de route</param>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.RemoveLivraison(FastDelivery_Library.Modele.Lieu,FastDelivery_IHM.Map)">
+            <summary>
+            Supprime une livraison de la tournée et/ou de la demande de livraison et actualise l'IHM
+            </summary>
+            <param name="lieu">Livraison à supprimer</param>
+            <param name="map">Map (carte dans l'IHM)</param>
+            <returns></returns>
+        </member>
+        <member name="M:FastDelivery_IHM.Controler.ChangePlage(FastDelivery_Library.Modele.Lieu,System.DateTime,System.DateTime)">
+            <summary>
+            Modifie les plages horaires de la livraison
+            </summary>
+            <param name="d">Livraison à modifier</param>
+            <param name="debutPlage">nouvelle valeur pour début de plage</param>
+            <param name="finPlage">nouvelle valeur pour fin</param>
+        </member>
+        <member name="T:FastDelivery_IHM.etat">
+            <summary>
+            Représente les différents états dans lequel on se trouve
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.LieuStack.displayCheck">
+            <summary>
+            Permet de représenter un lieu dans une liste et de gérer les animations
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.LieuStack.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.LieuStack.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.DeliveryPop.lieu">
+            <summary>
+            Contient le lieu qui précède la livraison que l'on va créé
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.DeliveryPop.adresse">
+            <summary>
+            Correspond à l'adresse de la nouvelle livraison
+            </summary>
+        </member>
+        <member name="P:FastDelivery_IHM.DeliveryPop.continu">
+            <summary>
+            Informe si l'utilisateur a annulé l'ajout de la livraison ou non
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.DeliveryPop.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.DeliveryPop.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.LieuMap">
+            <summary>
+            Permet de représenter un Lieu sur la carte et de gérer les animations
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.LieuMap.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.LieuMap.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.MainPage">
+            <summary>
+            Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.MapCanvas_PointClicked(System.Object,FastDelivery_IHM.EventMap)">
+            <summary>
+            Evènement levé lorsque l'on a fait un clique droit → Créer une livraison ici
+            Si on est dans l'état 'tourneeCalculee' on passe en mode wait event pour récupérer le clique sur la livraison
+            qui doit précéder celle-ci
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.LieuMap_Supprimer(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur une livraison puis supprimer
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.LieuMap_Modifier(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur modifier sur une livraison
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.HamburgerButton_Click(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on a cliqué sur la bouton hamburger
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.loadMap_Click(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur le bouton 'Charger une carte'
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.loadDeliveries_Click(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur 'Charger les livraisons'
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.LieuMap_Clicked(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur une livraison sur la carte
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.getRoadMap_Click(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Répond au click d'un utiisateur voulant générer une feuille de route.
+            Propose à l'utilisateur de stocker la feuille de route dans un dossier local avec un type et un nom par défaut
+            </summary>
+            <param name="sender">objet ayant appelé cette péthode</param>
+            <param name="e">évènement correspondant à l'appel de cette méthode</param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.LieuStack_Selected(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur une livraison dans la liste (StackPanel)
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.loadCircuit_Click(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on clique sur 'Calculer la tournée'
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.listDeliveries_KeyDown(System.Object,Windows.UI.Xaml.Input.KeyRoutedEventArgs)">
+            <summary>
+            Evènement levé lorsque l'on appuie sur une touche dans la liste de livraisons
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.showCancel">
+            <summary>
+            Affiche le message de demande si l'on souhaite poursuivre l'opération si on attend que l'utilisateur clique sur une livraison
+            et qu'il clique ailleurs
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.stopTSP_Click(System.Object,Windows.UI.Xaml.RoutedEventArgs)">
+            <summary>
+            Répond au clic d'un utilisateur voulant stoper la progression du TSP (calcul d'une soultion plus otpimale)
+            Stoppe proprement l'exécution du TSP
+            </summary>
+            <param name="sender">Objet appelant cette méthode</param>
+            <param name="e">évènement correspondant à l'appel de cette méthode</param>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.MainPage.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.Map">
+            <summary>
+            Map représentant la carte dans l'IHM avec gestion sur plusieurs 'calques'
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.Map.InitializeComponent">
+            <summary>
+            InitializeComponent()
+            </summary>
+        </member>
+        <member name="M:FastDelivery_IHM.Map.Connect(System.Int32,System.Object)">
+            <summary>
+            Connect()
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.PointService">
+            <summary>
+            Permet d'associer aux éléments graphiques des infos de type Point
+            </summary>
+        </member>
+        <member name="T:FastDelivery_IHM.Program">
+            <summary>
+            Program class
+            </summary>
+        </member>
+    </members>
+</doc>
