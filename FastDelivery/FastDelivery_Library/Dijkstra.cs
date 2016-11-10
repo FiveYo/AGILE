@@ -8,6 +8,9 @@ using FastDelivery_Library.Modele;
 
 namespace FastDelivery_Library
 {
+    /// <summary>
+    /// Classe permettant d'effectuer l'algorithme de dijkstra et de récupérer ainsi un graphe orienté complet
+    /// </summary>
     public class DijkstraAlgorithm
     {
         private Dictionary<int, Point> noeuds;
@@ -18,6 +21,10 @@ namespace FastDelivery_Library
         private Dictionary<Point, double> distance;
         private static List<int> idTest = new List<int>();
 
+        /// <summary>
+        /// Constructeur de la classe 
+        /// </summary>
+        /// <param name="carte">Objet de type Carte contenant l'ensemble des points et des troncons qui serviront à établir le graphe orienté complet</param>
         public DijkstraAlgorithm(Carte carte)
         {
             // create a copy of the array so that we can operate on this array
@@ -25,6 +32,11 @@ namespace FastDelivery_Library
             this.Troncons = new Dictionary<int, Troncon>(carte.troncons);
         }
 
+        /// <summary>
+        /// Méthode qui exécute l'algorithme de Dijkstra depuis un point de départ
+        /// Les résultats sont ensuite accessibles par getters
+        /// </summary>
+        /// <param name="source">Point de dpart de l'algorithme de Dijkstra</param>
         public void execute(Point source)
         {
             settlednoeuds = new HashSet<Point>();
@@ -42,6 +54,10 @@ namespace FastDelivery_Library
             }
         }
 
+        /// <summary>
+        /// Permet de détemriner la distance minimale entre un point et chacun de ses voisins
+        /// </summary>
+        /// <param name="node">Point dont on veut déterminer la distance minimale avec ses voisins</param>
         private void findMinimalDistances(Point node)
         {
             List<Point> adjacentnoeuds = getNeighbors(node);
@@ -64,10 +80,14 @@ namespace FastDelivery_Library
             }
         }
 
+        /// <summary>
+        /// Permet de déterminer la distance (coût) entre un point et un autre 
+        /// </summary>
+        /// <param name="node">Point d'origine</param>
+        /// <param name="target">Point cible</param>
+        /// <returns>le coût du troncon entre les deux points</returns>
         private double getDistance(Point node, Point target)
         {
-            // Utiliser de préférences les voisins des Points plutôt que de 
-            // parcourir toute la liste des troncons
             foreach (Troncon Troncon in Troncons.Values)
             {
                 if ((Troncon.origine.id == node.id) && (Troncon.destination.id == target.id))
@@ -78,9 +98,13 @@ namespace FastDelivery_Library
             throw new Exception("Erreur calcul de la distance entre deux points");
         }
 
+        /// <summary>
+        /// Permet d'obtenir la liste de tous les voisins d'un point
+        /// </summary>
+        /// <param name="node">Point dont on veut connaître tous les voisins</param>
+        /// <returns>La liste de tou sles voisins du point source</returns>
         private List<Point> getNeighbors(Point node)
         {
-            // Idem
             List<Point> neighbors = new List<Point>();
             foreach (Troncon Troncon in Troncons.Values)
             {
@@ -92,6 +116,11 @@ namespace FastDelivery_Library
             return neighbors;
         }
 
+        /// <summary>
+        /// Détermine le coût minimum parmis une liste de Points
+        /// </summary>
+        /// <param name="Pointes">Liste de points dont on veut connaître le coût minimal</param>
+        /// <returns>la valeur minimale trouvée</returns>
         private Point getMinimum(HashSet<Point> Pointes)
         {
             Point minimum = null;
@@ -112,11 +141,21 @@ namespace FastDelivery_Library
             return minimum;
         }
 
+        /// <summary>
+        /// Permet de détemriner si un point à déjà été visité
+        /// </summary>
+        /// <param name="Point">Point à étudier</param>
+        /// <returns>true si le point à déjà été visité, false sinon</returns>
         private bool isSettled(Point Point)
         {
             return settlednoeuds.Contains(Point);
         }
 
+        /// <summary>
+        /// Détermine le coût minimal associé à un point dans le dictionnaire de Points et de distances
+        /// </summary>
+        /// <param name="destination">Point dont on veut connaître la valeur de la distance minimale</param>
+        /// <returns>d la valeur de al distance minimale</returns>
         private double getShortestDistance(Point destination)
         {
             double d = 0;
@@ -130,16 +169,17 @@ namespace FastDelivery_Library
             }
         }
 
-        /*
-         * This method returns the path from the source to the selected target and
-         * NULL if no path exists
-         */
+         /// <summary>
+         /// Permet d'obtenir le chemin parcouru d'un point source à un point visé (plus court chemin entre deux points)
+         /// </summary>
+         /// <param name="target">point de destination</param>
+         /// <returns>null si ce chemin n'existe pas, Liste ordonnée de Points s'il existe</returns>
         public LinkedList<Point> getPath(Point target)
         {
             LinkedList<Point> path = new LinkedList<Point>();
             Point step = target;
             Point tmp;
-            // check if a path exists
+            // On vérifie si le chemin existe
             if (!predecessors.TryGetValue(step, out tmp))
             {
                 return null;
@@ -149,7 +189,7 @@ namespace FastDelivery_Library
             {
                 path.AddLast(step);
             }
-            // Put it into the correct order
+            // On remet la liste dans le bon ordre
             path = new LinkedList<Point>(path.Reverse().ToList<Point>());
             return path;
         }
