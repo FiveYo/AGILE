@@ -56,8 +56,8 @@ namespace FastDelivery_IHM
         /// <summary>
         /// Parse le fichier xml et charge la map associé sur l'IHM
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="map"></param>
+        /// <param name="file">Stream du fichier à parser</param>
+        /// <param name="map">Map (carte dans l'IHM)</param>
         public static void loadMap(Stream file, Map map)
         {
             if (etatActuel == etat.enCoursDeCalcul)
@@ -80,8 +80,8 @@ namespace FastDelivery_IHM
         /// <summary>
         /// Parse le fichier xml et charge les livraisons sur l'IHM
         /// </summary>
-        /// <param name="streamFile"></param>
-        /// <param name="mapCanvas"></param>
+        /// <param name="streamFile">Stream du fichier à parser</param>
+        /// <param name="mapCanvas">Map (carte dans l'IHM)</param>
         /// <returns></returns>
         public static Tuple<List<LieuStack>,List<LieuMap>> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
@@ -120,10 +120,10 @@ namespace FastDelivery_IHM
         }
 
         /// <summary>
-        /// 
+        /// Ajoute une livraison à la demande de livraison et met à jour l'IHM
         /// </summary>
-        /// <param name="popup"></param>
-        /// <param name="map"></param>
+        /// <param name="popup">PopUp contenant les informations de création de la livraison</param>
+        /// <param name="map">Map (carte dans l'IHM)</param>
         /// <returns></returns>
         internal static Tuple<LieuStack, LieuMap> AddLivDemande(DeliveryPop popup, Map map)
         {
@@ -150,9 +150,9 @@ namespace FastDelivery_IHM
         /// <summary>
         /// Ajoute une livraison dans la tournée et l'affiche dans l'IHM
         /// </summary>
-        /// <param name="lieu"></param>
-        /// <param name="livraison"></param>
-        /// <param name="map"></param>
+        /// <param name="lieu">Lieu précédent la nouvelle livraison</param>
+        /// <param name="livraison">PopUp contenant les informations pour la nouvelle livraison</param>
+        /// <param name="map">Map (carte dans l'IHM)</param>
         /// <returns></returns>
         public static Tuple<int, LieuStack, LieuMap> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
@@ -177,9 +177,9 @@ namespace FastDelivery_IHM
         /// Calcul le chemin entre les différentes livraisons, lance une Task asynchrone (comme un thread mais en mieux)
         /// qui va mettre à jour l'IHM régulièrement
         /// </summary>
-        /// <param name="mapCanvas"></param>
-        /// <param name="listDelivery"></param>
-        /// <param name="eventLieuStack"></param>
+        /// <param name="mapCanvas">Map (carte dans l'IHM)</param>
+        /// <param name="listDelivery">StackPanel à mettre à jour dans l'IHM</param>
+        /// <param name="eventLieuStack">Handler de la méthode a appelé pour les évènements pour les items du StackPanel</param>
         public static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
         {
             Task chargeTsp = null;
@@ -212,10 +212,10 @@ namespace FastDelivery_IHM
         /// <summary>
         /// Charge le chemin sur l'IHM et met à jour l'ordre des livraisons dans la liste régulièrement
         /// </summary>
-        /// <param name="mapCanvas"></param>
-        /// <param name="listDeliveries"></param>
-        /// <param name="eventLieuStack"></param>
-        /// <param name="chargeTsp"></param>
+        /// <param name="mapCanvas">Map (carte dans l'IHM)</param>
+        /// <param name="listDeliveries">StackPanel à mettre à jour dans l'IHM</param>
+        /// <param name="eventLieuStack">Handler de la méthode a appelé pour les évènements pour les items du StackPanel</param>
+        /// <param name="chargeTsp">Task permettant de savoir quand le TSP a fini de calculé</param>
         private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack, Task chargeTsp)
         {
             Tournee tourneeTmp = null;
@@ -307,9 +307,10 @@ namespace FastDelivery_IHM
         }
 
         /// <summary>
-        /// Génère le fichier de feuille de route représentat la tournée
+        /// Permet de demander à l'utilisateur de sélectionner un dossier local où générer une feuille de route
+        /// Génère ensuite la feuille de route dans le dossier spécifié, à l'aide des données de la tournée calculée
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="file">Fichier où l'on va stocker la feuille de route</param>
         public static async void GetRoadMap(Windows.Storage.StorageFile file)
         {
             if (file != null && etatActuel == etat.tourneeCalculee)
@@ -336,19 +337,15 @@ namespace FastDelivery_IHM
                 }
 
                 await Windows.Storage.FileIO.WriteTextAsync(file, intro);
-                // Let Windows know that we're finished changing the file so
-                // the other app can update the remote version of the file.
-                // Completing updates may require Windows to ask for user input.
-                Windows.Storage.Provider.FileUpdateStatus status =
-                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
             }
         }
 
         /// <summary>
         /// Supprime une livraison de la tournée et/ou de la demande de livraison et actualise l'IHM
         /// </summary>
-        /// <param name="lieu"></param>
-        /// <param name="map"></param>
+        /// <param name="lieu">Livraison à supprimer</param>
+        /// <param name="map">Map (carte dans l'IHM)</param>
         /// <returns></returns>
         internal static List<LieuMap> RemoveLivraison(Lieu lieu, Map map)
         {
@@ -446,9 +443,9 @@ namespace FastDelivery_IHM
         /// <summary>
         /// Modifie les plages horaires de la livraison
         /// </summary>
-        /// <param name="d"></param>
-        /// <param name="debutPlage"></param>
-        /// <param name="finPlage"></param>
+        /// <param name="d">Livraison à modifier</param>
+        /// <param name="debutPlage">nouvelle valeur pour début de plage</param>
+        /// <param name="finPlage">nouvelle valeur pour fin</param>
         public static void ChangePlage(Lieu d, DateTime debutPlage, DateTime finPlage)
         {
             if(etatActuel == etat.tourneeCalculee)

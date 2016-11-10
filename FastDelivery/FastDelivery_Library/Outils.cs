@@ -13,7 +13,9 @@ namespace FastDelivery_Library
 {
     public static class Outils
     {
-
+        /// <summary>
+        /// Objet TSP initialisé
+        /// </summary>
         private static TSP1 tsp = new TSP1();
         /// <summary>
         /// Retourne une liste d'object, le premier étant la dictionnaire de Troncon,
@@ -146,6 +148,11 @@ namespace FastDelivery_Library
             tsp.stop = true;
         }
 
+        /// <summary>
+        /// retourne la liste des livraisons demandées
+        /// </summary>
+        /// <param name="streamFile">stream du fichier xml</param>
+        /// <returns></returns>
         public static DemandeDeLivraisons ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int, Point> HashPoint)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
@@ -256,8 +263,8 @@ namespace FastDelivery_Library
         /// <summary>
         /// Créé la matrice carré de cout.
         /// </summary>
-        /// <param name="LivStruct"></param>
-        /// <param name="PointStruct"></param>
+        /// <param name="LivStruct">La liste des livraisons</param>
+        /// <param name="carte"> graphe utilisé pour initialisé le graphe</param>
         /// <returns></returns>
         public static int[,] CreateCostMatrice(DemandeDeLivraisons LivStruct, Modele.Carte carte)
         {
@@ -315,6 +322,12 @@ namespace FastDelivery_Library
 
             return matrice;
         }
+
+        /// <summary>
+        /// Calcul le cout d'un chemin
+        /// </summary>
+        /// <param name="linkedPoint"> liste ordonnée de points définissant un chemin</param>
+        /// <returns>retrourne le cout total d'une liste de points ordonnée représentant un chemin</returns>
         public static double calculcout(LinkedList<Point> linkedPoint)
         {
             int i = 0;
@@ -338,7 +351,12 @@ namespace FastDelivery_Library
             }
             return cout;
         }
-
+        /// <summary>
+        /// Mise en route du TSP
+        /// </summary>
+        /// <param name="LivStruct">Liste des livraisons demandées</param>
+        /// <param name="carte">Graphe pour initialiser le dijkstra</param>
+        /// <returns>retourne une tâche pour calculer le TSP</returns>
         public static Task startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
             Livraison tmp;
@@ -367,7 +385,12 @@ namespace FastDelivery_Library
             });
             return t;
         }
-
+        /// <summary>
+        /// Calcul d'une tournée en cherchant toujours une optimisation
+        /// </summary>
+        /// <param name="demande"> Liste de livraison demandée</param>
+        /// <param name="carte">Graphe initialisant le dijkstra</param>
+        /// <returns>Renvoie la tournée calculée</returns>
         public static Tournee getResultActual(DemandeDeLivraisons demande, Carte carte)
         {
             Tournee t2 = null;
@@ -421,7 +444,11 @@ namespace FastDelivery_Library
             }
             return t2;
         }
-
+        /// <summary>
+        /// Calcul une liste de tornçon via une liste de points ordonnée
+        /// </summary>
+        /// <param name="points">Liste de point ordonnée</param>
+        /// <returns>renvoie une liste de tronçon représentant tous les points de la List Ordonnée mise en paramètre</returns>
         public static List<Troncon> PathToTroncon(LinkedList<Point> points)
         {
             List<Troncon> troncons = new List<Troncon>();

@@ -15,19 +15,50 @@ namespace FastDelivery_Library
     /// </summary>
     public abstract class TemplateTSP : TSP
     {
+        /// <summary>
+        /// flag determinant si le calcul doit être stoppé ou pas
+        /// </summary>
         public bool stop=false;
+
+        /// <summary>
+        /// Heure de Depart de la tournée ( initialisée à celle de l'entrepot)
+        /// </summary>
         public DateTime heureDepart;
+
+        /// <summary>
+        /// tableaux avec la meilleur solution (tableau d'entier)
+        /// </summary>
         public int[] meilleureSolution;
+
+        /// <summary>
+        /// Cout de la meilleur solution 
+        /// </summary>
         private int coutMeilleureSolution = 0;
+
+        /// <summary>
+        /// flag determinant si le temps de calcul maximal prévu a été atteint
+        /// </summary>
         private Boolean tempsLimiteAtteint;
+
+        /// <summary>
+        /// Liste des livraisons à classer
+        /// </summary>
         private DemandeDeLivraisons demande;
+
+        /// <summary>
+        /// list des meilleurs horaires ( même odre que la meilleur solution)
+        /// </summary>
         public List<DateTime> meilleurshoraires;
+
+        /// <summary>
+        /// list des meilleurs tempsd'attente (même odre que le temps d'attente)
+        /// </summary>
         public List<TimeSpan> meilleurtempsattente;
 
         /// <summary>
-        /// Renvoie le booleen qui servira a voir si on a dépasser la limite de temps
+        /// méthode pour stopper le calcul si le temps de calcul devient trop grand
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Renvoie le booleen qui servira a voir si on a dépasser la limite de temps</returns>
         public Boolean getTempsLimiteAtteint()
         {
             return tempsLimiteAtteint;
@@ -36,11 +67,11 @@ namespace FastDelivery_Library
         /// <summary>
         /// Méthode principale de la classe qui cherchera automatiquement le meilleur coût via l'appel de la fonction brancAndBound
         /// </summary>
-        /// <param name="tpsLimite" description="limite de temps pour la resolution"></param>
-        /// <param name="nbSommets" description="nombre de sommet présent dans le graphe"></param>
-        /// <param name="cout" description="cout[i][j] = duree pour aller de i a j, avec 0 <= i<nbSommets et 0 <= j<nbSommets "></param>
-        /// <param name="duree" description=" duree[i] = duree pour visiter le sommet i, avec 0 <= i<nbSommets"></param>
-        /// <param name="demandeLiv" description="Objet regroupant les livraisons souhaitées"></param>
+        /// <param name="tpsLimite" >"limite de temps pour la resolution"></param>
+        /// <param name="nbSommets" >"nombre de sommet présent dans le graphe"></param>
+        /// <param name="cout" >"cout[i][j] = duree pour aller de i a j, avec 0 <= i<nbSommets et 0 <= j<nbSommets "></param>
+        /// <param name="duree" >" duree[i] = duree pour visiter le sommet i, avec 0 <= i<nbSommets"></param>
+        /// <param name="demandeLiv" >"Objet regroupant les livraisons souhaitées"></param>
         public void chercheSolution(TimeSpan tpsLimite, int nbSommets, int[,] cout, int[] duree, DemandeDeLivraisons demandeLiv)
         {
 
@@ -61,32 +92,18 @@ namespace FastDelivery_Library
             tempsattentes.Add(new TimeSpan(0, 0, 0));
             branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite, horaires, tempsattentes, heureDepart);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i" description="index de la meilleur solution"></param>
-        /// <returns>Renvoie le sommet d'index i de la liste des meilleures solutions</returns>
+        
         public int? getMeilleureSolution(int i)
         {
             if ((meilleureSolution == null) || (i < 0) || (i >= meilleureSolution.Length))
                 return null;
             return meilleureSolution[i];
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i" description="index du meilleur horaire"></param>
-        /// <returns>Renvoie l'horaire d'index i de la liste des meilleurs horaires</returns>
         public DateTime? getMeilleurHoraire(int i)
         {
             if ((meilleurshoraires == null) || (i < 0) || (i >= meilleurshoraires.Count)) return null;
             return meilleurshoraires[i];
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i" description="index du meilleur temps d'attente"></param>
-        /// <returns>Renvoie le temps d'attente d'index i de la liste des meilleurs temps d'attente</returns>
         public TimeSpan? getmeilleurtempsattente(int i)
         {
             if ((meilleurtempsattente == null) || (i < 0) || (i >= meilleurtempsattente.Count)) return null;
@@ -99,44 +116,44 @@ namespace FastDelivery_Library
 
        
         /// <summary>
-        /// TODO
+        /// 
         /// </summary>
-        /// <param name="sommetCourant" description="Sommet courant"></param>
-        /// <param name="nonVus" description="tableau des sommets restant a visiter"></param>
-        /// <param name="cout" description="cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
-        /// <param name="duree" description="duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
+        /// <param name="sommetCourant" >"Sommet courant"></param>
+        /// <param name="nonVus" >"tableau des sommets restant a visiter"></param>
+        /// <param name="cout" >"cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
+        /// <param name="duree" >"duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
         /// <param name="demande"></param>
         /// <param name="heuredepassage"></param>
-        /// <returns>Renvoie une borne inferieure du cout des permutations commencant par sommetCourant, 
+        /// <returns>Renvoies une borne inferieure du cout des permutations commencant par sommetCourant, 
 	    /// contenant chaque sommet de nonVus exactement une fois et terminant par le sommet 0</returns>
         protected abstract int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande, DateTime heuredepassage);
 
         
         /// <summary>
-        /// TODO
+        /// Creer un itérateur pour naviguer entre les sommets.
         /// </summary>
         /// <param name="sommetCrt"></param>
-        /// <param name="nonVus" description="nonVus : tableau des sommets restant a visiter"></param>
-        /// <param name="cout" description="cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
-        /// <param name="duree" description="duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
+        /// <param name="nonVus" >"nonVus : tableau des sommets restant a visiter"></param>
+        /// <param name="cout" >"cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
+        /// <param name="duree" >"duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
         /// <returns>Renvoie un iterateur permettant d'iterer sur tous les sommets de nonVus</returns>
         protected abstract IIterator<int> iterator(int sommetCrt, List<int> nonVus, int[,] cout, int[] duree);
 
 
         /// <summary>
-        /// TODO
+        /// méthode principale qui cherchera la meilleur solution en essayant chaque sommet.
         /// </summary>
-        /// <param name="sommetCrt" description="Sommet Courant"></param>
-        /// <param name="nonVus" description="la liste des sommets qui n'ont pas encore ete visites"></param>
-        /// <param name="vus" description="vus la liste des sommets visites (y compris sommetCrt)"></param>
-        /// <param name="coutVus" description="la somme des couts des arcs du chemin passant par tous les sommets de vus + la somme des duree des sommets de vus"></param>
-        /// <param name="cout" description="cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
-        /// <param name="duree" description="duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
-        /// <param name="tpsDebut" description="moment ou la resolution a commence"></param>
-        /// <param name="tpsLimite" description="limite de temps pour la resolution"></param>
-        /// <param name="horaires" description="liste de datetimes représentant les différentes heures de passages"></param>
-        /// <param name="tempsattente" description="liste de TimeSpan(intervalles d'heures)"></param>
-        /// <param name="heure " description="heure"></param>
+        /// <param name="sommetCrt" >"Sommet Courant"></param>
+        /// <param name="nonVus" >"la liste des sommets qui n'ont pas encore ete visites"></param>
+        /// <param name="vus" >"vus la liste des sommets visites (y compris sommetCrt)"></param>
+        /// <param name="coutVus" >"la somme des couts des arcs du chemin passant par tous les sommets de vus + la somme des duree des sommets de vus"></param>
+        /// <param name="cout" >"cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
+        /// <param name="duree" >"duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
+        /// <param name="tpsDebut" >"moment ou la resolution a commence"></param>
+        /// <param name="tpsLimite" >"limite de temps pour la resolution"></param>
+        /// <param name="horaires" >"liste de datetimes représentant les différentes heures de passages"></param>
+        /// <param name="tempsattente" >"liste de TimeSpan(intervalles d'heures)"></param>
+        /// <param name="heure " >"heure"></param>
         void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite, List<DateTime> horaires, List<TimeSpan> tempsattente, DateTime heure)
         {
 
@@ -300,11 +317,7 @@ namespace FastDelivery_Library
                 }
             }
         }
-
-        int TSP.getMeilleureSolution(int i)
-        {
-            throw new NotImplementedException();
-        }
+        
 
 
 

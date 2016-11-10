@@ -11,10 +11,14 @@ namespace FastDelivery_Library.Modele
     /// </summary>
     public class Troncon
     {
+        // Paramètre de base du tronçon
         public int longueur, vitesse, id;
+        //Points décrivant le sens et la direction du tronçon
         public Point destination, origine;
+        //Nom de la rue 
         public string rue;
 
+        //Cout calculé en seconde
         public double cout
         {
             get { return (double)longueur / (double)(vitesse / 3.6); }

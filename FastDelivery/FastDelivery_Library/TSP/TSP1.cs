@@ -8,7 +8,9 @@ using Windows.Foundation.Collections;
 
 namespace FastDelivery_Library
 {
-
+    /// <summary>
+    /// Classe principale de TSP
+    /// </summary>
     public class TSP1 : TemplateTSP
     {
 
@@ -34,42 +36,5 @@ namespace FastDelivery_Library
             }
 
         }
-        //override protected int bound(int sommetCourant, List<int> nonVus, int[,] cout, int[] duree, DemandeDeLivraisons demande,DateTime heurepassage)
-        //{
-        //    List<int> listeCout = new List<int>();
-        //    TimeSpan t = new TimeSpan(0, 0, cout[0, sommetCourant]);
-        //    int i = 0;
-        //    foreach (int s in nonVus)
-        //    {
-        //        if (i != sommetCourant)
-        //        {
-        //            if (demande.livraisons[s].planifier && s != 0)
-        //            {
-        //                DateTime finHoraire = DateTime.Parse(demande.livraisons[s].finPlage);
-        //                DateTime debutHoraire = DateTime.Parse(demande.livraisons[s].debutPlage);
-        //                DateTime test1 = heurepassage + new TimeSpan(0, 0, cout[sommetCourant, i] + duree[i]);
-        //                if ((test1 <= finHoraire) && (test1 >= debutHoraire))
-        //                {
-        //                    listeCout.Add(cout[sommetCourant, i] + duree[i]);
-        //                }
-        //                i++;
-        //            }
-        //            else
-        //            {
-        //                listeCout.Add(cout[sommetCourant, i] + duree[i]);
-        //                i++;
-        //            }
-        //        }
-        //    } 
-        //    if (listeCout.Count != 0)
-        //    {
-        //        return listeCout.Min();
-        //    }
-        //    else
-        //    {
-        //        return 0;
-        //    }
-        //}
     }
-
 }
