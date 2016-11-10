@@ -44,6 +44,7 @@ namespace FastDelivery_Library
             meilleurtempsattente = new List<TimeSpan>(nbSommets);
             vus.Add(0); // le premier sommet visite est 0
             horaires.Add(heureDepart);
+            tempsattentes.Add(new TimeSpan(0, 0, 0));
             branchAndBound(0, nonVus, vus, 0, cout, duree, DateTime.Now, tpsLimite, horaires, tempsattentes, heureDepart);
         }
 
