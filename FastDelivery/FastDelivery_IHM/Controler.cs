@@ -126,7 +126,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        public async static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
+        public static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
         {
             Task chargeTsp = null;
             if (etatActuel == etat.enCoursDeCalcul)

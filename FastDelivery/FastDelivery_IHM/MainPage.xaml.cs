@@ -62,7 +62,7 @@ namespace FastDelivery_IHM
                 if (Controler.etatActuel == etat.tourneeCalculee)
                 {
                     waitevent = true;
-                    feedBack.Text = "Séléctionner une livraison sur la carte s'il vous plait";
+                    feedBack.Text = "Sélectionnez sur le plan la livraison qui précèdera cette nouvelle livraison";
                 }
                 else
                 {
@@ -169,11 +169,11 @@ namespace FastDelivery_IHM
                 }
                 catch (Exception_XML exc)
                 {
-                    feedBack.Text = "Échec du chargement de la carte : " + exc.Message;
+                    feedBack.Text = "Échec du chargement du plan : " + exc.Message;
                 }
                 catch
                 {
-                    feedBack.Text = "Une erreur est survenue lors du chargement de la carte. Veuillez réessayer.";
+                    feedBack.Text = "Une erreur est survenue lors du chargement du plan. Veuillez réessayer.";
                 }
                 animFeedback.Begin();
             }
@@ -227,7 +227,7 @@ namespace FastDelivery_IHM
                 }
                 catch (Exception_XML exc)
                 {
-                    feedBack.Text = "Échec du chargement de la tournée : " + exc.Message;
+                    feedBack.Text = "Échec du chargement de la demande de livraison : demande mal formée. " + exc.Message;
                 }
                 catch (Exception_Stream exc)
                 {
@@ -235,7 +235,7 @@ namespace FastDelivery_IHM
                 }
                 catch
                 {
-                    feedBack.Text = "Une erreur est survenue lors le chargement de la tournée. Veuillez réessayer.";
+                    feedBack.Text = "Une erreur est survenue lors du chargement de votre demande de livraison. Veuillez réessayer.";
                 }
                 animFeedback.Begin();
             }
@@ -287,25 +287,35 @@ namespace FastDelivery_IHM
                 if (await showCancel())
                     return;
             }
-            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
-            savePicker.SuggestedStartLocation =
-                Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
-            // Dropdown of file types the user can save the file as
-            savePicker.FileTypeChoices.Add("Plain text", new List<string>() { ".txt" });
-            // Default file name if the user does not type one in or select a file to replace
-            savePicker.SuggestedFileName = "New Document";
-
-            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
             try
             {
-                feedBack.Text = "Génération de la feuille de route";
-                Controler.GetRoadMap(file);
-                feedBack.Text = "Votre feuille de route à bien été générée.";
-                animFeedback.Begin();
+                if (Controler.etatActuel == etat.tourneeCalculee)
+                {
+                    var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+                    savePicker.SuggestedStartLocation =
+                        Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+                    // Dropdown of file types the user can save the file as
+                    savePicker.FileTypeChoices.Add("Plain text", new List<string>() { ".txt" });
+                    // Default file name if the user does not type one in or select a file to replace
+                    savePicker.SuggestedFileName = "Feuille De Route";
+
+                    Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
+
+                    feedBack.Text = "Génération de la feuille de route";
+                    Controler.GetRoadMap(file);
+                    feedBack.Text = "Votre feuille de route à bien été générée.";
+                    animFeedback.Begin();
+                }
+                else
+                {
+                    feedBack.Text = "Vous ne pouvez pas générer une feuille de route sans avoir calculé une tournée";
+                    animFeedback.Begin();
+                }
             }
             catch (TimeoutException)
             {
                 feedBack.Text = "La feuille de route n'a pas été générée";
+                animFeedback.Begin();
                 var messageDialog = new MessageDialog("La feuille de route n'a pas été générée");
                 await messageDialog.ShowAsync();
             }
@@ -352,7 +362,7 @@ namespace FastDelivery_IHM
                 feedBack.Text = "Chargement en cours de la tournée...";
                 Controler.GetWay(mapCanvas, listDeliveries, LieuStack_Selected);
                 
-                feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
+                feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan, charger un nouveau plan, ou générer votre feuille de route";
                 animFeedback.Begin();
             }
             catch (Exception_Stream exc)
@@ -361,7 +371,7 @@ namespace FastDelivery_IHM
             }
             catch (TimeoutException)
             {
-                feedBack.Text = "Calcul de la tournée annulé. Sélectionnez une nouvelle carte et une nouvelle livraison";
+                feedBack.Text = "Calcul de la tournée annulé. Sélectionnez un nouveau plan et une nouvelle livraison";
                 var messageDialog = new MessageDialog("L'opération a été annulée car le calcul demande un temps trop important (plus de 1 minute).");
                 await messageDialog.ShowAsync();
             }
@@ -419,6 +429,6 @@ namespace FastDelivery_IHM
             Outils.StopTsp();
             feedBack.Text = "Vous avez stoppé la recherche de solutions plus optimale.";
         }
-
+        
     }
 }

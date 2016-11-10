@@ -238,13 +238,13 @@
                     <RowDefinition Height="0.5*"/>
                 </Grid.RowDefinitions>
                 <TextBlock x:Name="addressBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
-                                     Grid.Column="0" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                                     Grid.Column="0" Grid.Row="0" TextAlignment="Center" Margin="0" MaxLines="2"/>
                 <TextBlock x:Name="plageHoraireBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
-                                     Grid.Column="0" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0"/>
+                                     Grid.Column="0" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0" MaxLines="2"/>
                 <TextBlock x:Name="dureeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
-                                     Grid.Column="1" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0"/>
+                                     Grid.Column="1" Grid.Row="0" TextAlignment="Center" Margin="0,0,0,0" MaxLines="2"/>
                 <TextBlock x:Name="heureArriveeBox" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch"
-                                     Grid.Column="1" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0"/>
+                                     Grid.Column="1" Grid.Row="1" TextAlignment="Center" Margin="0,0,0,0" MaxLines="2"/>
             </Grid>
         </Grid>
     </ToggleButton>

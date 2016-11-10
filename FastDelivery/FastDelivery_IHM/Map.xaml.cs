@@ -68,6 +68,9 @@ namespace FastDelivery_IHM
             cheminUI.Children.Clear();
 
             DisplayMap(plan);
+
+            livraisonUI.Children.Clear();
+            cheminUI.Children.Clear();
         }
 
         public List<LieuMap> LoadDeliveries(DemandeDeLivraisons demandeLivraisons)
@@ -121,7 +124,8 @@ namespace FastDelivery_IHM
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            foreach (var troncon in plan.troncons)
+            // Parallel.ForEach(
+            foreach(var troncon in plan.troncons)
             {
                 Line line = new Line();
                 Line lineToAim = new Line();
@@ -152,7 +156,7 @@ namespace FastDelivery_IHM
                 lineToAim.Stroke = colorAim;
                 line.StrokeThickness = 2;
                 lineToAim.StrokeThickness = 20;
-                
+
                 carteUI.Children.Add(line);
                 carteUI.Children.Add(lineToAim);
             }
