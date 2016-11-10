@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml.Controls;
-
-using FastDelivery_Library;
 using Windows.UI.Xaml;
 using System.ComponentModel;
 using FastDelivery_Library.Modele;
@@ -19,7 +13,7 @@ namespace FastDelivery_IHM
     public sealed partial class LieuStack : UserControl, INotifyPropertyChanged
     {
         /// <summary>
-        /// Classe correspondant à une livraison dans la liste déroulante de livraisons pour une tournée chargée.
+        /// Permet de représenter un lieu dans une liste et de gérer les animations
         /// </summary>
         public bool displayCheck { get; set; }
         public Lieu lieu { get; set; }

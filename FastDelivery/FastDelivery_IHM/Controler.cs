@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using FastDelivery_Library.Modele;
 
-#if DEBUG
-using System.Diagnostics;
-#endif
 
 using System.IO;
 
 using Windows.UI.Xaml.Controls;
 using FastDelivery_Library;
 using FastDelivery_IHM.UndoRedo;
-using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
-using System.Runtime.CompilerServices;
 
 namespace FastDelivery_IHM
 {

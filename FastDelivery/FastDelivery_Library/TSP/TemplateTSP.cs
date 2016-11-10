@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation.Collections;
-using System.Diagnostics;
 using FastDelivery_Library.Modele;
 
 namespace FastDelivery_Library

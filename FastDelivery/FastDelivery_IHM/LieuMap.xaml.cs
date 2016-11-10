@@ -1,25 +1,15 @@
-﻿using FastDelivery_Library;
-using FastDelivery_Library.Modele;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using FastDelivery_Library.Modele;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace FastDelivery_IHM
 {
+    /// <summary>
+    /// Permet de représenter un Lieu sur la carte et de gérer les animations
+    /// </summary>
     public sealed partial class LieuMap : UserControl
     {
         public event RoutedEventHandler Clicked;

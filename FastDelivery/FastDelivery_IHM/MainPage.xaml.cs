@@ -2,22 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 using System.Threading.Tasks;
-using Windows.UI.Core;
 using Windows.UI.Popups;
 using FastDelivery_Library;
-using System.Threading;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -43,6 +35,11 @@ namespace FastDelivery_IHM
             waitevent = false;
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on a fait un clique droit → Créer une livraison ici
+        /// Si on est dans l'état 'tourneeCalculee' on passe en mode wait event pour récupérer le clique sur la livraison
+        /// qui doit précéder celle-ci
+        /// </summary>
         private async void MapCanvas_PointClicked(object sender, EventMap e)
         {
             Outils.StopTsp();
@@ -76,6 +73,9 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur une livraison puis supprimer
+        /// </summary>
         private async void LieuMap_Supprimer(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -112,7 +112,11 @@ namespace FastDelivery_IHM
                 feedBack.Text = "Vous ne pouvez pas avoir de tournée sans livraison";
             }
         }
-
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur modifier sur une livraison
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LieuMap_Modifier(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -137,11 +141,21 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on a cliqué sur la bouton hamburger
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             this.navbar.IsPaneOpen = !navbar.IsPaneOpen;
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur le bouton 'Charger une carte'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void loadMap_Click(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -184,6 +198,11 @@ namespace FastDelivery_IHM
             
         }
         
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur 'Charger les livraisons'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void loadDeliveries_Click(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -245,6 +264,11 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur une livraison sur la carte
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LieuMap_Clicked(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -321,7 +345,11 @@ namespace FastDelivery_IHM
                 await messageDialog.ShowAsync();
             }
         }
-        
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur une livraison dans la liste (StackPanel)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LieuStack_Selected(object sender, RoutedEventArgs e)
         {
             if (waitevent)
@@ -349,6 +377,11 @@ namespace FastDelivery_IHM
             
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on clique sur 'Calculer la tournée'
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void loadCircuit_Click(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -378,6 +411,11 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Evènement levé lorsque l'on appuie sur une touche dans la liste de livraisons
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void listDeliveries_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             if (waitevent)
@@ -407,6 +445,11 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Affiche le message de demande si l'on souhaite poursuivre l'opération si on attend que l'utilisateur clique sur une livraison
+        /// et qu'il clique ailleurs
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> showCancel()
         {
             MessageDialog m = new MessageDialog("Vous étiez en train de créer une nouvelle livraison, veuillez sélectionnez une livraison ou annuler");
