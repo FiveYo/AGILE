@@ -8,14 +8,23 @@ using Windows.Foundation.Metadata;
 
 namespace FastDelivery_Library
 {
-
+    /// <summary>
+    /// Classe de l'itérateur utilisé dans le TSP
+    /// </summary>
     public class IteratorSeq : IIterator<int>
     {
-
-        TimeSpan runtime;
+        /// <summary>
+        /// Définit le tableau de sommets
+        /// </summary>
         private int[] candidats;
-        private int nbCandidats;
 
+        /// <summary>
+        /// Le nombre de sommet restant
+        /// </summary>
+        private int nbCandidats;
+        /// <summary>
+        /// renvoie le sommet actuel
+        /// </summary>
         public int Current
         {
             get
@@ -47,11 +56,14 @@ namespace FastDelivery_Library
             }
         }
 
-        /**
-            * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
-            * @param nonVus
-            * @param sommetCrt
-            */
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="sommetCrt"></param>
+        /// <param name="nonVus" >"nonVus : tableau des sommets restant a visiter"></param>
+        /// <param name="cout" >"cout[i][j] = duree pour aller de i a j, avec 0 <= i < nbSommets et 0 <= j < nbSommets"></param>
+        /// <param name="duree" >"duree[i] = duree pour visiter le sommet i, avec 0 <= i < nbSommets"></param>
+        /// <returns>Renvoie un iterateur permettant d'iterer sur tous les sommets de nonVus</returns>
         public IteratorSeq(ICollection<int> nonVus, int sommetCrt, int[,] cout, int[] duree)
         {
             List<int> listeCouts = new List<int>();
@@ -69,17 +81,11 @@ namespace FastDelivery_Library
                 candidats[test--] = nonVus.ElementAt(listeCouts.IndexOf(listeCoutsTri[nbCandidats++]));
             }
         }
-
-        //public IteratorSeq(ICollection<int> nonVus, int sommetCrt, int[,] cout, int[] duree)
-        //{
-        //    this.candidats = new int[nonVus.Count()];
-        //    nbCandidats = 0;
-        //    foreach (int s in nonVus)
-        //    {
-        //        candidats[nbCandidats++] = s;
-        //    }
-        //}
-
+        
+        /// <summary>
+        /// Fait avancer l'itérateur
+        /// </summary>
+        /// <returns>REnvoie la valeur du prochain sommer en décrémentant ceux vus</returns>
         public int MoveNext()
         {
             return candidats[--nbCandidats];

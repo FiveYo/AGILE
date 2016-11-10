@@ -12,16 +12,29 @@ namespace FastDelivery_Library
     /// </summary>
     public class Tournee : IComparable
     {
+        /// <summary>
+        /// Entrepot
+        /// </summary>
         public Entrepot entrepot;
 
-        // Les livraisons sont ordonnées par ordre de passage
+        /// <summary>
+        /// Les livraisons sont ordonnées par ordre de passage
+        /// </summary>
         public List<Livraison> livraisons;
 
-        // Si on veut connaitre le chemin pour aller à une livraisons on peut y accéder par sa clef
+        /// <summary>
+        /// Si on veut connaitre le chemin pour aller à une livraisons on peut y accéder par sa clef
+        /// </summary>
         public Dictionary<Lieu, Chemin> Hashchemin;
 
+        /// <summary>
+        /// Les erreurs possibles liées aux horaires de passages et plage horaires
+        /// </summary>
         public enum Error { Before, After };
 
+        /// <summary>
+        /// Dictionnaire repertoriant les heures de passage (heure d'arrivée) de chaque livraison
+        /// </summary>
         public Dictionary<Livraison, DateTime> HeuredePassage = new Dictionary<Livraison, DateTime>();
 
         public Tournee(Entrepot entrepot, List<Livraison> livraisons, Dictionary<Lieu, Chemin> minche)
@@ -31,6 +44,9 @@ namespace FastDelivery_Library
             this.Hashchemin = minche;
         }
 
+        /// <summary>
+        /// Méthode qui met à jour les heures d'Arrivés et heures de Départ de chaque livraison présente dans la liste de livraison ordonnée mise en attribut
+        /// </summary>
         public void UpdateHeurePassage()
         {
             DateTime tA=entrepot.heureDepart;
@@ -62,6 +78,14 @@ namespace FastDelivery_Library
 
 
         }
+
+        /// <summary>
+        /// méthode d'ajout de livraison
+        /// </summary>
+        /// <param name="carte">Graphe qu'on utilisera pour instancier dijkstra</param>
+        /// <param name="newlivraison">La nouvelle livraison à ajouter</param>
+        /// <param name="index">l'index de la livraison à ajouter dans la tournée</param>
+        /// <returns>Retourne un dictionnaire livraison/erreur décrivant les éventuelles erreur liées aux plages horaires lors du décalage des livraisons</returns>
         public Dictionary<Livraison, Error> AddLivraison(Carte carte, Livraison newlivraison, int index)
         {
 
@@ -141,7 +165,12 @@ namespace FastDelivery_Library
             return ErrorLivraison;
 
         }
-
+        /// <summary>
+        /// méthode de suppréssion de livraison 
+        /// </summary>
+        /// <param name="carte">Graphe utilisé pour instancier le dijkstra</param>
+        /// <param name="badlivraison">Livraison à supprimer</param>
+        /// <returns>Retourne un dictionnaire Livraison/erreur décrivant les éventuelles erreur liées aux plages horaires lors du décalage des livraisons</returns>
         public Dictionary<Livraison, Error> DelLivraison(Carte carte, Livraison badlivraison)
         {
             Point positionelementprecedent;
@@ -219,23 +248,21 @@ namespace FastDelivery_Library
 
 
 
-        //Cette méthode renvoie un dictionnaire avec les livraisons qui demandent  des plages horaires
-        //elle prend en argument une tournee ( avec les plages horaires initialisée) et la livraison (avec une plage horaire sinon on s'en fout)
-        //un dictionnaire(Livraison,list<Double>) la liste des livraisons en clé et une liste de double
-        //la liste de double sera composée de deux éléments (toujours)
-        //---le premier élément sera le flag qui donnera des informations concernant la plage horaire  :
-        //si il vaut -1, c'est que l'heure de passage est après la fin de la plage horaire ( il faut donc baisser le cout de cette livraison afin d'avancer l'heure de passage)
-        //si il faut 1, c'est que l'heure de passage est avant le début de la plage horaire ( il faut donc augmenter le cout de cette livraison afin de retarder l'heure de passage)
-        //il vaudra 0 si tout va bien
-        //---le second élément sera le temps en seconde qui sépare l'intervalle (borne supérieure( FinPlage si -1 ) ou inférieur(DebutPlage si 1) voulu des plages : 
-        //il peut etre négatif ou positif ( respectivement avec les -1 / 1 du premier élément de la liste)
-        //il servira a bidouiller le cout afin de respecter les conditions de plages horaires
-
-        //CEPANDANT, le  problème se situe dans l'achitecture même du projet, car si on change le cout a chaque fois on peut tomber sur une boucle infinie qui anéantira toute vie sur terre, meme ton chien va prendre tarif poto.
+        /// <summary>
+        /// Cette méthode renvoie un dictionnaire avec les livraisons qui demandent  des plages horaires
+        /// </summary>
+        /// <returns>Un dictionnaire Livraison/liste(double)
+        /// Chaque livraison dans la Liste des livraisons ordonnées en clé et une liste de double
+        ///---le premier élément sera le flag qui donnera des informations concernant la plage horaire  :
+        ///si il vaut -1, c'est que l'heure de passage est après la fin de la plage horaire ( il faut donc baisser le cout de cette livraison afin d'avancer l'heure de passage)
+        ///si il faut 1, c'est que l'heure de passage est avant le début de la plage horaire ( il faut donc augmenter le cout de cette livraison afin de retarder l'heure de passage)
+        ///il vaudra 0 si tout va bien
+        ///---le second élément sera le temps en seconde qui sépare l'intervalle (borne supérieure( FinPlage si -1 ) ou inférieur(DebutPlage si 1) voulu des plages : 
+        ///il peut etre négatif ou positif ( respectivement avec les -1 / 1 du premier élément de la liste)
+        /// </returns>
         public Dictionary<Livraison, List<double>> Check()
         {
             // pour exécuter cette méthode il faut que tournee ait son attribut ' HeureDePassage ' initialisé
-            // et que la livraison soit munie d'une plage horaire sinon on s'en fout
             if (HeuredePassage == null)
             {
                 throw new Exception("HeureDePassage non intialisé");
@@ -483,6 +510,11 @@ namespace FastDelivery_Library
             foreach (var livraison in livraisons) { }
         }
 
+        /// <summary>
+        /// Compare deux objet tournée
+        /// </summary>
+        /// <param name="objet"> Objet Tournée a comparé avec l'appelant </param>
+        /// <returns>Renvoie un entier décrivant la comparaison entre deux objet tournée</returns>
         public int CompareTo(object objet)
         {
             Tournee obj = objet as Tournee;

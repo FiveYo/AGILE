@@ -14,9 +14,13 @@ namespace FastDelivery_Library.Modele
     /// </summary>
     public class Livraison : Lieu, INotifyPropertyChanged
     {
+        /// <summary>
+        ///  Paramètres de bases récupéré dans le fichier XML
+        /// </summary>
         public int duree;
         private DateTime _debutPlage;
         private DateTime _finPlage;
+        public Point adresse { get; set; }
 
         public DateTime debutPlage {
             get
@@ -47,11 +51,19 @@ namespace FastDelivery_Library.Modele
                 }
             }
         }
-
+        /// <summary>
+        /// Booleen indiquant si la livraison possède des plages horaires ou non
+        /// </summary
         public bool planifier { get; set; }
-        public Point adresse { get; set; }
 
+        /// <summary>
+        /// Heure à laquelle on arrivera à la livraison
+        /// </summary>
         private DateTime _heureArrivee;
+
+        /// <summary>
+        /// Heure à laquelle on partira de cette livraison
+        /// </summary
         private DateTime _heureDepart;
 
         public DateTime heureArrivee
@@ -84,7 +96,9 @@ namespace FastDelivery_Library.Modele
                 }
             }
         }
-
+        /// <summary>
+        /// Paramètre définissant le temps à attendre si le livreur arrive avant la plage horaire.
+        /// </summary>
         public TimeSpan tempsAttente = new TimeSpan(0, 0, 0);
 
         public event PropertyChangedEventHandler PropertyChanged;
