@@ -79,7 +79,7 @@ namespace FastDelivery_unitTest
             c = new Carte(points, troncons, 0, 100, 10, 100);
         }
 
-        [TestMethod]
+        
         public void LivGenerator()
         {
             int id = 0;
@@ -90,7 +90,7 @@ namespace FastDelivery_unitTest
                 HashLivraison.Add(id, tmp);
                 id++;
             }
-            entrepotTest = new Entrepot(1, c.points[1], "10:00:00");
+            entrepotTest = new Entrepot(1, c.points[1], DateTime.Parse("10:00:00"));
             demand = new DemandeDeLivraisons(HashLivraison, entrepotTest);
             
         }
@@ -102,15 +102,36 @@ namespace FastDelivery_unitTest
             LivGenerator();
             int[,] MatriceReturn = Outils.CreateCostMatrice(demand, c);
             int[,] MatriceAttendu = new int[3, 3];
-            Assert.AreEqual(MatriceAttendu, MatriceReturn);
+            MatriceAttendu[0, 0] = 0;
+            MatriceAttendu[0, 1] = 20;
+            MatriceAttendu[0, 2] = 10;
+            MatriceAttendu[1, 0] = 20;
+            MatriceAttendu[1, 1] = 0;
+            MatriceAttendu[1, 2] = 30;
+            MatriceAttendu[2, 0] = 10;
+            MatriceAttendu[2, 1] = 10;
+            MatriceAttendu[2, 2] = 0;
+            for (int i = 0; i<3;i++)
+            {
+                for (int j = 0; j<3;j++)
+                {
+                    Assert.AreEqual(MatriceAttendu[i,j], MatriceReturn[i,j]);
+                }
+            }
         }
 
         [TestMethod]
         public void Test_calculcout()
         {
-
-            int coutAttendu;
-            // double coutReturn = FastDelivery_Library.Outils.calculcout(ListPoints);
+            CarteGenerator();
+            int id= 0;
+            double coutAttendu=10;
+            double coutRetourne;
+            LinkedList<Point> PointOrd = new LinkedList<FastDelivery_Library.Modele.Point>();
+            PointOrd.AddLast(c.points[2]);
+            PointOrd.AddLast(c.points[3]);
+            coutRetourne = Outils.calculcout(PointOrd);
+            Assert.AreEqual(coutRetourne, coutAttendu);
 
         }
     }
