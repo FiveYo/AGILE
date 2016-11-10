@@ -353,12 +353,18 @@ namespace FastDelivery_Library
                 }
             }
 
-            Task t = new Task(() =>
+            Task t = Task.Run(() =>
             {
-                tsp.chercheSolution(new TimeSpan(0, 1, 0, 0), LivStruct.livraisons.Count + 1, cost,
+                try
+                {
+                    tsp.chercheSolution(new TimeSpan(0, 1, 0, 0), LivStruct.livraisons.Count + 1, cost,
                 duree, LivStruct);
+                }
+                catch(TimeoutException)
+                {
+
+                }
             });
-            t.Start();
             return t;
         }
 
