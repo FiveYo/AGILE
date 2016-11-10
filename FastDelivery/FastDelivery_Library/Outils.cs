@@ -345,18 +345,19 @@ namespace FastDelivery_Library
             int[,] cost = CreateCostMatrice(LivStruct, carte);
             tsp = new TSP1();
             int[] duree = new int[LivStruct.livraisons.Count + 1];
-            for(int i = 0; i < duree.Length; i++)
+            for (int i = 0; i < duree.Length; i++)
             {
-                if(LivStruct.livraisons.TryGetValue(i, out tmp))
+                if (LivStruct.livraisons.TryGetValue(i, out tmp))
                 {
                     duree[i] = tmp.duree;
                 }
             }
 
             Task t = new Task(() =>
-                tsp.chercheSolution(new TimeSpan(0, 0, 1, 0), LivStruct.livraisons.Count + 1, cost,
-                duree, LivStruct)
-                );
+            {
+                tsp.chercheSolution(new TimeSpan(0, 1, 0, 0), LivStruct.livraisons.Count + 1, cost,
+                duree, LivStruct);
+            });
             t.Start();
             return t;
         }

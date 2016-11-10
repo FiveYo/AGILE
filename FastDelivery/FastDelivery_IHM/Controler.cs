@@ -17,12 +17,12 @@ using FastDelivery_Library;
 using FastDelivery_IHM.UndoRedo;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
+using System.Runtime.CompilerServices;
 
 namespace FastDelivery_IHM
 {
     public static class Controler
     {
-        private static Task chargeTsp;
         private static Carte carte { get; set; }
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
@@ -35,8 +35,8 @@ namespace FastDelivery_IHM
         {
             if (etatActuel == etat.enCoursDeCalcul)
             {
-                Outils.StopTsp();
                 etatActuel = etat.enCoursDArret;
+                Outils.StopTsp();
             }
             try
             {
@@ -54,8 +54,8 @@ namespace FastDelivery_IHM
         {
             if (etatActuel == etat.enCoursDeCalcul)
             {
-                Outils.StopTsp();
                 etatActuel = etat.enCoursDArret;
+                Outils.StopTsp();
             }
             List<LieuStack> lieuStack = new List<LieuStack>();
             List<LieuMap> lieuMap;
@@ -89,8 +89,8 @@ namespace FastDelivery_IHM
         {
             if (etatActuel == etat.enCoursDeCalcul)
             {
-                Outils.StopTsp();
                 etatActuel = etat.enCoursDArret;
+                Outils.StopTsp();
             }
             int id = demandeLivraisons.livraisons.Keys.Max() + 1;
             Livraison liv = new Livraison(popup.adresse, popup.duree);
@@ -110,8 +110,8 @@ namespace FastDelivery_IHM
         {
             if (etatActuel == etat.enCoursDeCalcul)
             {
-                Outils.StopTsp();
                 etatActuel = etat.enCoursDArret;
+                Outils.StopTsp();
             }
             if (etatActuel == etat.tourneeCalculee)
             {
@@ -125,12 +125,13 @@ namespace FastDelivery_IHM
             }
         }
 
-        public static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
+        public async static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
         {
+            Task chargeTsp = null;
             if (etatActuel == etat.enCoursDeCalcul)
             {
-                Outils.StopTsp();
                 etatActuel = etat.enCoursDArret;
+                Outils.StopTsp();
             }
             if (etatActuel == etat.livraisonCharge || etatActuel == etat.tourneeCalculee)
             {
@@ -138,7 +139,8 @@ namespace FastDelivery_IHM
                 {
                     chargeTsp = Outils.startTsp(demandeLivraisons, carte);
                     tournee = null;
-                    loadWay(mapCanvas, listDelivery, eventLieuStack);
+                    
+                    loadWay(mapCanvas, listDelivery, eventLieuStack, chargeTsp);
                     etatActuel = etat.enCoursDeCalcul;
                 }
                 catch
@@ -152,7 +154,7 @@ namespace FastDelivery_IHM
             }
         }
 
-        private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack)
+        private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack, Task chargeTsp)
         {
             chargeTsp.ContinueWith((i) => { Debug.WriteLine("hello"); });
             await Task.Delay(1000);
@@ -160,7 +162,6 @@ namespace FastDelivery_IHM
             {
                 if(etatActuel == etat.enCoursDArret)
                 {
-                    chargeTsp.Wait();
                     return;
                 }
                 Tournee tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
@@ -213,6 +214,31 @@ namespace FastDelivery_IHM
                 }
                 tournee = tourneeTmp;
                 await Task.Delay(2000);
+            }
+            if (etatActuel == etat.enCoursDArret)
+                return;
+            Tournee final = await Outils.getResultActual(demandeLivraisons, carte);
+            if(final != null)
+            {
+                tournee = final;
+
+                mapCanvas.LoadWay(tournee);
+
+                LieuStack first = listDeliveries.Children.First() as LieuStack;
+
+                listDeliveries.Children.Clear();
+                listDeliveries.Children.Add(first);
+                List<LieuStack> listOrder = new List<LieuStack>();
+                foreach (var livraison in tournee.livraisons)
+                {
+                    listOrder.Add(new LieuStack(livraison));
+                }
+
+                foreach (var item in listOrder)
+                {
+                    listDeliveries.Children.Add(item);
+                    item.Select += eventLieuStack.Invoke;
+                }
             }
             etatActuel = etat.tourneeCalculee;
         }

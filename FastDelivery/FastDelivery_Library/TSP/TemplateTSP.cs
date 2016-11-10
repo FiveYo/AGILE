@@ -104,6 +104,11 @@ namespace FastDelivery_Library
 	     */
         void branchAndBound(int sommetCrt, List<int> nonVus, List<int> vus, int coutVus, int[,] cout, int[] duree, DateTime tpsDebut, TimeSpan tpsLimite, List<DateTime> horaires, List<TimeSpan> tempsattente, DateTime heure)
         {
+
+            if(stop)
+            {
+                throw new TimeoutException();
+            }
             TimeSpan tempsdattente;
             DateTime lastheuredepart = heure;
 
