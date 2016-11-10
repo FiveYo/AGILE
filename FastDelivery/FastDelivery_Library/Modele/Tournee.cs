@@ -313,7 +313,7 @@ namespace FastDelivery_Library
                     // livraison2 est initialisée à livraisonNewPlage
                     if (FinNewPlage.CompareTo(heurePassage) < 0)
                     {
-                        if (livraisons.Count() != indexLivraisonInverseeNewPlage+1)
+                        /*if (livraisons.Count() != indexLivraisonInverseeNewPlage+1)
                         {
                             // Calcul de l'heure d'arrivee pour la livraison dont on a modif la plage horaire
                             Livraison livraison1 = livraisonsInversee[indexLivraisonInverseeNewPlage + 1];
@@ -346,6 +346,7 @@ namespace FastDelivery_Library
                             }
                             livraisonNewPlage.heureDepart = livraisonNewPlage.heureArrivee.Add(TimeSpan.FromSeconds((double)livraisonNewPlage.duree));
 
+                            livraison1 = livraisonNewPlage;
 
                             foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
                             {
@@ -354,22 +355,16 @@ namespace FastDelivery_Library
                                 trajetALivraison2 = TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout);
 
                                 // Teste si l'heure de passage actuel de livraison2 est humainement faisable
+
                                 if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
                                 {
-                                    DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
-                                    HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
-                                    livraison.SetHeureDePassage(HeuredePassage[livraison]);
-                                    livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
-
-                                   /* //Teste si plage horaire respectee
-                                    if (HeuredePassage[livraison].CompareTo(livraison.debutPlage) < 0)
+                                    if (livraison != livraison1)
                                     {
-                                        livraison.heureDepart = livraison.debutPlage.Add(TimeSpan.FromSeconds(livraison.duree));
+                                        DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                        HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                        livraison.SetHeureDePassage(HeuredePassage[livraison]);
+                                        livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
                                     }
-                                    else if (HeuredePassage[livraison].CompareTo(livraison.finPlage) > 0)
-                                    {
-                                        livraison.heureDepart = livraison1.heureDepart.Add(TimeSpan.FromSeconds(livraison.duree) + TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout));
-                                    }*/
 
                                 }
 
@@ -383,7 +378,7 @@ namespace FastDelivery_Library
                         else
                         {
 
-                        }
+                        }*/
                     }
 
                     // le livreur arrive plus tard que prévu
@@ -434,24 +429,19 @@ namespace FastDelivery_Library
                                 trajetALivraison2 = TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout);
 
                                 // Teste si l'heure de passage actuel de livraison2 est humainement faisable
-                                if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
-                                {
-                                    DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
-                                    HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
-                                    livraison.SetHeureDePassage(HeuredePassage[livraison]);
-                                    livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
-
-                                    //Teste si plage horaire respectee
-                                    /*if (HeuredePassage[livraison].CompareTo(livraison.debutPlage) < 0)
+                                
+                                    if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
                                     {
-                                        livraison.heureDepart = livraison.debutPlage.Add(TimeSpan.FromSeconds(livraison.duree));
+                                    if (livraison != livraison1)
+                                    {
+                                        DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                        HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                        livraison.SetHeureDePassage(HeuredePassage[livraison]);
+                                        livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
                                     }
-                                    else if(HeuredePassage[livraison].CompareTo(livraison.finPlage) > 0)
-                                    {
-                                        livraison.heureDepart = livraison1.heureDepart.Add(TimeSpan.FromSeconds(livraison.duree)+TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout));
-                                    }*/
 
-                                }
+                                    }
+                                
                                 else
                                 {
                                     break;
