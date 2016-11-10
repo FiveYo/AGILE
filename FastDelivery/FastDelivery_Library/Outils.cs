@@ -425,7 +425,10 @@ namespace FastDelivery_Library
         public static List<Troncon> PathToTroncon(LinkedList<Point> points)
         {
             List<Troncon> troncons = new List<Troncon>();
-
+            if(points == null)
+            {
+                return troncons;
+            }
             Point start = points.First();
 
             foreach(var point in points.Skip(1))
