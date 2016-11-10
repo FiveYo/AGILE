@@ -404,5 +404,15 @@ namespace FastDelivery_IHM
             }
             return waitevent;
         }
+
+        private void undoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Controler.Undo();
+        }
+
+        private void redoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Controler.Redo();
+        }
     }
 }

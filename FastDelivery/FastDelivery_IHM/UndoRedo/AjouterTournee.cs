@@ -12,6 +12,7 @@ namespace FastDelivery_IHM.UndoRedo
     {
         private Lieu lieu;
         private DeliveryPop livraison;
+        private Livraison toAdd;
         private Map map;
         private Tournee tournee;
         private Carte carte;
@@ -29,7 +30,7 @@ namespace FastDelivery_IHM.UndoRedo
         public object Do()
         {
             LieuMap lieuMap;
-            Livraison toAdd = null;
+            toAdd = null;
             int index;
 
             if (lieu is Livraison)
@@ -54,9 +55,22 @@ namespace FastDelivery_IHM.UndoRedo
             return new Tuple<int, LieuStack, LieuMap>(index, new LieuStack(toAdd), lieuMap);
         }
 
-        object Actions.Undo()
+        public object Undo()
         {
-            throw new NotImplementedException();
+            List<LieuMap> l = null;
+            demandeLivraisons.livraisons.Remove(
+                demandeLivraisons.livraisons.Where((node) =>
+                {
+                    if (node.Value == toAdd as Livraison)
+                        return true;
+                    else
+                        return false;
+                }).First().Key
+            );
+            tournee.DelLivraison(carte, toAdd as Livraison);
+            l = map.LoadDeliveries(demandeLivraisons);
+            map.LoadWay(tournee);
+            return l;
         }
     }
 }
