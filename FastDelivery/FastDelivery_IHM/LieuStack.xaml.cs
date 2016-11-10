@@ -68,9 +68,8 @@ namespace FastDelivery_IHM
 
                 if ((liv as Livraison).heureArrivee != DateTime.MinValue && (liv as Livraison).heureDepart != DateTime.MinValue)
                 {
-                    string toto = String.Format("{0:t} → {1:t}",
+                    heureArriveeBox.Text = String.Format("{0:t} → {1:t}",
                         (liv as Livraison).heureArrivee, (liv as Livraison).heureDepart);
-                    heureArriveeBox.Text = toto;
                 }
 
                 if ((liv as Livraison).planifier)

@@ -143,7 +143,7 @@ namespace FastDelivery_Library
 
         public static void StopTsp()
         {
-            //tsp.stop = true;
+            tsp.stop = true;
         }
 
         public static DemandeDeLivraisons ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int, Point> HashPoint)
@@ -361,10 +361,9 @@ namespace FastDelivery_Library
             return t;
         }
 
-        public async static Task<Tournee> getResultActual(DemandeDeLivraisons demande, Carte carte)
+        public static Tournee getResultActual(DemandeDeLivraisons demande, Carte carte)
         {
             Tournee t2 = null;
-            await Task.Delay(100);
             List<Livraison> resultat = new List<Livraison>();
             List<DateTime> resultatDate = new List<DateTime>();
             List<TimeSpan> resultatTemp = new List<TimeSpan>();

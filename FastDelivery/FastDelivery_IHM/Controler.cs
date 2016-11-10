@@ -154,6 +154,8 @@ namespace FastDelivery_IHM
 
         private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack)
         {
+            chargeTsp.ContinueWith((i) => { Debug.WriteLine("hello"); });
+            await Task.Delay(1000);
             while(!chargeTsp.IsCompleted)
             {
                 if(etatActuel == etat.enCoursDArret)
@@ -161,7 +163,7 @@ namespace FastDelivery_IHM
                     chargeTsp.Wait();
                     return;
                 }
-                Tournee tourneeTmp = await Outils.getResultActual(demandeLivraisons, carte);
+                Tournee tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
                 if (tourneeTmp != null)
                 {
                     if (tournee == null)
@@ -187,7 +189,7 @@ namespace FastDelivery_IHM
                         }
 
                     }
-                    if (!tourneeTmp.livraisons.SequenceEqual(tournee.livraisons))
+                    if (Enumerable.SequenceEqual(tourneeTmp.livraisons.OrderBy(t => t), tournee.livraisons.OrderBy(t => t)))
                     {
                         tournee = tourneeTmp;
                         mapCanvas.LoadWay(tournee);
@@ -304,7 +306,7 @@ namespace FastDelivery_IHM
             {
                 Livraison livraisonNewPlage = d as Livraison;
                 livraisonNewPlage.SetPlage(debutPlage, finPlage);
-                //tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
+                tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
             }
         }
     }
