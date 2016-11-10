@@ -278,6 +278,12 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Répond au click d'un utiisateur voulant générer une feuille de route.
+        /// Propose à l'utilisateur de stocker la feuille de route dans un dossier local avec un type et un nom par défaut
+        /// </summary>
+        /// <param name="sender">objet ayant appelé cette péthode</param>
+        /// <param name="e">évènement correspondant à l'appel de cette méthode</param>
         private async void getRoadMap_Click(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();
@@ -424,6 +430,12 @@ namespace FastDelivery_IHM
             return waitevent;
         }
 
+        /// <summary>
+        /// Répond au clic d'un utilisateur voulant stoper la progression du TSP (calcul d'une soultion plus otpimale)
+        /// Stoppe proprement l'exécution du TSP
+        /// </summary>
+        /// <param name="sender">Objet appelant cette méthode</param>
+        /// <param name="e">évènement correspondant à l'appel de cette méthode</param>
         private void stopTSP_Click(object sender, RoutedEventArgs e)
         {
             Outils.StopTsp();

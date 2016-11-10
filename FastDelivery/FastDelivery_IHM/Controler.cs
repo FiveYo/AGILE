@@ -288,6 +288,11 @@ namespace FastDelivery_IHM
             etatActuel = etat.tourneeCalculee;
         }
 
+        /// <summary>
+        /// Permet de demander à l'utilisateur de sélectionner un dossier local où générer une feuille de route
+        /// Génère ensuite la feuille de route dans le dossier spécifié, à l'aide des données de la tournée calculée
+        /// </summary>
+        /// <param name="file">Fichier où l'on va stocker al feuille de route</param>
         public static async void GetRoadMap(Windows.Storage.StorageFile file)
         {
             if (file != null && etatActuel == etat.tourneeCalculee)
@@ -314,11 +319,7 @@ namespace FastDelivery_IHM
                 }
 
                 await Windows.Storage.FileIO.WriteTextAsync(file, intro);
-                // Let Windows know that we're finished changing the file so
-                // the other app can update the remote version of the file.
-                // Completing updates may require Windows to ask for user input.
-                Windows.Storage.Provider.FileUpdateStatus status =
-                    await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
             }
         }
 
