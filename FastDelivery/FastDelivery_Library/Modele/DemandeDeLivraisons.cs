@@ -11,7 +11,13 @@ namespace FastDelivery_Library.Modele
     /// </summary>
     public class DemandeDeLivraisons
     {
+        /// <summary>
+        /// Dictionnaire des livraisons composant la DelandeDeLivraisons
+        /// </summary>
         public Dictionary<int, Livraison> livraisons;
+        /// <summary>
+        /// Entrepot de la DemandeDeLivraisons
+        /// </summary>
         public Entrepot entrepot;
         /// <summary>
         /// Constructeur de la classe DemandeDeLivraisons

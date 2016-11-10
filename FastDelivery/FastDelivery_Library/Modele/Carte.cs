@@ -11,8 +11,17 @@ namespace FastDelivery_Library.Modele
     /// </summary>
     public class Carte
     {
+        /// <summary>
+        /// Dictionnaire des points de la carte
+        /// </summary>
         public Dictionary<int, Point> points;
+        /// <summary>
+        /// Dictionnaire des troncons de la carte
+        /// </summary>
         public Dictionary<int, Troncon> troncons;
+        /// <summary>
+        /// Valeurs des extremum de la carte
+        /// </summary>
         public int minX, maxX, minY, maxY;
         /// <summary>
         /// Constructeur de la classe Carte

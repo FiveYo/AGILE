@@ -11,7 +11,13 @@ namespace FastDelivery_Library.Modele
     /// </summary>
     public class Chemin
     {
+        /// <summary>
+        /// Liste des troncons composant le Chemin
+        /// </summary>
         List<Troncon> tronconList = new List<Troncon>();
+        /// <summary>
+        /// Coût total du chemin
+        /// </summary>
         public double cout;
         /// <summary>
         /// Constructeur de la classe Chemin

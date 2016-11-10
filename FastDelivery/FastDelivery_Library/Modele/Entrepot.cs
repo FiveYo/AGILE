@@ -8,12 +8,21 @@ using System.Threading.Tasks;
 namespace FastDelivery_Library.Modele
 {
     /// <summary>
-    /// Contient l'adresse et l'heure de départ de l'entrepot
+    /// Contient l'adresse et l'heure de départ de l'entrepot, hérite de Lieu
     /// </summary>
     public class Entrepot : Lieu
     {
+        /// <summary>
+        /// id de l'entrepot
+        /// </summary>
         public int id;
+        /// <summary>
+        /// Coordonnées de l'entrepôt
+        /// </summary>
         public Point adresse { get; set; }
+        /// <summary>
+        /// Heure de départ de l'entrepot
+        /// </summary>
         public DateTime heureDepart;
         /// <summary>
         /// Constructeur de la classe Entrepot

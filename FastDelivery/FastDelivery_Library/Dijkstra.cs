@@ -13,12 +13,33 @@ namespace FastDelivery_Library
     /// </summary>
     public class DijkstraAlgorithm
     {
+        /// <summary>
+        /// Dictionnaire des points correspondant aux noeuds du graphe orienté
+        /// </summary>
         private Dictionary<int, Point> noeuds;
+        /// <summary>
+        /// Liste des troncons correspondant aux arcs du graphe orienté
+        /// </summary>
         private Dictionary<int, Troncon> Troncons;
+        /// <summary>
+        /// Liste des noeuds visités
+        /// </summary>
         private HashSet<Point> settlednoeuds;
+        /// <summary>
+        /// Liste des noeuds pas encore visités
+        /// </summary>
         private HashSet<Point> unSettlednoeuds;
+        /// <summary>
+        /// Dictionnaire regroupant tous les prédecesseurs d'un point
+        /// </summary>
         private Dictionary<Point, Point> predecessors;
+        /// <summary>
+        /// Distance parcourue (coût)
+        /// </summary>
         private Dictionary<Point, double> distance;
+        /// <summary>
+        /// Liste d'id servant à trouver une distance minimale
+        /// </summary>
         private static List<int> idTest = new List<int>();
 
         /// <summary>
