@@ -162,27 +162,51 @@ namespace FastDelivery_IHM
                     return;
                 }
                 Tournee tourneeTmp = await Outils.getResultActual(demandeLivraisons, carte);
-                if (tournee == null)
-                    tournee = tourneeTmp;
-                if(tourneeTmp.livraisons.SequenceEqual(tournee.livraisons))
+                if (tourneeTmp != null)
                 {
-                    tournee = tourneeTmp;
-                    mapCanvas.LoadWay(tournee);
-
-                    LieuStack first = listDeliveries.Children.First() as LieuStack;
-
-                    listDeliveries.Children.Clear();
-                    listDeliveries.Children.Add(first);
-                    List<LieuStack> listOrder = new List<LieuStack>();
-                    foreach (var livraison in tournee.livraisons)
+                    if (tournee == null)
                     {
-                        listOrder.Add(new LieuStack(livraison));
+                        tournee = tourneeTmp;
+
+                        mapCanvas.LoadWay(tournee);
+
+                        LieuStack first = listDeliveries.Children.First() as LieuStack;
+
+                        listDeliveries.Children.Clear();
+                        listDeliveries.Children.Add(first);
+                        List<LieuStack> listOrder = new List<LieuStack>();
+                        foreach (var livraison in tournee.livraisons)
+                        {
+                            listOrder.Add(new LieuStack(livraison));
+                        }
+
+                        foreach (var item in listOrder)
+                        {
+                            listDeliveries.Children.Add(item);
+                            item.Select += eventLieuStack.Invoke;
+                        }
+
                     }
-
-                    foreach (var item in listOrder)
+                    if (!tourneeTmp.livraisons.SequenceEqual(tournee.livraisons))
                     {
-                        listDeliveries.Children.Add(item);
-                        item.Select += eventLieuStack.Invoke;
+                        tournee = tourneeTmp;
+                        mapCanvas.LoadWay(tournee);
+
+                        LieuStack first = listDeliveries.Children.First() as LieuStack;
+
+                        listDeliveries.Children.Clear();
+                        listDeliveries.Children.Add(first);
+                        List<LieuStack> listOrder = new List<LieuStack>();
+                        foreach (var livraison in tournee.livraisons)
+                        {
+                            listOrder.Add(new LieuStack(livraison));
+                        }
+
+                        foreach (var item in listOrder)
+                        {
+                            listDeliveries.Children.Add(item);
+                            item.Select += eventLieuStack.Invoke;
+                        }
                     }
                 }
                 tournee = tourneeTmp;
@@ -280,7 +304,7 @@ namespace FastDelivery_IHM
             {
                 Livraison livraisonNewPlage = d as Livraison;
                 livraisonNewPlage.SetPlage(debutPlage, finPlage);
-                tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
+                //tournee.ModifPlage(livraisonNewPlage, demandeLivraisons, carte);
             }
         }
     }

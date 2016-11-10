@@ -355,7 +355,7 @@ namespace FastDelivery_Library
 
             Task t = new Task(() =>
                 tsp.chercheSolution(new TimeSpan(0, 0, 1, 0), LivStruct.livraisons.Count + 1, cost,
-                duree)
+                duree, LivStruct)
                 );
             t.Start();
             return t;
@@ -363,40 +363,50 @@ namespace FastDelivery_Library
 
         public async static Task<Tournee> getResultActual(DemandeDeLivraisons demande, Carte carte)
         {
+            Tournee t2 = null;
             await Task.Delay(100);
             List<Livraison> resultat = new List<Livraison>();
+            List<DateTime> resultatDate = new List<DateTime>();
 
-            //for(int i = 0; i < tsp.meilleureSolution.Length; i++)
-            //{
-            //    if(tsp.meilleureSolution[i] != 0)
-            //    {
-            //        resultat.Add(demande.livraisons.ElementAt(tsp.meilleureSolution[i] - 1).Value);
-            //    }
-            //}
-
-            foreach (var index in tsp.meilleureSolution.Skip(1))
+            // On vérifie qu'il existe déjà des solutions
+            if (tsp.meilleureSolution.Where((i) => { return i == 0; }).Count() == 1)
             {
-                resultat.Add(demande.livraisons.ElementAt(index - 1).Value);
+
+                foreach (var index in tsp.meilleureSolution.Skip(1))
+                {
+                    resultat.Add(demande.livraisons.ElementAt(index - 1).Value);
+                }
+                foreach (var horaire in tsp.meilleurshoraires.Skip(1))
+                {
+                    resultatDate.Add(horaire);
+                }
+
+                DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
+
+                Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
+
+                Point start = demande.entrepot.adresse;
+
+                foreach (var livraison in resultat)
+                {
+                    dijkstra.execute(start);
+                    chemins.Add(livraison, new Chemin(PathToTroncon(dijkstra.getPath(livraison.adresse))));
+                    start = livraison.adresse;
+                }
+
+
+                dijkstra.execute(resultat.Last().adresse);
+                chemins.Add(
+                    demande.entrepot,
+                    new Chemin(PathToTroncon(dijkstra.getPath(demande.entrepot.adresse))));
+
+                t2 = new Tournee(demande.entrepot, resultat, chemins);
+                for (int i = 0; i < resultat.Count; i++)
+                {
+                    t2.HeuredePassage.Add(resultat[i], resultatDate[i]);
+                    resultat[i].HeureDePassage = resultatDate[i];
+                }
             }
-            DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
-
-            Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
-
-            Point start = demande.entrepot.adresse;
-
-            foreach (var livraison in resultat)
-            {
-                dijkstra.execute(start);
-                chemins.Add(livraison, new Chemin(PathToTroncon(dijkstra.getPath(livraison.adresse))));
-                start = livraison.adresse;
-            }
-
-            dijkstra.execute(resultat.Last().adresse);
-            chemins.Add(
-                demande.entrepot,
-                new Chemin(PathToTroncon(dijkstra.getPath(demande.entrepot.adresse))));
-
-            Tournee t2 = new Tournee(demande.entrepot, resultat, chemins);
             return t2;
         }
 

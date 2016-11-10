@@ -109,6 +109,7 @@ namespace FastDelivery_IHM
             {
                 if (b != _isChecked)
                 {
+                    animationPointeur.Begin();
                     if (lieu is Livraison)
                     {
                         Image img = (Image)Resources["livraisonShadow"];

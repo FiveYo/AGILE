@@ -53,6 +53,8 @@ namespace FastDelivery_Library.Modele
 
         public DateTime HeureDePassage;
 
+        public TimeSpan tempsAttente = new TimeSpan(0, 0, 0);
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         // This method is called by the Set accessor of each property.

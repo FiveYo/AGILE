@@ -17,7 +17,7 @@ namespace FastDelivery_Library.Modele
 
         public double cout
         {
-            get { return (double)longueur / (double)vitesse; }
+            get { return (double)longueur / (double)(vitesse / 3.6); }
         }
 
         public Troncon(Point destination, int longueur, Point origine, int vitesse, string nomRue, int ID )

@@ -8,12 +8,13 @@ using Windows.Foundation.Metadata;
 
 namespace FastDelivery_Library
 {
-    
-    public class IteratorSeq : IIterator<int> {
 
+    public class IteratorSeq : IIterator<int>
+    {
 
-    private int[] candidats;
-    private int nbCandidats;
+        TimeSpan runtime;
+        private int[] candidats;
+        private int nbCandidats;
 
         public int Current
         {
@@ -47,26 +48,45 @@ namespace FastDelivery_Library
         }
 
         /**
-         * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
-         * @param nonVus
-         * @param sommetCrt
-         */
-        public IteratorSeq(ICollection<int> nonVus, int sommetCrt)
+            * Cree un iterateur pour iterer sur l'ensemble des sommets de nonVus
+            * @param nonVus
+            * @param sommetCrt
+            */
+        public IteratorSeq(ICollection<int> nonVus, int sommetCrt, int[,] cout, int[] duree)
         {
-            this.candidats = new int[nonVus.Count()];
-            nbCandidats = 0;
+            List<int> listeCouts = new List<int>();
             foreach (int s in nonVus)
             {
-                candidats[nbCandidats++] = s;
+                listeCouts.Add(cout[sommetCrt, s]);
+            }
+            List<int> listeCoutsTri = new List<int>(listeCouts);
+            listeCoutsTri.Sort();
+            this.candidats = new int[nonVus.Count()];
+            nbCandidats = 0;
+            int test = nonVus.Count - 1;
+            foreach (int s in nonVus)
+            {
+                candidats[test--] = nonVus.ElementAt(listeCouts.IndexOf(listeCoutsTri[nbCandidats++]));
             }
         }
+
+        //public IteratorSeq(ICollection<int> nonVus, int sommetCrt, int[,] cout, int[] duree)
+        //{
+        //    this.candidats = new int[nonVus.Count()];
+        //    nbCandidats = 0;
+        //    foreach (int s in nonVus)
+        //    {
+        //        candidats[nbCandidats++] = s;
+        //    }
+        //}
+
         public int MoveNext()
         {
             return candidats[--nbCandidats];
 
         }
 
-       
+
 
         uint IIterator<int>.GetMany(int[] items)
         {
