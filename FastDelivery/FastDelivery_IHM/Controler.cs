@@ -119,6 +119,12 @@ namespace FastDelivery_IHM
             return new Tuple<List<LieuStack>, List<LieuMap>>(lieuStack, lieuMap);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="popup"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
         internal static Tuple<LieuStack, LieuMap> AddLivDemande(DeliveryPop popup, Map map)
         {
             if (etatActuel == etat.enCoursDeCalcul)
@@ -140,6 +146,14 @@ namespace FastDelivery_IHM
             return new Tuple<LieuStack, LieuMap>(lieuStack, lieuMap);
         }
 
+
+        /// <summary>
+        /// Ajoute une livraison dans la tournée et l'affiche dans l'IHM
+        /// </summary>
+        /// <param name="lieu"></param>
+        /// <param name="livraison"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
         public static Tuple<int, LieuStack, LieuMap> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
             if (etatActuel == etat.enCoursDeCalcul)
@@ -159,6 +173,13 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Calcul le chemin entre les différentes livraisons, lance une Task asynchrone (comme un thread mais en mieux)
+        /// qui va mettre à jour l'IHM régulièrement
+        /// </summary>
+        /// <param name="mapCanvas"></param>
+        /// <param name="listDelivery"></param>
+        /// <param name="eventLieuStack"></param>
         public static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
         {
             Task chargeTsp = null;
@@ -188,6 +209,13 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Charge le chemin sur l'IHM et met à jour l'ordre des livraisons dans la liste régulièrement
+        /// </summary>
+        /// <param name="mapCanvas"></param>
+        /// <param name="listDeliveries"></param>
+        /// <param name="eventLieuStack"></param>
+        /// <param name="chargeTsp"></param>
         private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack, Task chargeTsp)
         {
             Tournee tourneeTmp = null;
@@ -199,17 +227,7 @@ namespace FastDelivery_IHM
                 {
                     return;
                 }
-                //await Task.Run(() =>
-                //{
-                //    try
-                //    {
-                        tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
-                //    }
-                //    catch (Exception)
-                //    {
-                //        return;
-                //    }
-                //});
+                tourneeTmp = Outils.getResultActual(demandeLivraisons, carte);
                 if (tourneeTmp != null)
                 {
                     if (tournee == null)
@@ -288,6 +306,10 @@ namespace FastDelivery_IHM
             etatActuel = etat.tourneeCalculee;
         }
 
+        /// <summary>
+        /// Génère le fichier de feuille de route représentat la tournée
+        /// </summary>
+        /// <param name="file"></param>
         public static async void GetRoadMap(Windows.Storage.StorageFile file)
         {
             if (file != null && etatActuel == etat.tourneeCalculee)
@@ -322,6 +344,12 @@ namespace FastDelivery_IHM
             }
         }
 
+        /// <summary>
+        /// Supprime une livraison de la tournée et/ou de la demande de livraison et actualise l'IHM
+        /// </summary>
+        /// <param name="lieu"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
         internal static List<LieuMap> RemoveLivraison(Lieu lieu, Map map)
         {
             if (etatActuel == etat.enCoursDeCalcul)
@@ -415,6 +443,12 @@ namespace FastDelivery_IHM
             return l;
         }
 
+        /// <summary>
+        /// Modifie les plages horaires de la livraison
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="debutPlage"></param>
+        /// <param name="finPlage"></param>
         public static void ChangePlage(Lieu d, DateTime debutPlage, DateTime finPlage)
         {
             if(etatActuel == etat.tourneeCalculee)
@@ -427,6 +461,9 @@ namespace FastDelivery_IHM
         }
     }
 
+    /// <summary>
+    /// Représente les différents états dans lequel on se trouve
+    /// </summary>
     public enum etat
     {
         intial,
