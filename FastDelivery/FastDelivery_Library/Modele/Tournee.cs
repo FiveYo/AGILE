@@ -350,11 +350,6 @@ namespace FastDelivery_Library
                             }
                             livraisonNewPlage.heureDepart = livraisonNewPlage.heureArrivee.Add(TimeSpan.FromSeconds((double)livraisonNewPlage.duree));
 
-                            //Mise heure de départ
-                            if (HeuredePassage[livraisonNewPlage].Add(TimeSpan.FromSeconds((double)livraison1.duree))
-                            {
-
-                            }
 
                             foreach (var livraison in livraisons.Skip(livraisons.IndexOf(livraisonNewPlage)))
                             {
@@ -366,10 +361,22 @@ namespace FastDelivery_Library
                                 if (HeuredePassage[livraison1].Add(trajetALivraison2).CompareTo(HeuredePassage[livraison]) > 0)
                                 {
                                     DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
-                                    HeuredePassage[livraison] = nouvelleHeurePassage;
-                                    livraison.SetHeureDePassage(nouvelleHeurePassage);
+                                    HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
+                                    livraison.SetHeureDePassage(HeuredePassage[livraison]);
+                                    livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
+
+                                   /* //Teste si plage horaire respectee
+                                    if (HeuredePassage[livraison].CompareTo(livraison.debutPlage) < 0)
+                                    {
+                                        livraison.heureDepart = livraison.debutPlage.Add(TimeSpan.FromSeconds(livraison.duree));
+                                    }
+                                    else if (HeuredePassage[livraison].CompareTo(livraison.finPlage) > 0)
+                                    {
+                                        livraison.heureDepart = livraison1.heureDepart.Add(TimeSpan.FromSeconds(livraison.duree) + TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout));
+                                    }*/
 
                                 }
+
                                 else
                                 {
                                     break;
@@ -435,7 +442,18 @@ namespace FastDelivery_Library
                                 {
                                     DateTime nouvelleHeurePassage = HeuredePassage[livraison1].Add(trajetALivraison2);
                                     HeuredePassage[livraison] = HeuredePassage[livraison1].Add(trajetALivraison2);
-                                    livraison.SetHeureDePassage(nouvelleHeurePassage);
+                                    livraison.SetHeureDePassage(HeuredePassage[livraison]);
+                                    livraison.heureDepart = livraison.heureArrivee.Add(TimeSpan.FromSeconds(livraison.duree));
+
+                                    //Teste si plage horaire respectee
+                                    /*if (HeuredePassage[livraison].CompareTo(livraison.debutPlage) < 0)
+                                    {
+                                        livraison.heureDepart = livraison.debutPlage.Add(TimeSpan.FromSeconds(livraison.duree));
+                                    }
+                                    else if(HeuredePassage[livraison].CompareTo(livraison.finPlage) > 0)
+                                    {
+                                        livraison.heureDepart = livraison1.heureDepart.Add(TimeSpan.FromSeconds(livraison.duree)+TimeSpan.FromSeconds(Hashchemin[pointArrivee].cout));
+                                    }*/
 
                                 }
                                 else
