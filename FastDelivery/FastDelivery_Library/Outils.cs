@@ -307,7 +307,7 @@ namespace FastDelivery_Library
             return cout;
         }
 
-        public static Tuple<List<Livraison>,List<DateTime>> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
+        public static Tuple<List<Livraison>,List<DateTime>,List<TimeSpan>> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
             Livraison tmp;
             int[,] cost = CreateCostMatrice(LivStruct, carte);
@@ -328,7 +328,7 @@ namespace FastDelivery_Library
                 duree);
 #endif
 
-            Tuple<List<Livraison>, List<DateTime>> resultat = new Tuple<List<Livraison>, List<DateTime>>(new List<Livraison>(),new List<DateTime>());
+            Tuple<List<Livraison>, List<DateTime>,List<TimeSpan>> resultat = new Tuple<List<Livraison>, List<DateTime>,List< TimeSpan >> (new List<Livraison>(),new List<DateTime>(),new List<TimeSpan>());
             
             if(tsp.getTempsLimiteAtteint())
             {
@@ -344,6 +344,10 @@ namespace FastDelivery_Library
             {
                 resultat.Item2.Add(horaire);
             }
+            foreach(var temp in tsp.meilleurtempsattente.Skip(1))
+            {
+                resultat.Item3.Add(temp);
+            }
 
             return resultat;
         }
@@ -355,6 +359,7 @@ namespace FastDelivery_Library
             List<Livraison> livraisonsOrdonnee = new List<Livraison>(res.Item1);
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
             List<DateTime> horaireList = new List<DateTime>(res.Item2);
+            List<TimeSpan> temp = new List<TimeSpan>(res.Item3);
             Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
 
             Point start = livraisons.entrepot.adresse;
@@ -373,7 +378,8 @@ namespace FastDelivery_Library
             for (int i = 0; i < livraisonsOrdonnee.Count; i++)
             {
                 t.HeuredePassage.Add(livraisonsOrdonnee[i], horaireList[i]);
-                livraisonsOrdonnee[i].HeureDePassage = horaireList[i];
+                livraisonsOrdonnee[i].HeureArrive = horaireList[i];
+                livraisonsOrdonnee[i].HeureDepart = horaireList[i] + temp[i] + new TimeSpan(0, 0, livraisonsOrdonnee[i].duree);
             }
             return t;
 
