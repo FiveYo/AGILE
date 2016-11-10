@@ -333,16 +333,8 @@ namespace FastDelivery_IHM
             try
             {
                 feedBack.Text = "Chargement en cours de la tournée...";
-                List<LieuStack> deliveriesOrder = Controler.GetWay(mapCanvas);
-                LieuStack first = listDeliveries.Children.First() as LieuStack;
+                Controler.GetWay(mapCanvas, listDeliveries, LieuStack_Selected);
                 
-                listDeliveries.Children.Clear();
-                listDeliveries.Children.Add(first);
-                foreach (var item in deliveriesOrder)
-                {
-                    listDeliveries.Children.Add(item);
-                    item.Select += LieuStack_Selected;
-                } 
                 feedBack.Text = "La tournée a été calculée, vous pouvez la visualiser sur le plan. Vous pouvez également charger un nouveau plan.";
                 animFeedback.Begin();
             }

@@ -15,11 +15,14 @@ using System.IO;
 using Windows.UI.Xaml.Controls;
 using FastDelivery_Library;
 using FastDelivery_IHM.UndoRedo;
+using System.Collections.ObjectModel;
+using Windows.UI.Xaml;
 
 namespace FastDelivery_IHM
 {
     public static class Controler
     {
+        private static Task chargeTsp;
         private static Carte carte { get; set; }
         private static DemandeDeLivraisons demandeLivraisons { get; set; }
 
@@ -30,6 +33,11 @@ namespace FastDelivery_IHM
 
         public static void loadMap(Stream file, Map map)
         {
+            if (etatActuel == etat.enCoursDeCalcul)
+            {
+                Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+            }
             try
             {
                 carte = Outils.ParserXml_Plan(file);
@@ -44,6 +52,11 @@ namespace FastDelivery_IHM
 
         public static Tuple<List<LieuStack>,List<LieuMap>> loadDeliveries(Stream streamFile, Map mapCanvas)
         {
+            if (etatActuel == etat.enCoursDeCalcul)
+            {
+                Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+            }
             List<LieuStack> lieuStack = new List<LieuStack>();
             List<LieuMap> lieuMap;
             if(etatActuel >= etat.carteCharge)
@@ -74,6 +87,11 @@ namespace FastDelivery_IHM
 
         internal static Tuple<LieuStack, LieuMap> AddLivDemande(DeliveryPop popup, Map map)
         {
+            if (etatActuel == etat.enCoursDeCalcul)
+            {
+                Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+            }
             int id = demandeLivraisons.livraisons.Keys.Max() + 1;
             Livraison liv = new Livraison(popup.adresse, popup.duree);
             if(popup.planifier)
@@ -90,6 +108,11 @@ namespace FastDelivery_IHM
 
         public static Tuple<int, LieuStack, LieuMap> AddLivTournee(Lieu lieu, DeliveryPop livraison, Map map)
         {
+            if (etatActuel == etat.enCoursDeCalcul)
+            {
+                Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+            }
             if (etatActuel == etat.tourneeCalculee)
             {
                 AjouterTournee addTournee = new AjouterTournee(lieu, livraison, map, tournee, carte, demandeLivraisons);
@@ -102,53 +125,98 @@ namespace FastDelivery_IHM
             }
         }
 
-        public static List<LieuStack> GetWay(Map mapCanvas)
+        public static void GetWay(Map mapCanvas, StackPanel listDelivery, Action<object, RoutedEventArgs> eventLieuStack)
         {
-            List<LieuStack> listOrder = new List<LieuStack>();
+            if (etatActuel == etat.enCoursDeCalcul)
+            {
+                Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+            }
             if (etatActuel == etat.livraisonCharge || etatActuel == etat.tourneeCalculee)
             {
                 try
                 {
-                    tournee = Outils.creerTournee(demandeLivraisons, carte);
-                    mapCanvas.LoadWay(tournee);
+                    chargeTsp = Outils.startTsp(demandeLivraisons, carte);
+                    tournee = null;
+                    loadWay(mapCanvas, listDelivery, eventLieuStack);
+                    etatActuel = etat.enCoursDeCalcul;
                 }
                 catch
                 {
                     throw;
                 }
-                etatActuel = etat.tourneeCalculee;
             }
             else
             {
                 throw new Exception_Stream("Veuillez charger une carte et une tournée en premier");
             }
+        }
 
-            foreach (var livraison in tournee.livraisons)
+        private async static void loadWay(Map mapCanvas, StackPanel listDeliveries, Action<object, RoutedEventArgs> eventLieuStack)
+        {
+            while(!chargeTsp.IsCompleted)
             {
-                listOrder.Add(new LieuStack(livraison));
+                if(etatActuel == etat.enCoursDArret)
+                {
+                    chargeTsp.Wait();
+                    return;
+                }
+                Tournee tourneeTmp = await Outils.getResultActual(demandeLivraisons, carte);
+                if (tournee == null)
+                    tournee = tourneeTmp;
+                if(tourneeTmp.livraisons.SequenceEqual(tournee.livraisons))
+                {
+                    tournee = tourneeTmp;
+                    mapCanvas.LoadWay(tournee);
+
+                    LieuStack first = listDeliveries.Children.First() as LieuStack;
+
+                    listDeliveries.Children.Clear();
+                    listDeliveries.Children.Add(first);
+                    List<LieuStack> listOrder = new List<LieuStack>();
+                    foreach (var livraison in tournee.livraisons)
+                    {
+                        listOrder.Add(new LieuStack(livraison));
+                    }
+
+                    foreach (var item in listOrder)
+                    {
+                        listDeliveries.Children.Add(item);
+                        item.Select += eventLieuStack.Invoke;
+                    }
+                }
+                tournee = tourneeTmp;
+                await Task.Delay(2000);
             }
-            return listOrder;
+            etatActuel = etat.tourneeCalculee;
         }
 
         public static async void GetRoadMap(Windows.Storage.StorageFile file)
         {
-            if (file != null)
+            if (file != null && etatActuel == etat.tourneeCalculee)
             {
                 Windows.Storage.CachedFileManager.DeferUpdates(file);
-                // write to file
+                int i = 0;
+                string intro = "Bonjour cher livreur,\r\nVous trouverez ci-après la liste des livraisons que vous devez effectuer et le parcours que vous allez emprunter.\r\nFastDelivery vous souhaite un bon voyage.\r\n \r\n";
+                for (int j = 0; j < tournee.livraisons.Count; j++)
+                {
+                    intro += "Livraison n°" + (++i) + " :\r\n   Coordonnées : (" + tournee.livraisons[j].adresse.x + "," + tournee.livraisons[j].adresse.y + ") \r\n   Heure d'arrivée : " + tournee.livraisons[j].HeureDePassage + "\r\n   Heure de départ : " + tournee.livraisons[j].HeureDePassage + "\r\n   Itinéraire à suivre pour rejoindre cette livraison : ";
+                    foreach (var troncon in tournee.Hashchemin[tournee.livraisons[j]].getTronconList())
+                    {
+                        intro += troncon.rue + ",";
+                    }
+                    intro = intro.Substring(0, intro.Length - 1);
+                    if (j == 0)
+                    {
+                        intro += ".\r\n   Depuis l'entrepot. \r\n \r\n";
+                    }
+                    else
+                    {
+                        intro += ".\r\n   Depuis l'adresse : (" + tournee.livraisons[j - 1].adresse.x + "," + tournee.livraisons[j - 1].adresse.y + ") \r\n \r\n";
+                    }
+                }
 
-
-                //System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                //iTextSharp.text.Document doc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 30f, 30f, 30f, 30f);
-                //iTextSharp.text.pdf.PdfWriter writer = iTextSharp.text.pdf.PdfWriter.GetInstance(doc, ms);
-                //doc.Open();
-                //doc.Add(new iTextSharp.text.Chunk("hello world"));
-                //doc.Close();
-                //byte[] Result = ms.ToArray();
-
-
-
-                await Windows.Storage.FileIO.WriteTextAsync(file, "bonjour \r\n salut");
+                await Windows.Storage.FileIO.WriteTextAsync(file, intro);
                 // Let Windows know that we're finished changing the file so
                 // the other app can update the remote version of the file.
                 // Completing updates may require Windows to ask for user input.
@@ -159,6 +227,11 @@ namespace FastDelivery_IHM
 
         internal static List<LieuMap> RemoveLivraison(Lieu lieu, Map map)
         {
+            if (etatActuel == etat.enCoursDeCalcul)
+            {
+                Outils.StopTsp();
+                etatActuel = etat.enCoursDArret;
+            }
             List<LieuMap> l = null;
             if (demandeLivraisons.livraisons.Count > 1)
             {
@@ -217,6 +290,8 @@ namespace FastDelivery_IHM
         intial,
         carteCharge,
         livraisonCharge,
-        tourneeCalculee
+        enCoursDeCalcul,
+        tourneeCalculee,
+        enCoursDArret
     }
 }

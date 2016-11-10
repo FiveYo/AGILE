@@ -26,6 +26,10 @@ namespace FastDelivery_Library.Modele
 
         public Dictionary<Livraison, DateTime> HeuredePassage = new Dictionary<Livraison, DateTime>();
 
+        public Tournee()
+        {
+
+        }
         public Tournee(Entrepot entrepot, List<Livraison> livraisons, Dictionary<Lieu, Chemin> minche)
         {
             this.entrepot = entrepot;

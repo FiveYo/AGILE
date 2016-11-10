@@ -13,6 +13,8 @@ namespace FastDelivery_Library
 {
     public static class Outils
     {
+
+        private static TSP1 tsp = new TSP1();
         /// <summary>
         /// Retourne une liste d'object, le premier étant la dictionnaire de Troncon,
         /// le second le dictionnaire de point
@@ -138,6 +140,12 @@ namespace FastDelivery_Library
             carte = new Carte(PointHash, TronconHash, xmin, xmax, ymin, ymax);
             return carte;
         }
+
+        public static void StopTsp()
+        {
+            //tsp.stop = true;
+        }
+
         public static DemandeDeLivraisons ParserXml_Livraison(System.IO.Stream streamFile, Dictionary<int, Point> HashPoint)
         {
             //On initialise notre Xdocument avec le Path du fichier xml
@@ -331,11 +339,11 @@ namespace FastDelivery_Library
             return cout;
         }
 
-        public static List<Livraison> startTsp(DemandeDeLivraisons LivStruct, Carte carte)
+        public static Task startTsp(DemandeDeLivraisons LivStruct, Carte carte)
         {
             Livraison tmp;
             int[,] cost = CreateCostMatrice(LivStruct, carte);
-            TSP1 tsp = new TSP1();
+            tsp = new TSP1();
             int[] duree = new int[LivStruct.livraisons.Count + 1];
             for(int i = 0; i < duree.Length; i++)
             {
@@ -344,55 +352,52 @@ namespace FastDelivery_Library
                     duree[i] = tmp.duree;
                 }
             }
-#if DEBUG
-            tsp.chercheSolution(new TimeSpan(0,0,0,2), LivStruct.livraisons.Count + 1, cost,
-                duree);
-#else
-            tsp.chercheSolution(new TimeSpan(0,0,1,0), LivStruct.livraisons.Count + 1, cost,
-                duree);
-#endif
 
-            List<Livraison> resultat = new List<Livraison>();
-
-            if(tsp.getTempsLimiteAtteint())
-            {
-                throw new TimeoutException("try again");
-            }
-
-            foreach(var index in tsp.meilleureSolution.Skip(1))
-            {
-                resultat.Add(LivStruct.livraisons.ElementAt(index - 1).Value);
-            }
-
-            return resultat;
+            Task t = new Task(() =>
+                tsp.chercheSolution(new TimeSpan(0, 0, 1, 0), LivStruct.livraisons.Count + 1, cost,
+                duree)
+                );
+            t.Start();
+            return t;
         }
 
-        public static Tournee creerTournee(DemandeDeLivraisons livraisons, Carte carte)
+        public async static Task<Tournee> getResultActual(DemandeDeLivraisons demande, Carte carte)
         {
-            Tournee t;
-           
-            List<Livraison> livraisonsOrdonnee = startTsp(livraisons, carte);
+            await Task.Delay(100);
+            List<Livraison> resultat = new List<Livraison>();
+
+            //for(int i = 0; i < tsp.meilleureSolution.Length; i++)
+            //{
+            //    if(tsp.meilleureSolution[i] != 0)
+            //    {
+            //        resultat.Add(demande.livraisons.ElementAt(tsp.meilleureSolution[i] - 1).Value);
+            //    }
+            //}
+
+            foreach (var index in tsp.meilleureSolution.Skip(1))
+            {
+                resultat.Add(demande.livraisons.ElementAt(index - 1).Value);
+            }
             DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(carte);
 
             Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
 
-            Point start = livraisons.entrepot.adresse;
+            Point start = demande.entrepot.adresse;
 
-            foreach(var livraison in livraisonsOrdonnee)
+            foreach (var livraison in resultat)
             {
                 dijkstra.execute(start);
                 chemins.Add(livraison, new Chemin(PathToTroncon(dijkstra.getPath(livraison.adresse))));
                 start = livraison.adresse;
             }
 
-            dijkstra.execute(livraisonsOrdonnee.Last().adresse);
+            dijkstra.execute(resultat.Last().adresse);
             chemins.Add(
-                livraisons.entrepot,
-                new Chemin(PathToTroncon(dijkstra.getPath(livraisons.entrepot.adresse))));
-            t = new Tournee(livraisons.entrepot, livraisonsOrdonnee, chemins);
-            t.CalculHeurePassage();
-            return t;
+                demande.entrepot,
+                new Chemin(PathToTroncon(dijkstra.getPath(demande.entrepot.adresse))));
 
+            Tournee t2 = new Tournee(demande.entrepot, resultat, chemins);
+            return t2;
         }
 
         public static List<Troncon> PathToTroncon(LinkedList<Point> points)
