@@ -59,7 +59,7 @@ namespace FastDelivery_IHM
         {
             get
             {
-                return new DateTime(start.Time.Ticks);
+                return Convert.ToDateTime(start.Time.ToString());
             }
         }
 
@@ -67,7 +67,7 @@ namespace FastDelivery_IHM
         {
             get
             {
-                return new DateTime(end.Time.Ticks);
+                return Convert.ToDateTime(end.Time.ToString());
             }
         }
 
