@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using FastDelivery_Library;
 using FastDelivery_Library.Modele;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FastDelivery_unitTest
 {
@@ -14,6 +15,8 @@ namespace FastDelivery_unitTest
         DemandeDeLivraisons demand;
         Dictionary<int, Livraison> HashLivraison = new Dictionary<int, Livraison>();
         Entrepot entrepotTest;
+        Chemin chemin;
+        List<Troncon> tronconList = new List<Troncon>();
         public void CarteGenerator()
         {
             int id = 1;
@@ -76,13 +79,27 @@ namespace FastDelivery_unitTest
             troncons.Add(t11.id, t11);
             troncons.Add(t12.id, t12);
 
+            
+            tronconList.Add(t1);
+            tronconList.Add(t2);
+            tronconList.Add(t3);
+            tronconList.Add(t4);
+            tronconList.Add(t5);
+            tronconList.Add(t6);
+            tronconList.Add(t7);
+            tronconList.Add(t8);
+            tronconList.Add(t9);
+            tronconList.Add(t10);
+            tronconList.Add(t11);
+            tronconList.Add(t12);
+            chemin = new Chemin(tronconList);
             c = new Carte(points, troncons, 0, 100, 10, 100);
         }
 
-        
+
         public void LivGenerator()
         {
-            int id = 0;
+            int id = 1;
             int duree = 100;
             foreach (Point pt in c.points.Values.Skip(3))
             {
@@ -92,7 +109,7 @@ namespace FastDelivery_unitTest
             }
             entrepotTest = new Entrepot(1, c.points[1], DateTime.Parse("10:00:00"));
             demand = new DemandeDeLivraisons(HashLivraison, entrepotTest);
-            
+
         }
 
         [TestMethod]
@@ -111,11 +128,11 @@ namespace FastDelivery_unitTest
             MatriceAttendu[2, 0] = 10;
             MatriceAttendu[2, 1] = 10;
             MatriceAttendu[2, 2] = 0;
-            for (int i = 0; i<3;i++)
+            for (int i = 0; i < 3; i++)
             {
-                for (int j = 0; j<3;j++)
+                for (int j = 0; j < 3; j++)
                 {
-                    Assert.AreEqual(MatriceAttendu[i,j], MatriceReturn[i,j]);
+                    Assert.AreEqual(MatriceAttendu[i, j], MatriceReturn[i, j]);
                 }
             }
         }
@@ -124,8 +141,7 @@ namespace FastDelivery_unitTest
         public void Test_calculcout()
         {
             CarteGenerator();
-            int id= 0;
-            double coutAttendu=10;
+            double coutAttendu = 10;
             double coutRetourne;
             LinkedList<Point> PointOrd = new LinkedList<FastDelivery_Library.Modele.Point>();
             PointOrd.AddLast(c.points[2]);
@@ -133,6 +149,39 @@ namespace FastDelivery_unitTest
             coutRetourne = Outils.calculcout(PointOrd);
             Assert.AreEqual(coutRetourne, coutAttendu);
 
+        }
+        [TestMethod]
+        public void Test_getResultActual()
+        {
+            CarteGenerator();
+            LivGenerator();
+            Task t= Outils.startTsp(demand, c);
+            t.Wait();
+            Tournee tourneeAttendu = Outils.getResultActual(demand, c);
+            Dictionary<Lieu, Chemin> chemins = new Dictionary<Lieu, Chemin>();
+            chemins.Add(demand.livraisons[1],chemin);
+            List<Livraison> resultat = new List<Livraison>();
+            resultat.Add(demand.livraisons[2]);
+            resultat.Add(demand.livraisons[1]);
+            Tournee tourneeReturn = new Tournee(demand.entrepot, resultat, chemins);
+            int test = tourneeAttendu.CompareTo(tourneeReturn);
+            Assert.AreEqual(test,0);
+        }
+        
+        [TestMethod]
+        public void Test_PathToTroncon()
+        {
+            CarteGenerator();
+            LivGenerator();
+            LinkedList<Point> PointOrd = new LinkedList<FastDelivery_Library.Modele.Point>();
+            PointOrd.AddLast(c.points[2]);
+            PointOrd.AddLast(c.points[3]);
+
+            List<Troncon> tronconsAttendu = new List<Troncon>();
+            List<Troncon> tronconsReturn = new List<Troncon>();
+            tronconsAttendu = Outils.PathToTroncon(PointOrd);
+            tronconsReturn.Add(tronconList[11]);
+            Assert.AreEqual(tronconsReturn[0].id, tronconsAttendu[0].id);
         }
     }
 }
