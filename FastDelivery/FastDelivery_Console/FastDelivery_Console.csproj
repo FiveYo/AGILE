@@ -54,10 +54,6 @@
       <Project>{de3c8b43-92d3-4df4-a7ed-782f5051a238}</Project>
       <Name>FastDelivery_Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FastDelivery_unitTest\FastDelivery_unitTest.csproj">
-      <Project>{20f6e844-b09e-4c4c-bbc8-4965fe12c034}</Project>
-      <Name>FastDelivery_unitTest</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
